@@ -129,7 +129,7 @@ model Order {
   paymentMethod   String?
   paymentStatus   PaymentStatus @default(READY)
   tossOrderId     String?     @unique
-  userCouponId    Int?        @unique
+  userCouponId    Int?
 
   receiverName    String
   receiverPhone   String
@@ -230,7 +230,7 @@ model UserCoupon {
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   coupon    Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
-  order     Order?
+  orders    Order[]
 
   createdAt DateTime @default(now())
 
