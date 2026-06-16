@@ -5,19 +5,24 @@ import Link from 'next/link'
 interface ProductsPageProps {
   searchParams: {
     category?: string
+    categoryName?: string
     search?: string
     sort?: string
   }
 }
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
-  const categoryId = searchParams.category ? parseInt(searchParams.category) : undefined
+  const categories = await getCategories()
+  const requestedCategoryId = searchParams.category ? parseInt(searchParams.category) : undefined
+  const selectedCategory = requestedCategoryId
+    ? categories.find((category) => category.id === requestedCategoryId)
+    : categories.find((category) => category.name === searchParams.categoryName)
+  const categoryId = selectedCategory?.id
   const products = await getProducts({
     categoryId,
     search: searchParams.search,
     sort: searchParams.sort,
   })
-  const categories = await getCategories()
 
   return (
     <div className="container-max py-8">
@@ -96,9 +101,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         <main className="flex-1">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold">
-              {categoryId
-                ? categories.find((c) => c.id === categoryId)?.name
-                : '전체 상품'}
+              {selectedCategory?.name || '전체 상품'}
             </h1>
             <p className="text-sm text-gray-500">총 {products.length}개 상품</p>
           </div>

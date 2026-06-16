@@ -5,10 +5,19 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   images: {
-    domains: [
-      'res.cloudinary.com',
-      'cdn.example.com',
-      'images.unsplash.com',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.example.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
     ],
   },
 }

@@ -5,6 +5,21 @@ import Image from 'next/image'
 
 export const dynamic = 'force-dynamic'
 
+const heroImage =
+  'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2200'
+
+const categoryImages = [
+  'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?q=80&w=1000',
+  'https://images.unsplash.com/photo-1523381294911-8d3cead13475?q=80&w=1000',
+  'https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=1000',
+  'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000',
+]
+
+const storyImages = [
+  'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1200',
+  'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1000',
+]
+
 export default async function Home() {
   const [products, categories] = await Promise.all([
     getProducts({}),
@@ -18,13 +33,14 @@ export default async function Home() {
       {/* Hero Section */}
       <section className="relative h-[80vh] min-h-[600px] w-full bg-gray-900 overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1441984908747-d4121882c9b6?q=80&w=2000"
-          alt="Main Banner"
+          src={heroImage}
+          alt="Fashion store display"
           fill
-          className="object-cover opacity-70"
+          className="object-cover opacity-75"
           priority
         />
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-4">
+        <div className="absolute inset-0 bg-black/25" />
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white px-4">
           <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 drop-shadow-2xl">
             THE NEW<br />COLLECTION
           </h1>
@@ -32,17 +48,25 @@ export default async function Home() {
             당신의 무드를 완성하는 감각적인 패션 큐레이션.<br className="hidden md:block" />
             2024년 여름, 새로운 스타일을 발견하세요.
           </p>
-          <Link
-            href="/products"
-            className="px-12 py-5 bg-white text-black font-bold text-sm uppercase tracking-[0.2em] hover:bg-black hover:text-white transition-all duration-300 rounded-full"
-          >
-            Explore Now
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link
+              href="/products"
+              className="px-10 py-4 bg-white text-black font-bold text-sm hover:bg-black hover:text-white transition-all duration-300 rounded"
+            >
+              상품 보러가기
+            </Link>
+            <Link
+              href="#categories"
+              className="px-10 py-4 border border-white text-white font-bold text-sm hover:bg-white hover:text-black transition-all duration-300 rounded"
+            >
+              카테고리 보기
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* Category Grid */}
-      <section className="container-max py-24">
+      <section id="categories" className="container-max py-24">
         <div className="flex flex-col items-center mb-16">
           <h2 className="text-xs font-black tracking-[0.4em] text-gray-400 uppercase mb-4 text-center">Shop by Category</h2>
           <div className="h-1 w-12 bg-black"></div>
@@ -55,7 +79,7 @@ export default async function Home() {
               className="relative group aspect-[4/5] bg-gray-100 overflow-hidden rounded-2xl"
             >
               <Image
-                src={`https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1000&sig=${index}`} // 임시 카테고리 이미지
+                src={categoryImages[index % categoryImages.length]}
                 alt={cat.name}
                 fill
                 className="object-cover group-hover:scale-110 transition-transform duration-700"
@@ -119,16 +143,16 @@ export default async function Home() {
           <div className="relative h-[500px] w-full lg:h-[600px] group">
             <div className="absolute top-0 right-0 w-4/5 h-[80%] rounded-3xl overflow-hidden border-8 border-gray-900 shadow-2xl z-0">
               <Image
-                src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1000"
-                alt="Story 1"
+                src={storyImages[0]}
+                alt="Curated fashion rack"
                 fill
                 className="object-cover"
               />
             </div>
             <div className="absolute bottom-0 left-0 w-3/5 h-[60%] rounded-3xl overflow-hidden border-8 border-black shadow-2xl z-10 group-hover:scale-105 transition-transform duration-500">
               <Image
-                src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=1000"
-                alt="Story 2"
+                src={storyImages[1]}
+                alt="Leather bag detail"
                 fill
                 className="object-cover"
               />
