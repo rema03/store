@@ -1,0 +1,44 @@
+{
+  "name": "fashion-mall",
+  "version": "1.0.0",
+  "description": "Full-featured fashion shopping mall built with Next.js, TypeScript, Tailwind CSS, Prisma, and Toss Payments",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate",
+    "db:seed": "node prisma/seed.ts",
+    "db:migrate": "prisma migrate dev"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.3.4",
+    "@prisma/client": "^5.7.1",
+    "@tosspayments/payment-sdk": "^1.9.3",
+    "bcryptjs": "^2.4.3",
+    "clsx": "^2.0.0",
+    "lucide-react": "^0.263.1",
+    "next": "^14.1.0",
+    "next-auth": "^4.24.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.48.0",
+    "uuid": "^14.0.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "@types/uuid": "^10.0.0",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.55.0",
+    "eslint-config-next": "^14.1.0",
+    "postcss": "^8.4.32",
+    "prisma": "^5.7.1",
+    "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

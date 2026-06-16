@@ -1,0 +1,248 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============= Enums =============
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PREPARING
+  SHIPPING
+  COMPLETED
+  CANCELED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  READY
+  IN_PROGRESS
+  DONE
+  FAILED
+  CANCELED
+}
+
+enum DiscountType {
+  FIXED
+  PERCENT
+}
+
+// ============= Models =============
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(USER)
+
+  cartItems    CartItem[]
+  orders       Order[]
+  reviews      Review[]
+  wishlist     Wishlist[]
+  addresses    Address[]
+  userCoupons  UserCoupon[]
+  recentViews  RecentView[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       Int
+  description String?
+  imageUrl    String? // Main thumbnail image
+  categoryId  Int
+  stock       Int
+  isActive    Boolean  @default(true)
+
+  category     Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  images       ProductImage[]
+  cartItems    CartItem[]
+  orderItems   OrderItem[]
+  reviews      Review[]
+  wishlist     Wishlist[]
+  recentViews  RecentView[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  productId Int
+  url       String
+  order     Int     @default(0) // Order to display images
+
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  products  Product[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  quantity  Int
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, productId])
+}
+
+model Order {
+  id              Int         @id @default(autoincrement())
+  userId          Int
+  orderNumber     String      @unique
+  totalPrice      Int
+  discountAmount  Int         @default(0)
+  finalPrice      Int
+  status          OrderStatus @default(PENDING)
+
+  paymentKey      String?
+  paymentMethod   String?
+  paymentStatus   PaymentStatus @default(READY)
+  tossOrderId     String?     @unique
+
+  receiverName    String
+  receiverPhone   String
+  zipCode         String
+  address1        String
+  address2        String?
+  deliveryMemo    String?
+
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items           OrderItem[]
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Int
+
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  rating    Int
+  content   String
+  imageUrl  String?
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, productId])
+}
+
+model Wishlist {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+}
+
+model Address {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  receiverName String
+  phone        String
+  zipCode      String
+  address1     String
+  address2     String?
+  isDefault    Boolean  @default(false)
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Coupon {
+  id             Int      @id @default(autoincrement())
+  code           String   @unique
+  name           String
+  discountType   DiscountType
+  discountValue  Int
+  minOrderPrice  Int      @default(0)
+  maxDiscount    Int?
+  startsAt       DateTime
+  endsAt         DateTime
+  isActive       Boolean  @default(true)
+
+  userCoupons    UserCoupon[]
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model UserCoupon {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  couponId  Int
+  isUsed    Boolean  @default(false)
+  usedAt    DateTime?
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  coupon    Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, couponId])
+}
+
+model RecentView {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  viewedAt  DateTime @default(now())
+
+  @@unique([userId, productId])
+}
