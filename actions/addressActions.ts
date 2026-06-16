@@ -4,6 +4,8 @@ import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
+import { addressSchema } from '@/lib/validators'
+import { z } from 'zod'
 
 async function getSession() {
   return await getServerSession(authOptions)
@@ -19,14 +21,16 @@ export async function getAddresses() {
   })
 }
 
-export async function addAddress(formData: any) {
+export async function addAddress(formData: z.infer<typeof addressSchema>) {
   const session = await getSession()
   if (!session?.user) return { error: '로그인이 필요합니다.' }
 
   const userId = parseInt(session.user.id)
+  const validated = addressSchema.safeParse(formData)
+  if (!validated.success) return { error: '유효하지 않은 배송지 정보입니다.' }
 
   try {
-    if (formData.isDefault) {
+    if (validated.data.isDefault) {
       await prisma.address.updateMany({
         where: { userId, isDefault: true },
         data: { isDefault: false },
@@ -36,12 +40,12 @@ export async function addAddress(formData: any) {
     const address = await prisma.address.create({
       data: {
         userId,
-        receiverName: formData.receiverName,
-        phone: formData.phone,
-        zipCode: formData.zipCode,
-        address1: formData.address1,
-        address2: formData.address2,
-        isDefault: formData.isDefault || false,
+        receiverName: validated.data.receiverName,
+        phone: validated.data.phone,
+        zipCode: validated.data.zipCode,
+        address1: validated.data.address1,
+        address2: validated.data.address2,
+        isDefault: validated.data.isDefault,
       },
     })
 
@@ -80,7 +84,7 @@ export async function setDefaultAddress(id: number) {
         data: { isDefault: false }
       }),
       prisma.address.update({
-        where: { id },
+        where: { id, userId },
         data: { isDefault: true }
       })
     ])

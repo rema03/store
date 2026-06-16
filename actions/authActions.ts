@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { registerSchema } from '@/lib/validators'
 import bcryptjs from 'bcryptjs'
 
-export async function register(formData: any) {
+export async function register(formData: unknown) {
   const validatedFields = registerSchema.safeParse(formData)
 
   if (!validatedFields.success) {

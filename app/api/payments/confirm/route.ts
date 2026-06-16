@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import { requireEnv } from '@/lib/config'
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
@@ -10,6 +11,10 @@ export async function POST(req: NextRequest) {
   }
 
   const { paymentKey, orderId, amount } = await req.json()
+
+  if (typeof paymentKey !== 'string' || typeof orderId !== 'string' || typeof amount !== 'number') {
+    return NextResponse.json({ error: '잘못된 결제 요청입니다.' }, { status: 400 })
+  }
 
   try {
     // 1. DB에서 주문 조회 및 검증
@@ -22,6 +27,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: '주문을 찾을 수 없습니다.' }, { status: 404 })
     }
 
+    if (order.userId !== parseInt(session.user.id)) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+    }
+
     if (order.finalPrice !== amount) {
       return NextResponse.json({ error: '결제 금액이 일치하지 않습니다.' }, { status: 400 })
     }
@@ -31,7 +40,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. Toss Payments 승인 API 호출
-    const secretKey = process.env.TOSS_SECRET_KEY || 'test_sk_develop123456'
+    const secretKey = requireEnv('TOSS_SECRET_KEY')
     const basicToken = Buffer.from(`${secretKey}:`).toString('base64')
 
     const response = await fetch('https://api.tosspayments.com/v1/payments/confirm', {
@@ -56,9 +65,8 @@ export async function POST(req: NextRequest) {
 
     // 3. 결제 성공 처리 (Transaction)
     await prisma.$transaction(async (tx) => {
-      // 주문 상태 변경
-      await tx.order.update({
-        where: { id: order.id },
+      const orderUpdate = await tx.order.updateMany({
+        where: { id: order.id, userId: parseInt(session.user.id), status: 'PENDING' },
         data: {
           status: 'PAID',
           paymentKey,
@@ -67,11 +75,26 @@ export async function POST(req: NextRequest) {
         },
       })
 
+      if (orderUpdate.count !== 1) {
+        throw new Error('이미 처리된 주문입니다.')
+      }
+
       // 재고 감소 및 장바구니 비우기
       for (const item of order.items) {
-        await tx.product.update({
-          where: { id: item.productId },
+        const stockUpdate = await tx.product.updateMany({
+          where: { id: item.productId, stock: { gte: item.quantity } },
           data: { stock: { decrement: item.quantity } },
+        })
+
+        if (stockUpdate.count !== 1) {
+          throw new Error('상품 재고가 부족합니다.')
+        }
+      }
+
+      if (order.userCouponId) {
+        await tx.userCoupon.update({
+          where: { id: order.userCouponId },
+          data: { isUsed: true, usedAt: new Date() },
         })
       }
 

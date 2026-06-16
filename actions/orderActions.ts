@@ -1,7 +1,10 @@
+'use server'
+
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { generateOrderNumber } from '@/lib/utils'
+import { calculateDiscount, generateOrderNumber, generateTossOrderId } from '@/lib/utils'
+import { getShippingFee } from '@/lib/config'
 
 export async function createOrder(data: {
   addressId: number
@@ -22,6 +25,14 @@ export async function createOrder(data: {
       })
 
       if (cartItems.length === 0) throw new Error('주문할 상품이 없습니다.')
+      if (cartItems.length !== new Set(data.cartItemIds).size) {
+        throw new Error('장바구니 정보를 다시 확인해주세요.')
+      }
+
+      for (const item of cartItems) {
+        if (!item.product.isActive) throw new Error('판매 중이 아닌 상품이 포함되어 있습니다.')
+        if (item.product.stock < item.quantity) throw new Error(`${item.product.name} 재고가 부족합니다.`)
+      }
 
       // 2. 금액 계산
       const totalPrice = cartItems.reduce(
@@ -30,28 +41,38 @@ export async function createOrder(data: {
       )
       
       let discountAmount = 0
+      let userCouponId: number | undefined
       if (data.userCouponId) {
         const userCoupon = await tx.userCoupon.findFirst({
-          where: { id: data.userCouponId, userId, isUsed: false },
+          where: {
+            id: data.userCouponId,
+            userId,
+            isUsed: false,
+            coupon: {
+              isActive: true,
+              startsAt: { lte: new Date() },
+              endsAt: { gte: new Date() },
+            },
+          },
           include: { coupon: true },
         })
 
-        if (userCoupon) {
-          if (userCoupon.coupon.discountType === 'PERCENT') {
-            discountAmount = Math.floor((totalPrice * userCoupon.coupon.discountValue) / 100)
-            if (userCoupon.coupon.maxDiscount) {
-              discountAmount = Math.min(discountAmount, userCoupon.coupon.maxDiscount)
-            }
-          } else {
-            discountAmount = userCoupon.coupon.discountValue
-          }
-        }
+        if (!userCoupon) throw new Error('사용할 수 없는 쿠폰입니다.')
+        if (totalPrice < userCoupon.coupon.minOrderPrice) throw new Error('쿠폰 최소 주문 금액을 충족하지 못했습니다.')
+
+        discountAmount = calculateDiscount(
+          userCoupon.coupon.discountType,
+          userCoupon.coupon.discountValue,
+          totalPrice,
+          userCoupon.coupon.maxDiscount,
+        )
+        userCouponId = userCoupon.id
       }
 
-      const finalPrice = totalPrice - discountAmount + (totalPrice >= 50000 ? 0 : 3000)
+      const finalPrice = totalPrice - discountAmount + getShippingFee(totalPrice)
 
       // 3. 배송지 정보 가져오기
-      const address = await tx.address.findUnique({ where: { id: data.addressId } })
+      const address = await tx.address.findFirst({ where: { id: data.addressId, userId } })
       if (!address) throw new Error('배송지 정보가 없습니다.')
 
       // 4. 주문 생성
@@ -63,7 +84,8 @@ export async function createOrder(data: {
           discountAmount,
           finalPrice,
           status: 'PENDING',
-          tossOrderId: Buffer.from(Date.now().toString()).toString('base64'), // 임시 ID
+          tossOrderId: generateTossOrderId(),
+          userCouponId,
           receiverName: address.receiverName,
           receiverPhone: address.phone,
           zipCode: address.zipCode,
@@ -81,9 +103,9 @@ export async function createOrder(data: {
 
       return { success: true, orderId: order.id, finalPrice: order.finalPrice, tossOrderId: order.tossOrderId }
     })
-  } catch (error: any) {
+  } catch (error) {
     console.error('Order creation error:', error)
-    return { error: error.message || '주문 생성에 실패했습니다.' }
+    return { error: error instanceof Error ? error.message : '주문 생성에 실패했습니다.' }
   }
 }
 

@@ -1,9 +1,12 @@
+'use server'
+
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { productSchema } from '@/lib/validators'
 import { revalidatePath } from 'next/cache'
 import { OrderStatus } from '@prisma/client'
+import { z } from 'zod'
 
 async function checkAdmin() {
   const session = await getServerSession(authOptions)
@@ -12,7 +15,9 @@ async function checkAdmin() {
   }
 }
 
-export async function createProduct(data: any) {
+type ProductInput = z.infer<typeof productSchema>
+
+export async function createProduct(data: ProductInput) {
   await checkAdmin()
   
   const validated = productSchema.parse(data)
@@ -36,7 +41,7 @@ export async function createProduct(data: any) {
   }
 }
 
-export async function updateProduct(id: number, data: any) {
+export async function updateProduct(id: number, data: ProductInput) {
   await checkAdmin()
   const validated = productSchema.parse(data)
 
@@ -56,13 +61,23 @@ export async function updateProduct(id: number, data: any) {
 export async function deleteProduct(id: number) {
   await checkAdmin()
   try {
-    await prisma.product.delete({ where: { id } })
+    await prisma.product.update({
+      where: { id },
+      data: { isActive: false },
+    })
     revalidatePath('/admin/products')
     revalidatePath('/products')
     return { success: true }
   } catch (error) {
     return { error: '상품 삭제에 실패했습니다.' }
   }
+}
+
+export async function getAdminProductById(id: number) {
+  await checkAdmin()
+  return await prisma.product.findUnique({
+    where: { id },
+  })
 }
 
 export async function getAllOrders() {

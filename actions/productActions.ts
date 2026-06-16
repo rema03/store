@@ -3,6 +3,7 @@
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import { Prisma } from '@prisma/client'
 
 export async function getProducts(params: {
   categoryId?: number
@@ -11,7 +12,7 @@ export async function getProducts(params: {
 }) {
   const { categoryId, search, sort } = params
 
-  let orderBy: any = { createdAt: 'desc' }
+  let orderBy: Prisma.ProductOrderByWithRelationInput = { createdAt: 'desc' }
   if (sort === 'price_asc') orderBy = { price: 'asc' }
   if (sort === 'price_desc') orderBy = { price: 'desc' }
 

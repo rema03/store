@@ -5,11 +5,21 @@ import Image from 'next/image'
 import { formatPrice } from '@/lib/utils'
 import { createOrder } from '@/actions/orderActions'
 import { loadTossPayments } from '@tosspayments/payment-sdk'
+import { getShippingFee } from '@/lib/config'
+import type { Address, CartItem, Coupon, Product, UserCoupon } from '@prisma/client'
+
+type CheckoutCartItem = CartItem & {
+  product: Product
+}
+
+type CheckoutUserCoupon = UserCoupon & {
+  coupon: Coupon
+}
 
 interface CheckoutFormProps {
-  cartItems: any[]
-  addresses: any[]
-  coupons: any[]
+  cartItems: CheckoutCartItem[]
+  addresses: Address[]
+  coupons: CheckoutUserCoupon[]
 }
 
 export default function CheckoutForm({ cartItems, addresses, coupons }: CheckoutFormProps) {
@@ -17,10 +27,10 @@ export default function CheckoutForm({ cartItems, addresses, coupons }: Checkout
   const [selectedCouponId, setSelectedCouponId] = useState<number | undefined>(undefined)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY || 'test_ck_develop123456'
+  const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY
 
   const totalPrice = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
-  const shippingFee = totalPrice >= 50000 ? 0 : 3000
+  const shippingFee = getShippingFee(totalPrice)
   
   let discountAmount = 0
   if (selectedCouponId) {
@@ -43,6 +53,12 @@ export default function CheckoutForm({ cartItems, addresses, coupons }: Checkout
     setIsSubmitting(true)
     
     try {
+      if (!clientKey) {
+        alert('결제 클라이언트 키가 설정되지 않았습니다.')
+        setIsSubmitting(false)
+        return
+      }
+
       // 1. 서버에 주문 생성 요청
       const result = await createOrder({
         addressId: selectedAddressId,

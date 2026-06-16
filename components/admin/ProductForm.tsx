@@ -8,12 +8,14 @@ import { createProduct, updateProduct } from '@/actions/adminActions'
 import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 import Image from 'next/image'
+import type { Category, Product } from '@prisma/client'
 
 type ProductInput = z.infer<typeof productSchema>
+type ProductFormInitialData = Pick<Product, 'id' | 'name' | 'price' | 'description' | 'categoryId' | 'stock' | 'imageUrl'>
 
 interface ProductFormProps {
-  initialData?: any
-  categories: any[]
+  initialData?: ProductFormInitialData
+  categories: Category[]
 }
 
 export default function ProductForm({ initialData, categories }: ProductFormProps) {
@@ -29,10 +31,18 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
     formState: { errors },
   } = useForm<ProductInput>({
     resolver: zodResolver(productSchema),
-    defaultValues: initialData || {
-      isActive: true,
-      stock: 0,
-    },
+    defaultValues: initialData
+      ? {
+          name: initialData.name,
+          price: initialData.price,
+          stock: initialData.stock,
+          categoryId: initialData.categoryId,
+          description: initialData.description ?? undefined,
+          imageUrl: initialData.imageUrl ?? undefined,
+        }
+      : {
+          stock: 0,
+        },
   })
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {

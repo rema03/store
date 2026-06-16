@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
+import { reviewSchema } from '@/lib/validators'
 
 async function getSession() {
   return await getServerSession(authOptions)
@@ -14,13 +15,15 @@ export async function createReview(data: { productId: number, rating: number, co
   if (!session?.user) return { error: '로그인이 필요합니다.' }
 
   const userId = parseInt(session.user.id)
+  const validated = reviewSchema.safeParse(data)
+  if (!validated.success) return { error: '유효하지 않은 리뷰 정보입니다.' }
 
   try {
     const hasPurchased = await prisma.order.findFirst({
       where: {
         userId,
         status: { in: ['PAID', 'COMPLETED', 'SHIPPING', 'PREPARING'] },
-        items: { some: { productId: data.productId } }
+        items: { some: { productId: validated.data.productId } }
       }
     })
 
@@ -29,7 +32,7 @@ export async function createReview(data: { productId: number, rating: number, co
     }
 
     const existingReview = await prisma.review.findUnique({
-      where: { userId_productId: { userId, productId: data.productId } }
+      where: { userId_productId: { userId, productId: validated.data.productId } }
     })
 
     if (existingReview) {
@@ -39,13 +42,13 @@ export async function createReview(data: { productId: number, rating: number, co
     await prisma.review.create({
       data: {
         userId,
-        productId: data.productId,
-        rating: data.rating,
-        content: data.content,
+        productId: validated.data.productId,
+        rating: validated.data.rating,
+        content: validated.data.content,
       }
     })
 
-    revalidatePath(`/products/${data.productId}`)
+    revalidatePath(`/products/${validated.data.productId}`)
     return { success: true }
   } catch (error) {
     return { error: '리뷰 등록에 실패했습니다.' }

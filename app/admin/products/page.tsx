@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import Image from 'next/image'
+import DeleteProductButton from '@/components/admin/DeleteProductButton'
 
 export default async function AdminProductsPage() {
   const session = await getServerSession(authOptions)
@@ -51,7 +52,7 @@ export default async function AdminProductsPage() {
                 <td className="px-6 py-4 text-sm">{product.stock}개</td>
                 <td className="px-6 py-4 text-right space-x-4">
                   <Link href={`/admin/products/${product.id}/edit`} className="text-blue-600 hover:underline text-sm">수정</Link>
-                  <button className="text-red-600 hover:underline text-sm">삭제</button>
+                  <DeleteProductButton productId={product.id} />
                 </td>
               </tr>
             ))}

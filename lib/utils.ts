@@ -11,16 +11,14 @@ export const formatPrice = (price: number): string => {
 
 // Order number generation
 export const generateOrderNumber = (): string => {
-  const timestamp = Date.now().toString()
-  const random = Math.random().toString(36).substring(2, 8).toUpperCase()
+  const timestamp = Date.now().toString(36).toUpperCase()
+  const random = crypto.randomUUID().replace(/-/g, '').slice(0, 6).toUpperCase()
   return `ORD-${timestamp.slice(-8)}-${random}`
 }
 
 // Toss Order ID generation
 export const generateTossOrderId = (): string => {
-  const timestamp = Date.now().toString()
-  const random = Math.random().toString(36).substring(2, 8).toUpperCase()
-  return `${timestamp.slice(-8)}${random}`
+  return crypto.randomUUID().replace(/-/g, '').slice(0, 32)
 }
 
 // Calculate discount

@@ -24,8 +24,8 @@ export const productSchema = z.object({
 
 // Cart validation
 export const cartItemSchema = z.object({
-  productId: z.coerce.number().positive('상품은 필수입니다'),
-  quantity: z.coerce.number().min(1, '수량은 1 이상이어야 합니다'),
+  productId: z.coerce.number().int().positive('상품은 필수입니다'),
+  quantity: z.coerce.number().int().min(1, '수량은 1 이상이어야 합니다'),
 })
 
 // Review validation
