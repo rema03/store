@@ -3,10 +3,24 @@
 import { useState } from 'react'
 import { deleteProduct } from '@/actions/adminActions'
 import { useRouter } from 'next/navigation'
+import { styled } from '@devup-ui/react'
 
 interface DeleteProductButtonProps {
   productId: number
 }
+
+const Button = styled('button')({
+  color: '#dc2626',
+  fontSize: '14px',
+  transition: 'opacity 0.15s ease',
+  _hover: {
+    textDecoration: 'underline',
+  },
+  _disabled: {
+    cursor: 'not-allowed',
+    opacity: 0.5,
+  },
+})
 
 export default function DeleteProductButton({ productId }: DeleteProductButtonProps) {
   const [isDeleting, setIsDeleting] = useState(false)
@@ -28,13 +42,12 @@ export default function DeleteProductButton({ productId }: DeleteProductButtonPr
   }
 
   return (
-    <button
+    <Button
       type="button"
       disabled={isDeleting}
       onClick={handleDelete}
-      className="text-red-600 hover:underline text-sm disabled:opacity-50"
     >
       {isDeleting ? '삭제 중' : '삭제'}
-    </button>
+    </Button>
   )
 }

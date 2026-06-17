@@ -4,6 +4,202 @@ import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { ShoppingCart, Heart, User, Search, Menu, X } from 'lucide-react'
 import { useState } from 'react'
+import { styled } from '@devup-ui/react'
+
+const SiteHeader = styled('header')({
+  position: 'sticky',
+  top: 0,
+  zIndex: 50,
+  borderBottom: '1px solid #e8e5df',
+  background: 'rgba(255, 255, 255, 0.92)',
+  backdropFilter: 'blur(18px)',
+})
+
+const HeaderInner = styled('div')({
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: '0 20px',
+})
+
+const HeaderRow = styled('div')({
+  height: ['64px', '76px'],
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '20px',
+})
+
+const Brand = styled(Link)({
+  fontSize: ['20px', '24px'],
+  fontWeight: 900,
+  letterSpacing: '-0.02em',
+})
+
+const DesktopNav = styled('nav')({
+  display: ['none', 'flex'],
+  alignItems: 'center',
+  gap: '8px',
+  padding: '6px',
+  border: '1px solid #eee9df',
+  borderRadius: '999px',
+  background: '#f8f5ef',
+})
+
+const NavLink = styled(Link)({
+  padding: '9px 14px',
+  borderRadius: '999px',
+  fontSize: '13px',
+  fontWeight: 800,
+  color: '#3f3a33',
+  _hover: {
+    background: '#141414',
+    color: '#fff',
+  },
+})
+
+const ActionGroup = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  gap: ['4px', '8px'],
+})
+
+const IconLink = styled(Link)({
+  width: '40px',
+  height: '40px',
+  display: 'grid',
+  placeItems: 'center',
+  borderRadius: '999px',
+  color: '#171717',
+  _hover: {
+    background: '#f2eee6',
+  },
+})
+
+const LoginLink = styled(Link)({
+  padding: '11px 14px',
+  borderRadius: '999px',
+  border: '1px solid #171717',
+  fontSize: '12px',
+  fontWeight: 900,
+  letterSpacing: '0.08em',
+  _hover: {
+    background: '#171717',
+    color: '#fff',
+  },
+})
+
+const MenuButton = styled('button')({
+  width: '40px',
+  height: '40px',
+  display: ['grid', 'none'],
+  placeItems: 'center',
+  border: 0,
+  borderRadius: '999px',
+  background: '#171717',
+  color: '#fff',
+  cursor: 'pointer',
+})
+
+const UserMenuWrap = styled('div')({
+  position: 'relative',
+})
+
+const UserButton = styled('button')({
+  width: '40px',
+  height: '40px',
+  display: 'grid',
+  placeItems: 'center',
+  border: 0,
+  borderRadius: '999px',
+  background: '#171717',
+  color: '#fff',
+  cursor: 'pointer',
+})
+
+const UserDropdown = styled('div')({
+  position: 'absolute',
+  right: 0,
+  top: 'calc(100% + 12px)',
+  width: '210px',
+  overflow: 'hidden',
+  border: '1px solid #e7e1d7',
+  borderRadius: '18px',
+  background: '#fff',
+  boxShadow: '0 24px 50px rgba(22, 18, 14, 0.14)',
+  opacity: 0,
+  visibility: 'hidden',
+  transform: 'translateY(-6px)',
+  transition: '160ms ease',
+  _groupHover: {
+    opacity: 1,
+    visibility: 'visible',
+    transform: 'translateY(0)',
+  },
+})
+
+const DropdownHead = styled('div')({
+  padding: '16px',
+  borderBottom: '1px solid #f0ece5',
+})
+
+const Muted = styled('p')({
+  fontSize: '12px',
+  color: '#8a8176',
+})
+
+const StrongLine = styled('p')({
+  marginTop: '3px',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  fontWeight: 800,
+})
+
+const DropdownLink = styled(Link)({
+  display: 'block',
+  padding: '12px 16px',
+  fontSize: '14px',
+  fontWeight: 700,
+  _hover: {
+    background: '#faf7f0',
+  },
+})
+
+const SignOutButton = styled('button')({
+  width: '100%',
+  padding: '12px 16px',
+  border: 0,
+  borderTop: '1px solid #f0ece5',
+  background: '#fff',
+  color: '#c2410c',
+  textAlign: 'left',
+  fontSize: '14px',
+  fontWeight: 800,
+  cursor: 'pointer',
+  _hover: {
+    background: '#fff7ed',
+  },
+})
+
+const MobileNav = styled('nav')({
+  display: ['block', 'none'],
+  padding: '0 0 16px',
+})
+
+const MobileGrid = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: '8px',
+})
+
+const MobileLink = styled(Link)({
+  padding: '14px',
+  border: '1px solid #eee9df',
+  borderRadius: '14px',
+  background: '#fbf8f2',
+  fontSize: '14px',
+  fontWeight: 800,
+})
 
 export default function Header() {
   const { data: session } = useSession()
@@ -15,88 +211,81 @@ export default function Header() {
   ]
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-100">
-      <div className="container-max">
-        <div className="flex justify-between items-center h-16 md:h-20">
-          <Link href="/" className="text-xl md:text-2xl font-black tracking-tighter">
-            FASHION MALL
-          </Link>
+    <SiteHeader>
+      <HeaderInner>
+        <HeaderRow>
+          <Brand href="/">FASHION MALL</Brand>
 
-          <nav className="hidden md:flex items-center gap-8 text-sm font-bold">
-            <Link href="/products" className="hover:text-gray-500">전체 상품</Link>
+          <DesktopNav>
+            <NavLink href="/products">전체 상품</NavLink>
             {categoryLinks.map((category) => (
-              <Link key={category.href} href={category.href} className="hover:text-gray-500">
+              <NavLink key={category.href} href={category.href}>
                 {category.label}
-              </Link>
+              </NavLink>
             ))}
-          </nav>
+          </DesktopNav>
 
-          <div className="flex items-center gap-4">
-            <Link href="/products" className="p-2" aria-label="상품 검색">
-              <Search size={20} />
-            </Link>
-            <Link href="/cart" className="p-2 relative">
-              <ShoppingCart size={20} />
-            </Link>
-            <Link href="/wishlist" className="p-2 hidden sm:block"><Heart size={20} /></Link>
-            
+          <ActionGroup>
+            <IconLink href="/products" aria-label="상품 검색">
+              <Search size={19} />
+            </IconLink>
+            <IconLink href="/cart" aria-label="장바구니">
+              <ShoppingCart size={19} />
+            </IconLink>
+            <IconLink href="/wishlist" aria-label="위시리스트">
+              <Heart size={19} />
+            </IconLink>
+
             {session ? (
-              <div className="group relative">
-                <button className="p-2 flex items-center gap-1 font-bold text-sm">
-                  <User size={20} />
-                </button>
-                <div className="absolute right-0 top-full w-48 bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all rounded-md overflow-hidden">
-                  <div className="p-4 border-b border-gray-50">
-                    <p className="text-xs text-gray-500">Logged in as</p>
-                    <p className="font-bold truncate">{session.user?.name}</p>
-                  </div>
-                  <Link href="/mypage" className="block px-4 py-2 text-sm hover:bg-gray-50">마이페이지</Link>
-                  <Link href="/orders" className="block px-4 py-2 text-sm hover:bg-gray-50">주문내역</Link>
+              <UserMenuWrap role="group">
+                <UserButton aria-label="사용자 메뉴">
+                  <User size={19} />
+                </UserButton>
+                <UserDropdown>
+                  <DropdownHead>
+                    <Muted>Logged in as</Muted>
+                    <StrongLine>{session.user?.name}</StrongLine>
+                  </DropdownHead>
+                  <DropdownLink href="/mypage">마이페이지</DropdownLink>
+                  <DropdownLink href="/orders">주문내역</DropdownLink>
                   {session.user?.role === 'ADMIN' && (
-                    <Link href="/admin" className="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-50 font-bold border-t border-gray-50">관리자 대시보드</Link>
+                    <DropdownLink href="/admin">관리자 대시보드</DropdownLink>
                   )}
-                  <button 
-                    onClick={() => signOut()}
-                    className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-50 border-t border-gray-50"
-                  >
-                    로그아웃
-                  </button>
-                </div>
-              </div>
+                  <SignOutButton onClick={() => signOut()}>로그아웃</SignOutButton>
+                </UserDropdown>
+              </UserMenuWrap>
             ) : (
-              <Link href="/login" className="p-2 text-sm font-bold uppercase tracking-widest">Login</Link>
+              <LoginLink href="/login">LOGIN</LoginLink>
             )}
-            
-            <button
-              className="md:hidden p-2"
+
+            <MenuButton
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
             >
               {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
-          </div>
-        </div>
+            </MenuButton>
+          </ActionGroup>
+        </HeaderRow>
 
         {isMenuOpen && (
-          <nav className="md:hidden border-t border-gray-100 py-4">
-            <div className="grid grid-cols-2 gap-2 text-sm font-bold">
-              <Link href="/products" onClick={() => setIsMenuOpen(false)} className="rounded border border-gray-200 px-4 py-3">
+          <MobileNav>
+            <MobileGrid>
+              <MobileLink href="/products" onClick={() => setIsMenuOpen(false)}>
                 전체 상품
-              </Link>
+              </MobileLink>
               {categoryLinks.map((category) => (
-                <Link
+                <MobileLink
                   key={category.href}
                   href={category.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className="rounded border border-gray-200 px-4 py-3"
                 >
                   {category.label}
-                </Link>
+                </MobileLink>
               ))}
-            </div>
-          </nav>
+            </MobileGrid>
+          </MobileNav>
         )}
-      </div>
-    </header>
+      </HeaderInner>
+    </SiteHeader>
   )
 }

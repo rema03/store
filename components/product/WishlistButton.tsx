@@ -4,11 +4,47 @@ import { useState } from 'react'
 import { toggleWishlist } from '@/actions/wishlistActions'
 import { useRouter } from 'next/navigation'
 import { Heart } from 'lucide-react'
+import { styled } from '@devup-ui/react'
 
 interface WishlistButtonProps {
   productId: number
   isInitiallyAdded: boolean
 }
+
+const WishButton = styled('button')({
+  width: '56px',
+  height: '56px',
+  display: 'grid',
+  placeItems: 'center',
+  border: '1px solid #e8e0d5',
+  borderRadius: '16px',
+  background: '#fff',
+  color: '#8c7d6d',
+  cursor: 'pointer',
+  _hover: {
+    borderColor: '#171512',
+  },
+  _disabled: {
+    opacity: 0.6,
+    cursor: 'not-allowed',
+  },
+})
+
+const WishButtonActive = styled('button')({
+  width: '56px',
+  height: '56px',
+  display: 'grid',
+  placeItems: 'center',
+  border: '1px solid #171512',
+  borderRadius: '16px',
+  background: '#171512',
+  color: '#fff',
+  cursor: 'pointer',
+  _disabled: {
+    opacity: 0.6,
+    cursor: 'not-allowed',
+  },
+})
 
 export default function WishlistButton({ productId, isInitiallyAdded }: WishlistButtonProps) {
   const [isAdded, setIsAdded] = useState(isInitiallyAdded)
@@ -34,15 +70,14 @@ export default function WishlistButton({ productId, isInitiallyAdded }: Wishlist
     setIsLoading(false)
   }
 
+  const ButtonComponent = isAdded ? WishButtonActive : WishButton
+
   return (
-    <button
+    <ButtonComponent
       onClick={handleToggle}
       disabled={isLoading}
-      className={`p-2 rounded-full border transition-colors ${
-        isAdded ? 'bg-black text-white border-black' : 'bg-white text-gray-400 border-gray-200 hover:border-gray-300'
-      }`}
     >
       <Heart size={20} fill={isAdded ? 'currentColor' : 'none'} />
-    </button>
+    </ButtonComponent>
   )
 }

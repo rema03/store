@@ -46,7 +46,7 @@
 - Next.js App Router
 - React
 - TypeScript
-- Tailwind CSS
+- DevUp UI
 
 ## Backend
 
@@ -1165,7 +1165,7 @@ prisma/
 
 - Next.js 프로젝트 생성
 - TypeScript 설정
-- Tailwind CSS 설정
+- DevUp UI 설정
 - 기본 레이아웃
 - Header/Footer
 - 환경 변수 예시 파일 작성
@@ -1384,7 +1384,7 @@ Toss Payments 테스트 키 설정 방법
 
 ## 28. 코딩 에이전트에게 주는 최종 지시
 
-위 요구사항을 바탕으로 **Next.js + TypeScript + Tailwind CSS + Prisma + PostgreSQL + Toss Payments API** 기반의 풀기능 패션 쇼핑몰을 구현해라.
+위 요구사항을 바탕으로 **Next.js + TypeScript + DevUp UI + Prisma + PostgreSQL + Toss Payments API** 기반의 풀기능 패션 쇼핑몰을 구현해라.
 
 작업 시 다음을 반드시 지켜라.
 

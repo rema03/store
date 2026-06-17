@@ -5,6 +5,20 @@ import CheckoutForm from '@/components/checkout/CheckoutForm'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
+import { styled } from '@devup-ui/react'
+
+const Page = styled('div')({
+  width: '100%',
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: '48px 24px',
+})
+
+const Title = styled('h1')({
+  marginBottom: '48px',
+  fontSize: '30px',
+  fontWeight: 900,
+})
 
 export default async function CheckoutPage() {
   const session = await getServerSession(authOptions)
@@ -23,13 +37,13 @@ export default async function CheckoutPage() {
   }
 
   return (
-    <div className="container-max py-12">
-      <h1 className="text-3xl font-bold mb-12">주문/결제</h1>
+    <Page>
+      <Title>주문/결제</Title>
       <CheckoutForm
         cartItems={cartItems}
         addresses={addresses}
         coupons={coupons}
       />
-    </div>
+    </Page>
   )
 }

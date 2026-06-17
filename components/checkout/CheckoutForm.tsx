@@ -7,6 +7,7 @@ import { createOrder } from '@/actions/orderActions'
 import { loadTossPayments } from '@tosspayments/payment-sdk'
 import { getShippingFee } from '@/lib/config'
 import type { Address, CartItem, Coupon, Product, UserCoupon } from '@prisma/client'
+import { styled } from '@devup-ui/react'
 
 type CheckoutCartItem = CartItem & {
   product: Product
@@ -21,6 +22,234 @@ interface CheckoutFormProps {
   addresses: Address[]
   coupons: CheckoutUserCoupon[]
 }
+
+const Layout = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: 'minmax(0, 1fr) 360px',
+  gap: '48px',
+  _media: {
+    '(max-width: 960px)': {
+      gridTemplateColumns: '1fr',
+    },
+  },
+})
+
+const MainColumn = styled('div')({
+  display: 'grid',
+  gap: '48px',
+})
+
+const Section = styled('section')({
+  display: 'grid',
+  gap: '24px',
+})
+
+const SectionTitle = styled('h2')({
+  fontSize: '20px',
+  fontWeight: 900,
+})
+
+const EmptyBox = styled('div')({
+  border: '2px dashed #ddd',
+  borderRadius: '8px',
+  padding: '32px',
+  textAlign: 'center',
+})
+
+const MutedText = styled('p')({
+  color: '#666',
+})
+
+const LinkButton = styled('button')({
+  marginTop: '16px',
+  color: '#111',
+  fontWeight: 800,
+  textDecoration: 'underline',
+})
+
+const AddressList = styled('div')({
+  display: 'grid',
+  gap: '16px',
+})
+
+const AddressOption = styled('label')({
+  display: 'block',
+  borderRadius: '8px',
+  cursor: 'pointer',
+  padding: '16px',
+  transition: 'border-color 0.15s ease, background 0.15s ease',
+})
+
+const AddressContent = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '16px',
+})
+
+const RadioInput = styled('input')({
+  width: '16px',
+  height: '16px',
+  accentColor: '#111',
+})
+
+const AddressInfo = styled('div')({
+  display: 'grid',
+  gap: '4px',
+})
+
+const NameRow = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '8px',
+})
+
+const Name = styled('span')({
+  fontWeight: 900,
+})
+
+const Badge = styled('span')({
+  borderRadius: '4px',
+  background: '#e5e7eb',
+  fontSize: '10px',
+  padding: '2px 6px',
+})
+
+const SmallMuted = styled('p')({
+  color: '#666',
+  fontSize: '14px',
+})
+
+const Select = styled('select')({
+  width: '100%',
+  border: '1px solid #d1d5db',
+  borderRadius: '6px',
+  background: '#fff',
+  padding: '12px',
+  outline: 'none',
+  _focus: {
+    borderColor: '#111',
+  },
+})
+
+const ItemList = styled('div')({
+  borderTop: '1px solid #eee',
+  borderBottom: '1px solid #eee',
+})
+
+const ItemRow = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '16px',
+  borderTop: '1px solid #eee',
+  padding: '16px 0',
+})
+
+const ItemMeta = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '16px',
+})
+
+const Thumb = styled('div')({
+  position: 'relative',
+  width: '64px',
+  height: '80px',
+  flexShrink: 0,
+  overflow: 'hidden',
+  borderRadius: '6px',
+  background: '#f1f1f1',
+})
+
+const CoverImage = styled(Image)({
+  objectFit: 'cover',
+})
+
+const ProductName = styled('p')({
+  fontSize: '14px',
+  fontWeight: 700,
+})
+
+const Quantity = styled('p')({
+  color: '#666',
+  fontSize: '12px',
+})
+
+const Price = styled('p')({
+  fontSize: '14px',
+  fontWeight: 900,
+  whiteSpace: 'nowrap',
+})
+
+const SummaryAside = styled('aside')({
+  minWidth: 0,
+})
+
+const SummaryBox = styled('div')({
+  position: 'sticky',
+  top: '96px',
+  display: 'grid',
+  gap: '24px',
+  borderRadius: '8px',
+  background: '#f7f7f7',
+  padding: '24px',
+})
+
+const SummaryTitle = styled('h2')({
+  fontSize: '18px',
+  fontWeight: 900,
+})
+
+const SummaryRows = styled('div')({
+  display: 'grid',
+  gap: '16px',
+})
+
+const SummaryRow = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+  gap: '16px',
+  fontSize: '14px',
+})
+
+const SummaryLabel = styled('span')({
+  color: '#666',
+})
+
+const Discount = styled('span')({
+  color: '#dc2626',
+})
+
+const TotalRow = styled(SummaryRow)({
+  borderTop: '1px solid #ddd',
+  paddingTop: '16px',
+  fontSize: '16px',
+  fontWeight: 900,
+})
+
+const TotalPrice = styled('span')({
+  color: '#111',
+  fontSize: '20px',
+})
+
+const PayButton = styled('button')({
+  width: '100%',
+  borderRadius: '6px',
+  background: '#111',
+  color: '#fff',
+  fontWeight: 900,
+  letterSpacing: '0.08em',
+  padding: '16px',
+  textTransform: 'uppercase',
+  transition: 'background 0.15s ease, opacity 0.15s ease',
+  _hover: {
+    background: '#2a2a2a',
+  },
+  _disabled: {
+    background: '#aaa',
+    cursor: 'not-allowed',
+  },
+})
 
 export default function CheckoutForm({ cartItems, addresses, coupons }: CheckoutFormProps) {
   const [selectedAddressId, setSelectedAddressId] = useState(addresses.find(a => a.isDefault)?.id || addresses[0]?.id)
@@ -99,57 +328,52 @@ export default function CheckoutForm({ cartItems, addresses, coupons }: Checkout
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-      <div className="lg:col-span-2 space-y-12">
-        {/* Address Selection */}
-        <section>
-          <h2 className="text-xl font-bold mb-6">배송지 정보</h2>
+    <Layout>
+      <MainColumn>
+        <Section>
+          <SectionTitle>배송지 정보</SectionTitle>
           {addresses.length === 0 ? (
-            <div className="p-8 border-2 border-dashed border-gray-200 rounded-lg text-center">
-              <p className="text-gray-500 mb-4">등록된 배송지가 없습니다.</p>
-              <button className="text-black font-bold underline">새 배송지 추가</button>
-            </div>
+            <EmptyBox>
+              <MutedText>등록된 배송지가 없습니다.</MutedText>
+              <LinkButton type="button">새 배송지 추가</LinkButton>
+            </EmptyBox>
           ) : (
-            <div className="space-y-4">
+            <AddressList>
               {addresses.map((addr) => (
-                <label
+                <AddressOption
                   key={addr.id}
-                  className={`block p-4 border rounded-lg cursor-pointer transition-colors ${
-                    selectedAddressId === addr.id ? 'border-black bg-gray-50' : 'border-gray-200'
-                  }`}
+                  style={{
+                    background: selectedAddressId === addr.id ? '#f7f7f7' : '#fff',
+                    border: `1px solid ${selectedAddressId === addr.id ? '#111' : '#ddd'}`,
+                  }}
                 >
-                  <div className="flex items-center">
-                    <input
+                  <AddressContent>
+                    <RadioInput
                       type="radio"
                       name="address"
                       checked={selectedAddressId === addr.id}
                       onChange={() => setSelectedAddressId(addr.id)}
-                      className="h-4 w-4 text-black focus:ring-black border-gray-300"
                     />
-                    <div className="ml-4">
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold">{addr.receiverName}</span>
-                        {addr.isDefault && (
-                          <span className="text-[10px] bg-gray-200 px-1.5 py-0.5 rounded">기본</span>
-                        )}
-                      </div>
-                      <p className="text-sm text-gray-600 mt-1">({addr.zipCode}) {addr.address1} {addr.address2}</p>
-                      <p className="text-sm text-gray-600">{addr.phone}</p>
-                    </div>
-                  </div>
-                </label>
+                    <AddressInfo>
+                      <NameRow>
+                        <Name>{addr.receiverName}</Name>
+                        {addr.isDefault && <Badge>기본</Badge>}
+                      </NameRow>
+                      <SmallMuted>({addr.zipCode}) {addr.address1} {addr.address2}</SmallMuted>
+                      <SmallMuted>{addr.phone}</SmallMuted>
+                    </AddressInfo>
+                  </AddressContent>
+                </AddressOption>
               ))}
-            </div>
+            </AddressList>
           )}
-        </section>
+        </Section>
 
-        {/* Coupon Selection */}
-        <section>
-          <h2 className="text-xl font-bold mb-6">쿠폰 할인</h2>
-          <select
+        <Section>
+          <SectionTitle>쿠폰 할인</SectionTitle>
+          <Select
             value={selectedCouponId || ''}
             onChange={(e) => setSelectedCouponId(e.target.value ? parseInt(e.target.value) : undefined)}
-            className="w-full p-3 border border-gray-300 rounded-md focus:ring-black focus:border-black"
           >
             <option value="">쿠폰 선택 안 함</option>
             {coupons.map((c) => (
@@ -157,63 +381,60 @@ export default function CheckoutForm({ cartItems, addresses, coupons }: Checkout
                 {c.coupon.name} ({c.coupon.discountType === 'PERCENT' ? `${c.coupon.discountValue}%` : formatPrice(c.coupon.discountValue)} 할인)
               </option>
             ))}
-          </select>
-        </section>
+          </Select>
+        </Section>
 
-        {/* Order Items Review */}
-        <section>
-          <h2 className="text-xl font-bold mb-6">주문 상품</h2>
-          <div className="divide-y divide-gray-100 border-t border-b border-gray-100">
+        <Section>
+          <SectionTitle>주문 상품</SectionTitle>
+          <ItemList>
             {cartItems.map((item) => (
-              <div key={item.id} className="py-4 flex justify-between items-center">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-20 bg-gray-100 rounded overflow-hidden relative">
-                    {item.product.imageUrl && <Image src={item.product.imageUrl} alt={item.product.name} fill className="object-cover" />}
-                  </div>
+              <ItemRow key={item.id}>
+                <ItemMeta>
+                  <Thumb>
+                    {item.product.imageUrl && <CoverImage src={item.product.imageUrl} alt={item.product.name} fill />}
+                  </Thumb>
                   <div>
-                    <p className="font-medium text-sm">{item.product.name}</p>
-                    <p className="text-xs text-gray-500">수량: {item.quantity}개</p>
+                    <ProductName>{item.product.name}</ProductName>
+                    <Quantity>수량: {item.quantity}개</Quantity>
                   </div>
-                </div>
-                <p className="font-bold text-sm">{formatPrice(item.product.price * item.quantity)}</p>
-              </div>
+                </ItemMeta>
+                <Price>{formatPrice(item.product.price * item.quantity)}</Price>
+              </ItemRow>
             ))}
-          </div>
-        </section>
-      </div>
+          </ItemList>
+        </Section>
+      </MainColumn>
 
-      {/* Payment Summary Sidebar */}
-      <div className="lg:col-span-1">
-        <div className="sticky top-24 bg-gray-50 rounded-lg p-6 space-y-6">
-          <h2 className="text-lg font-bold">최종 결제 금액</h2>
-          <div className="space-y-4">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-600">총 상품 금액</span>
+      <SummaryAside>
+        <SummaryBox>
+          <SummaryTitle>최종 결제 금액</SummaryTitle>
+          <SummaryRows>
+            <SummaryRow>
+              <SummaryLabel>총 상품 금액</SummaryLabel>
               <span>{formatPrice(totalPrice)}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-600">쿠폰 할인</span>
-              <span className="text-red-600">-{formatPrice(discountAmount)}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-600">배송비</span>
+            </SummaryRow>
+            <SummaryRow>
+              <SummaryLabel>쿠폰 할인</SummaryLabel>
+              <Discount>-{formatPrice(discountAmount)}</Discount>
+            </SummaryRow>
+            <SummaryRow>
+              <SummaryLabel>배송비</SummaryLabel>
               <span>{shippingFee === 0 ? '무료' : formatPrice(shippingFee)}</span>
-            </div>
-            <div className="border-t border-gray-200 pt-4 flex justify-between">
-              <span className="text-base font-bold">결제 예정 금액</span>
-              <span className="text-xl font-bold text-black">{formatPrice(finalPrice)}</span>
-            </div>
-          </div>
+            </SummaryRow>
+            <TotalRow>
+              <span>결제 예정 금액</span>
+              <TotalPrice>{formatPrice(finalPrice)}</TotalPrice>
+            </TotalRow>
+          </SummaryRows>
 
-          <button
+          <PayButton
             onClick={handleOrder}
             disabled={isSubmitting || addresses.length === 0}
-            className="w-full py-4 bg-black text-white font-bold rounded-md hover:bg-gray-800 disabled:bg-gray-400 transition-colors uppercase tracking-widest"
           >
             {isSubmitting ? 'Processing...' : '결제하기'}
-          </button>
-        </div>
-      </div>
-    </div>
+          </PayButton>
+        </SummaryBox>
+      </SummaryAside>
+    </Layout>
   )
 }

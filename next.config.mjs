@@ -1,3 +1,5 @@
+import { DevupUI } from '@devup-ui/next-plugin'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
@@ -5,6 +7,7 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -22,4 +25,4 @@ const nextConfig = {
   },
 }
 
-export default nextConfig
+export default DevupUI(nextConfig)

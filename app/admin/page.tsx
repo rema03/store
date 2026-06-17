@@ -4,6 +4,101 @@ import Link from 'next/link'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
+import { styled } from '@devup-ui/react'
+
+const Page = styled('div')({
+  width: '100%',
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: '48px 24px',
+})
+
+const Title = styled('h1')({
+  marginBottom: '32px',
+  fontSize: '30px',
+  fontWeight: 900,
+})
+
+const StatsGrid = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+  gap: '24px',
+  marginBottom: '48px',
+  _media: {
+    '(max-width: 960px)': {
+      gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+    },
+    '(max-width: 560px)': {
+      gridTemplateColumns: '1fr',
+    },
+  },
+})
+
+const StatCard = styled(Link)({
+  border: '1px solid #ddd',
+  borderRadius: '8px',
+  background: '#fff',
+  padding: '24px',
+  transition: 'box-shadow 0.15s ease, transform 0.15s ease',
+  _hover: {
+    boxShadow: '0 12px 30px rgba(0, 0, 0, 0.08)',
+    transform: 'translateY(-2px)',
+  },
+})
+
+const StatName = styled('p')({
+  color: '#666',
+  fontSize: '14px',
+  fontWeight: 700,
+})
+
+const StatValue = styled('p')({
+  marginTop: '8px',
+  fontSize: '24px',
+  fontWeight: 900,
+})
+
+const PanelGrid = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+  gap: '32px',
+  _media: {
+    '(max-width: 860px)': {
+      gridTemplateColumns: '1fr',
+    },
+  },
+})
+
+const Panel = styled('section')({
+  border: '1px solid #ddd',
+  borderRadius: '8px',
+  background: '#fff',
+  padding: '24px',
+})
+
+const PanelTitle = styled('h2')({
+  marginBottom: '16px',
+  fontSize: '20px',
+  fontWeight: 900,
+})
+
+const QuickGrid = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+  gap: '16px',
+})
+
+const QuickLink = styled(Link)({
+  borderRadius: '6px',
+  background: '#f7f7f7',
+  padding: '16px',
+  textAlign: 'center',
+  fontWeight: 800,
+  transition: 'background 0.15s ease',
+  _hover: {
+    background: '#eee',
+  },
+})
 
 export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions)
@@ -28,41 +123,40 @@ export default async function AdminDashboardPage() {
   ]
 
   return (
-    <div className="container-max py-12">
-      <h1 className="text-3xl font-bold mb-8">관리자 대시보드</h1>
+    <Page>
+      <Title>관리자 대시보드</Title>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <StatsGrid>
         {stats.map((item) => (
-          <Link
+          <StatCard
             key={item.name}
             href={item.href}
-            className="p-6 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
           >
-            <p className="text-sm font-medium text-gray-500">{item.name}</p>
-            <p className="text-2xl font-bold mt-2">{item.value}</p>
-          </Link>
+            <StatName>{item.name}</StatName>
+            <StatValue>{item.value}</StatValue>
+          </StatCard>
         ))}
-      </div>
+      </StatsGrid>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white p-6 border border-gray-200 rounded-lg">
-          <h2 className="text-xl font-bold mb-4">빠른 관리</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <Link href="/admin/products/new" className="p-4 bg-gray-50 rounded text-center hover:bg-gray-100 font-medium">
+      <PanelGrid>
+        <Panel>
+          <PanelTitle>빠른 관리</PanelTitle>
+          <QuickGrid>
+            <QuickLink href="/admin/products/new">
               상품 등록
-            </Link>
-            <Link href="/admin/orders" className="p-4 bg-gray-50 rounded text-center hover:bg-gray-100 font-medium">
+            </QuickLink>
+            <QuickLink href="/admin/orders">
               주문 확인
-            </Link>
-            <Link href="/admin/coupons" className="p-4 bg-gray-50 rounded text-center hover:bg-gray-100 font-medium">
+            </QuickLink>
+            <QuickLink href="/admin/coupons">
               쿠폰 생성
-            </Link>
-            <Link href="/" className="p-4 bg-gray-50 rounded text-center hover:bg-gray-100 font-medium">
+            </QuickLink>
+            <QuickLink href="/">
               쇼핑몰 홈
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
+            </QuickLink>
+          </QuickGrid>
+        </Panel>
+      </PanelGrid>
+    </Page>
   )
 }

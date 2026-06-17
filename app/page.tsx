@@ -2,6 +2,7 @@ import { getProducts, getCategories } from '@/actions/productActions'
 import ProductCard from '@/components/product/ProductCard'
 import Link from 'next/link'
 import Image from 'next/image'
+import { styled } from '@devup-ui/react'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,6 +21,264 @@ const storyImages = [
   'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1000',
 ]
 
+const Page = styled('div')({
+  background: '#fbf8f2',
+})
+
+const Hero = styled('section')({
+  position: 'relative',
+  minHeight: ['620px', '720px'],
+  overflow: 'hidden',
+  background: '#171512',
+})
+
+const HeroOverlay = styled('div')({
+  position: 'absolute',
+  inset: 0,
+  zIndex: 1,
+  background:
+    'linear-gradient(90deg, rgba(16,13,10,0.78) 0%, rgba(16,13,10,0.42) 48%, rgba(16,13,10,0.12) 100%)',
+})
+
+const HeroContent = styled('div')({
+  position: 'relative',
+  zIndex: 2,
+  maxWidth: '1200px',
+  minHeight: ['620px', '720px'],
+  margin: '0 auto',
+  padding: ['72px 20px', '92px 20px'],
+  display: 'flex',
+  alignItems: 'center',
+})
+
+const HeroCopy = styled('div')({
+  maxWidth: '720px',
+})
+
+const Eyebrow = styled('p')({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '8px',
+  marginBottom: '18px',
+  padding: '8px 12px',
+  border: '1px solid rgba(255,255,255,0.22)',
+  borderRadius: '999px',
+  background: 'rgba(255,255,255,0.1)',
+  color: '#fff',
+  fontSize: '12px',
+  fontWeight: 900,
+  letterSpacing: '0.12em',
+  backdropFilter: 'blur(10px)',
+})
+
+const HeroTitle = styled('h1')({
+  color: '#fff',
+  fontSize: ['58px', '96px'],
+  fontWeight: 950,
+  lineHeight: 0.92,
+  letterSpacing: '-0.065em',
+})
+
+const HeroText = styled('p')({
+  maxWidth: '560px',
+  marginTop: '26px',
+  color: 'rgba(255,255,255,0.82)',
+  fontSize: ['17px', '20px'],
+  lineHeight: 1.7,
+})
+
+const HeroActions = styled('div')({
+  display: 'flex',
+  flexDirection: ['column', 'row'],
+  gap: '12px',
+  marginTop: '34px',
+})
+
+const PrimaryLink = styled(Link)({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: '52px',
+  padding: '0 22px',
+  borderRadius: '16px',
+  background: '#fff',
+  color: '#171512',
+  fontSize: '14px',
+  fontWeight: 900,
+  _hover: {
+    background: '#f0e7d8',
+  },
+})
+
+const SecondaryLink = styled(Link)({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: '52px',
+  padding: '0 22px',
+  border: '1px solid rgba(255,255,255,0.42)',
+  borderRadius: '16px',
+  color: '#fff',
+  fontSize: '14px',
+  fontWeight: 900,
+  _hover: {
+    background: 'rgba(255,255,255,0.12)',
+  },
+})
+
+const Section = styled('section')({
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: ['64px 20px', '96px 20px'],
+})
+
+const SectionHeader = styled('div')({
+  display: 'flex',
+  alignItems: ['flex-start', 'flex-end'],
+  justifyContent: 'space-between',
+  flexDirection: ['column', 'row'],
+  gap: '18px',
+  marginBottom: '28px',
+})
+
+const SectionTitle = styled('h2')({
+  color: '#171512',
+  fontSize: ['30px', '46px'],
+  fontWeight: 950,
+  letterSpacing: '-0.045em',
+})
+
+const SectionSub = styled('p')({
+  marginTop: '8px',
+  color: '#7e7468',
+  fontSize: '15px',
+})
+
+const TextLink = styled(Link)({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '8px',
+  color: '#171512',
+  fontSize: '14px',
+  fontWeight: 900,
+})
+
+const CategoryGrid = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: ['1fr 1fr', 'repeat(4, 1fr)'],
+  gap: ['12px', '18px'],
+})
+
+const CategoryCard = styled(Link)({
+  position: 'relative',
+  minHeight: ['220px', '330px'],
+  overflow: 'hidden',
+  borderRadius: '24px',
+  background: '#ebe3d7',
+  boxShadow: '0 20px 45px rgba(36, 29, 21, 0.08)',
+})
+
+const CategoryShade = styled('div')({
+  position: 'absolute',
+  inset: 0,
+  zIndex: 1,
+  background: 'linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.55))',
+})
+
+const CategoryName = styled('span')({
+  position: 'absolute',
+  left: '18px',
+  bottom: '18px',
+  zIndex: 2,
+  color: '#fff',
+  fontSize: ['22px', '28px'],
+  fontWeight: 950,
+  letterSpacing: '-0.04em',
+})
+
+const ProductGrid = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: ['1fr 1fr', 'repeat(4, 1fr)'],
+  gap: ['28px 12px', '38px 18px'],
+})
+
+const Story = styled('section')({
+  background: '#171512',
+  color: '#fff',
+})
+
+const StoryInner = styled('div')({
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: ['72px 20px', '110px 20px'],
+  display: 'grid',
+  gridTemplateColumns: ['1fr', '0.9fr 1.1fr'],
+  gap: ['42px', '72px'],
+  alignItems: 'center',
+})
+
+const StoryTitle = styled('h2')({
+  fontSize: ['42px', '66px'],
+  fontWeight: 950,
+  lineHeight: 0.98,
+  letterSpacing: '-0.055em',
+})
+
+const StoryText = styled('p')({
+  maxWidth: '520px',
+  marginTop: '24px',
+  color: '#beb3a5',
+  fontSize: '17px',
+  lineHeight: 1.8,
+})
+
+const StoryStats = styled('div')({
+  display: 'flex',
+  gap: '24px',
+  marginTop: '32px',
+})
+
+const StatValue = styled('p')({
+  fontSize: '34px',
+  fontWeight: 950,
+})
+
+const StatLabel = styled('p')({
+  marginTop: '4px',
+  color: '#8e857a',
+  fontSize: '12px',
+  fontWeight: 800,
+  letterSpacing: '0.12em',
+})
+
+const StoryMedia = styled('div')({
+  position: 'relative',
+  minHeight: ['420px', '580px'],
+})
+
+const StoryImageLarge = styled('div')({
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  width: '82%',
+  height: '78%',
+  overflow: 'hidden',
+  border: '8px solid #26211c',
+  borderRadius: '28px',
+})
+
+const StoryImageSmall = styled('div')({
+  position: 'absolute',
+  left: 0,
+  bottom: 0,
+  width: '58%',
+  height: '56%',
+  overflow: 'hidden',
+  border: '8px solid #171512',
+  borderRadius: '28px',
+  boxShadow: '0 25px 60px rgba(0,0,0,0.34)',
+})
+
 export default async function Home() {
   const [products, categories] = await Promise.all([
     getProducts({}),
@@ -29,137 +288,113 @@ export default async function Home() {
   const newArrivals = products.slice(0, 8)
 
   return (
-    <div className="pb-20">
-      {/* Hero Section */}
-      <section className="relative h-[80vh] min-h-[600px] w-full bg-gray-900 overflow-hidden">
+    <Page>
+      <Hero>
         <Image
           src={heroImage}
           alt="Fashion store display"
           fill
-          className="object-cover opacity-75"
           priority
+          sizes="100vw"
+          style={{ objectFit: 'cover' }}
         />
-        <div className="absolute inset-0 bg-black/25" />
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white px-4">
-          <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 drop-shadow-2xl">
-            THE NEW<br />COLLECTION
-          </h1>
-          <p className="text-lg md:text-2xl font-medium mb-12 opacity-90 max-w-2xl leading-relaxed">
-            당신의 무드를 완성하는 감각적인 패션 큐레이션.<br className="hidden md:block" />
-            2024년 여름, 새로운 스타일을 발견하세요.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Link
-              href="/products"
-              className="px-10 py-4 bg-white text-black font-bold text-sm hover:bg-black hover:text-white transition-all duration-300 rounded"
-            >
-              상품 보러가기
-            </Link>
-            <Link
-              href="#categories"
-              className="px-10 py-4 border border-white text-white font-bold text-sm hover:bg-white hover:text-black transition-all duration-300 rounded"
-            >
-              카테고리 보기
-            </Link>
-          </div>
-        </div>
-      </section>
+        <HeroOverlay />
+        <HeroContent>
+          <HeroCopy>
+            <Eyebrow>SEASON CURATION</Eyebrow>
+            <HeroTitle>THE NEW COLLECTION</HeroTitle>
+            <HeroText>
+              당신의 무드를 완성하는 감각적인 패션 큐레이션.
+              매일 입기 좋은 스타일을 더 단정하고 빠르게 만나보세요.
+            </HeroText>
+            <HeroActions>
+              <PrimaryLink href="/products">상품 보러가기</PrimaryLink>
+              <SecondaryLink href="#categories">카테고리 보기</SecondaryLink>
+            </HeroActions>
+          </HeroCopy>
+        </HeroContent>
+      </Hero>
 
-      {/* Category Grid */}
-      <section id="categories" className="container-max py-24">
-        <div className="flex flex-col items-center mb-16">
-          <h2 className="text-xs font-black tracking-[0.4em] text-gray-400 uppercase mb-4 text-center">Shop by Category</h2>
-          <div className="h-1 w-12 bg-black"></div>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <Section id="categories">
+        <SectionHeader>
+          <div>
+            <SectionTitle>Shop by Category</SectionTitle>
+            <SectionSub>자주 찾는 카테고리를 빠르게 둘러보세요.</SectionSub>
+          </div>
+        </SectionHeader>
+        <CategoryGrid>
           {categories.slice(0, 4).map((cat, index) => (
-            <Link
-              key={cat.id}
-              href={`/products?category=${cat.id}`}
-              className="relative group aspect-[4/5] bg-gray-100 overflow-hidden rounded-2xl"
-            >
+            <CategoryCard key={cat.id} href={`/products?category=${cat.id}`}>
               <Image
                 src={categoryImages[index % categoryImages.length]}
                 alt={cat.name}
                 fill
-                className="object-cover group-hover:scale-110 transition-transform duration-700"
+                sizes="(max-width: 768px) 50vw, 25vw"
+                style={{ objectFit: 'cover' }}
               />
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-2xl font-black text-white tracking-tighter uppercase drop-shadow-lg">
-                  {cat.name}
-                </span>
-              </div>
-            </Link>
+              <CategoryShade />
+              <CategoryName>{cat.name}</CategoryName>
+            </CategoryCard>
           ))}
-        </div>
-      </section>
+        </CategoryGrid>
+      </Section>
 
-      {/* New Arrivals */}
-      <section className="container-max py-10">
-        <div className="flex justify-between items-end mb-12 border-b border-gray-100 pb-8">
+      <Section>
+        <SectionHeader>
           <div>
-            <h2 className="text-4xl font-black tracking-tighter uppercase">New Arrivals</h2>
-            <p className="text-gray-400 mt-2 font-bold text-sm tracking-widest uppercase">Weekly Fresh Items</p>
+            <SectionTitle>New Arrivals</SectionTitle>
+            <SectionSub>방금 업데이트된 신상품을 확인해보세요.</SectionSub>
           </div>
-          <Link href="/products" className="group flex items-center gap-2 text-sm font-black uppercase tracking-widest">
-            View All 
-            <span className="group-hover:translate-x-2 transition-transform">→</span>
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-16">
+          <TextLink href="/products">전체 보기 →</TextLink>
+        </SectionHeader>
+        <ProductGrid>
           {newArrivals.map((product) => (
-            <div key={product.id} className="fade-in-up">
-              <ProductCard product={product} />
-            </div>
+            <ProductCard key={product.id} product={product} />
           ))}
-        </div>
-      </section>
+        </ProductGrid>
+      </Section>
 
-      {/* Brand Story / Promo Section */}
-      <section className="bg-black py-32 mt-20 text-white overflow-hidden relative">
-        <div className="container-max grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          <div className="space-y-10 z-10">
-            <h2 className="text-5xl md:text-6xl font-black tracking-tighter leading-tight">
-              MORE THAN<br />JUST FASHION
-            </h2>
-            <p className="text-gray-400 text-lg leading-relaxed max-w-lg">
-              우리는 단순한 옷을 파는 것이 아니라, 당신만의 이야기를 담을 수 있는 스타일을 만듭니다. 
-              지속 가능한 소재와 변하지 않는 가치를 담은 컬렉션을 지금 경험해보세요.
-            </p>
-            <div className="flex gap-6">
-              <div className="text-center">
-                <p className="text-3xl font-black">10K+</p>
-                <p className="text-xs text-gray-500 font-bold uppercase tracking-widest mt-1">Customers</p>
+      <Story>
+        <StoryInner>
+          <div>
+            <StoryTitle>More than just fashion</StoryTitle>
+            <StoryText>
+              우리는 단순한 옷을 파는 것이 아니라, 당신만의 이야기를 담을 수 있는 스타일을 만듭니다.
+              지속 가능한 소재와 변하지 않는 가치를 담은 컬렉션을 경험해보세요.
+            </StoryText>
+            <StoryStats>
+              <div>
+                <StatValue>10K+</StatValue>
+                <StatLabel>CUSTOMERS</StatLabel>
               </div>
-              <div className="h-10 w-[1px] bg-gray-800 self-center"></div>
-              <div className="text-center">
-                <p className="text-3xl font-black">500+</p>
-                <p className="text-xs text-gray-500 font-bold uppercase tracking-widest mt-1">Styles</p>
+              <div>
+                <StatValue>500+</StatValue>
+                <StatLabel>STYLES</StatLabel>
               </div>
-            </div>
+            </StoryStats>
           </div>
-          <div className="relative h-[500px] w-full lg:h-[600px] group">
-            <div className="absolute top-0 right-0 w-4/5 h-[80%] rounded-3xl overflow-hidden border-8 border-gray-900 shadow-2xl z-0">
+          <StoryMedia>
+            <StoryImageLarge>
               <Image
                 src={storyImages[0]}
                 alt="Curated fashion rack"
                 fill
-                className="object-cover"
+                sizes="50vw"
+                style={{ objectFit: 'cover' }}
               />
-            </div>
-            <div className="absolute bottom-0 left-0 w-3/5 h-[60%] rounded-3xl overflow-hidden border-8 border-black shadow-2xl z-10 group-hover:scale-105 transition-transform duration-500">
+            </StoryImageLarge>
+            <StoryImageSmall>
               <Image
                 src={storyImages[1]}
                 alt="Leather bag detail"
                 fill
-                className="object-cover"
+                sizes="30vw"
+                style={{ objectFit: 'cover' }}
               />
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+            </StoryImageSmall>
+          </StoryMedia>
+        </StoryInner>
+      </Story>
+    </Page>
   )
 }

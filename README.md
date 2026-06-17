@@ -93,8 +93,7 @@ store/
 ├── .env.local                  # 개발 환경 변수 ✅
 ├── package.json                # 패키지 설정 ✅
 ├── tsconfig.json               # TypeScript 설정 ✅
-├── tailwind.config.ts          # Tailwind 설정 ✅
-├── postcss.config.ts           # PostCSS 설정 ✅
+├── devup.json                  # DevUp UI 테마 설정
 ├── next.config.ts              # Next.js 설정 ✅
 └── README.md                   # 이 파일
 ```
@@ -292,7 +291,7 @@ Vercel 대시보드에서 모든 `.env.local` 변수를 설정해야 합니다.
 
 - [Next.js 공식 문서](https://nextjs.org/docs)
 - [Prisma 공식 문서](https://www.prisma.io/docs)
-- [Tailwind CSS](https://tailwindcss.com/docs)
+- [DevUp UI](https://devup-ui.com)
 - [NextAuth.js](https://next-auth.js.org)
 - [Toss Payments](https://docs.tosspayments.com)
 

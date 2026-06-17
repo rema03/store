@@ -1,34 +1,110 @@
+import Link from 'next/link'
+import { styled } from '@devup-ui/react'
+
+const FooterShell = styled('footer')({
+  borderTop: '1px solid #e8e2d8',
+  background: '#171512',
+  color: '#fff',
+})
+
+const FooterInner = styled('div')({
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: ['48px 20px 28px', '72px 20px 34px'],
+})
+
+const FooterGrid = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: ['1fr', '1.4fr 0.8fr 0.8fr'],
+  gap: ['32px', '56px'],
+})
+
+const Brand = styled('h2')({
+  fontSize: ['26px', '36px'],
+  fontWeight: 950,
+  letterSpacing: '-0.04em',
+})
+
+const Description = styled('p')({
+  maxWidth: '420px',
+  marginTop: '16px',
+  color: '#b8aea1',
+  fontSize: '15px',
+  lineHeight: 1.8,
+})
+
+const ColumnTitle = styled('h3')({
+  marginBottom: '14px',
+  color: '#f4ede2',
+  fontSize: '12px',
+  fontWeight: 900,
+  letterSpacing: '0.12em',
+})
+
+const FooterText = styled('p')({
+  color: '#b8aea1',
+  fontSize: '14px',
+  lineHeight: 1.8,
+})
+
+const LinkList = styled('ul')({
+  display: 'grid',
+  gap: '10px',
+  listStyle: 'none',
+})
+
+const FooterLink = styled(Link)({
+  color: '#b8aea1',
+  fontSize: '14px',
+  _hover: {
+    color: '#fff',
+  },
+})
+
+const Bottom = styled('div')({
+  display: 'flex',
+  flexDirection: ['column', 'row'],
+  justifyContent: 'space-between',
+  gap: '12px',
+  marginTop: '54px',
+  paddingTop: '22px',
+  borderTop: '1px solid rgba(255,255,255,0.1)',
+  color: '#8e857a',
+  fontSize: '12px',
+})
+
 export default function Footer() {
   return (
-    <footer className="bg-white border-t border-gray-100 py-12">
-      <div className="container-max">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-2">
-            <h2 className="text-xl font-black tracking-tighter mb-4">FASHION MALL</h2>
-            <p className="text-sm text-gray-500 max-w-sm leading-relaxed">
-              우리는 가장 트렌디하고 감각적인 패션을 제안합니다. 당신의 스타일을 완성하는 단 하나의 쇼핑몰.
-            </p>
+    <FooterShell>
+      <FooterInner>
+        <FooterGrid>
+          <div>
+            <Brand>FASHION MALL</Brand>
+            <Description>
+              감각적인 셀렉션과 단정한 쇼핑 경험을 함께 제안합니다.
+              오래 입을 수 있는 스타일을 더 쉽게 고를 수 있도록 큐레이션합니다.
+            </Description>
           </div>
           <div>
-            <h3 className="font-bold text-sm uppercase tracking-widest mb-4">CS Center</h3>
-            <p className="text-sm text-gray-500">1234-5678</p>
-            <p className="text-xs text-gray-400 mt-1">10:00 - 18:00 (Weekend Off)</p>
+            <ColumnTitle>CS CENTER</ColumnTitle>
+            <FooterText>1234-5678</FooterText>
+            <FooterText>10:00 - 18:00</FooterText>
+            <FooterText>Weekend Off</FooterText>
           </div>
           <div>
-            <h3 className="font-bold text-sm uppercase tracking-widest mb-4">Quick Links</h3>
-            <ul className="space-y-2 text-sm text-gray-500">
-              <li>Notice</li>
-              <li>Shipping</li>
-              <li>Terms of Service</li>
-            </ul>
+            <ColumnTitle>QUICK LINKS</ColumnTitle>
+            <LinkList>
+              <li><FooterLink href="/products">전체 상품</FooterLink></li>
+              <li><FooterLink href="/orders">주문내역</FooterLink></li>
+              <li><FooterLink href="/mypage">마이페이지</FooterLink></li>
+            </LinkList>
           </div>
-        </div>
-        <div className="mt-12 pt-8 border-t border-gray-50 text-center">
-          <p className="text-xs text-gray-400">
-            &copy; 2024 Fashion Mall. All rights reserved.
-          </p>
-        </div>
-      </div>
-    </footer>
+        </FooterGrid>
+        <Bottom>
+          <span>© 2026 Fashion Mall. All rights reserved.</span>
+          <span>shop.jimindev.com</span>
+        </Bottom>
+      </FooterInner>
+    </FooterShell>
   )
 }

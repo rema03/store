@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { formatPrice } from '@/lib/utils'
 import { updateCartItemQuantity, removeFromCart } from '@/actions/cartActions'
 import { useState } from 'react'
+import { styled } from '@devup-ui/react'
 
 interface CartItemRowProps {
   item: {
@@ -17,6 +18,105 @@ interface CartItemRowProps {
     }
   }
 }
+
+const Row = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: ['88px 1fr', '112px 1fr'],
+  gap: ['14px', '20px'],
+  padding: '18px',
+  border: '1px solid #e8e0d5',
+  borderRadius: '24px',
+  background: '#fff',
+})
+
+const Media = styled('div')({
+  position: 'relative',
+  aspectRatio: '3 / 4',
+  overflow: 'hidden',
+  borderRadius: '16px',
+  background: '#efe7dc',
+})
+
+const Placeholder = styled('div')({
+  height: '100%',
+  display: 'grid',
+  placeItems: 'center',
+  color: '#9a8d7f',
+  fontSize: '12px',
+  fontWeight: 800,
+})
+
+const Body = styled('div')({
+  display: 'grid',
+  gap: '14px',
+})
+
+const Top = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+  gap: '16px',
+})
+
+const Name = styled('h3')({
+  color: '#171512',
+  fontSize: '16px',
+  fontWeight: 900,
+})
+
+const Price = styled('p')({
+  color: '#6f6256',
+  fontSize: '14px',
+})
+
+const Total = styled('p')({
+  color: '#171512',
+  fontWeight: 950,
+  whiteSpace: 'nowrap',
+})
+
+const Bottom = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '12px',
+})
+
+const Quantity = styled('div')({
+  display: 'inline-flex',
+  alignItems: 'center',
+  overflow: 'hidden',
+  border: '1px solid #e1d7ca',
+  borderRadius: '14px',
+})
+
+const QuantityButton = styled('button')({
+  width: '34px',
+  height: '34px',
+  border: 0,
+  background: '#fff',
+  cursor: 'pointer',
+  _disabled: {
+    opacity: 0.35,
+    cursor: 'not-allowed',
+  },
+})
+
+const QuantityValue = styled('span')({
+  minWidth: '38px',
+  borderLeft: '1px solid #e1d7ca',
+  borderRight: '1px solid #e1d7ca',
+  textAlign: 'center',
+  fontWeight: 850,
+})
+
+const RemoveButton = styled('button')({
+  border: 0,
+  background: 'transparent',
+  color: '#9a3412',
+  fontSize: '13px',
+  fontWeight: 850,
+  cursor: 'pointer',
+})
 
 export default function CartItemRow({ item }: CartItemRowProps) {
   const [isUpdating, setIsUpdating] = useState(false)
@@ -35,60 +135,51 @@ export default function CartItemRow({ item }: CartItemRowProps) {
   }
 
   return (
-    <div className="flex items-center py-6 border-b border-gray-100 last:border-0">
-      <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+    <Row>
+      <Media>
         {item.product.imageUrl ? (
           <Image
             src={item.product.imageUrl}
             alt={item.product.name}
             fill
-            className="object-cover"
+            sizes="112px"
+            style={{ objectFit: 'cover' }}
           />
         ) : (
-          <div className="flex h-full items-center justify-center bg-gray-50 text-gray-400">
-            No Image
-          </div>
+          <Placeholder>No Image</Placeholder>
         )}
-      </div>
+      </Media>
 
-      <div className="ml-4 flex flex-1 flex-col">
-        <div>
-          <div className="flex justify-between text-base font-medium text-gray-900">
-            <h3>{item.product.name}</h3>
-            <p className="ml-4">{formatPrice(item.product.price * item.quantity)}</p>
+      <Body>
+        <Top>
+          <div>
+            <Name>{item.product.name}</Name>
+            <Price>{formatPrice(item.product.price)}</Price>
           </div>
-          <p className="mt-1 text-sm text-gray-500">{formatPrice(item.product.price)}</p>
-        </div>
-        <div className="flex flex-1 items-end justify-between text-sm">
-          <div className="flex items-center border border-gray-300 rounded-md">
-            <button
+          <Total>{formatPrice(item.product.price * item.quantity)}</Total>
+        </Top>
+        <Bottom>
+          <Quantity>
+            <QuantityButton
               onClick={() => handleQuantityChange(item.quantity - 1)}
               disabled={isUpdating || item.quantity <= 1}
-              className="px-2 py-1 hover:bg-gray-100 disabled:opacity-30"
             >
               -
-            </button>
-            <span className="px-4 py-1 border-x border-gray-300 min-w-[40px] text-center">
-              {item.quantity}
-            </span>
-            <button
+            </QuantityButton>
+            <QuantityValue>{item.quantity}</QuantityValue>
+            <QuantityButton
               onClick={() => handleQuantityChange(item.quantity + 1)}
               disabled={isUpdating}
-              className="px-2 py-1 hover:bg-gray-100 disabled:opacity-30"
             >
               +
-            </button>
-          </div>
+            </QuantityButton>
+          </Quantity>
 
-          <button
-            type="button"
-            onClick={handleRemove}
-            className="font-medium text-gray-500 hover:text-red-600 underline"
-          >
-            Remove
-          </button>
-        </div>
-      </div>
-    </div>
+          <RemoveButton type="button" onClick={handleRemove}>
+            삭제
+          </RemoveButton>
+        </Bottom>
+      </Body>
+    </Row>
   )
 }

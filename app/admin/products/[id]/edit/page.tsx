@@ -4,12 +4,34 @@ import ProductForm from '@/components/admin/ProductForm'
 import { authOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { notFound, redirect } from 'next/navigation'
+import { styled } from '@devup-ui/react'
 
 interface EditProductPageProps {
   params: {
     id: string
   }
 }
+
+const Page = styled('div')({
+  width: '100%',
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: '48px 24px',
+})
+
+const Header = styled('div')({
+  marginBottom: '32px',
+})
+
+const Title = styled('h1')({
+  fontSize: '30px',
+  fontWeight: 900,
+})
+
+const Description = styled('p')({
+  marginTop: '8px',
+  color: '#666',
+})
 
 export default async function EditProductPage({ params }: EditProductPageProps) {
   const session = await getServerSession(authOptions)
@@ -26,13 +48,13 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
   if (!product) notFound()
 
   return (
-    <div className="container-max py-12">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">상품 수정</h1>
-        <p className="text-gray-500 mt-2">상품 정보를 수정합니다.</p>
-      </div>
+    <Page>
+      <Header>
+        <Title>상품 수정</Title>
+        <Description>상품 정보를 수정합니다.</Description>
+      </Header>
 
       <ProductForm initialData={product} categories={categories} />
-    </div>
+    </Page>
   )
 }

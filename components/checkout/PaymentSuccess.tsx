@@ -3,6 +3,81 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { styled } from '@devup-ui/react'
+
+const Shell = styled('div')({
+  padding: '80px 16px',
+  textAlign: 'center',
+})
+
+const Stack = styled('div')({
+  display: 'grid',
+  justifyItems: 'center',
+  gap: '24px',
+})
+
+const LoadingStack = styled(Stack)({
+  gap: '16px',
+})
+
+const Spinner = styled('div')({
+  width: '48px',
+  height: '48px',
+  borderRadius: '999px',
+  border: '2px solid #e5e7eb',
+  borderBottomColor: '#111',
+  animation: 'spin 0.8s linear infinite',
+})
+
+const Message = styled('p')({
+  color: '#666',
+})
+
+const LoadingMessage = styled('p')({
+  fontSize: '18px',
+  fontWeight: 700,
+})
+
+const Icon = styled('div')({
+  fontSize: '60px',
+  lineHeight: 1,
+})
+
+const Title = styled('h1')({
+  fontSize: '30px',
+  fontWeight: 900,
+})
+
+const ActionRow = styled('div')({
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  gap: '16px',
+  paddingTop: '32px',
+})
+
+const PrimaryLink = styled(Link)({
+  borderRadius: '6px',
+  background: '#111',
+  color: '#fff',
+  fontWeight: 800,
+  padding: '12px 32px',
+  transition: 'background 0.15s ease',
+  _hover: {
+    background: '#2a2a2a',
+  },
+})
+
+const SecondaryLink = styled(Link)({
+  border: '1px solid #d1d5db',
+  borderRadius: '6px',
+  fontWeight: 800,
+  padding: '12px 32px',
+  transition: 'background 0.15s ease',
+  _hover: {
+    background: '#f7f7f7',
+  },
+})
 
 export default function PaymentSuccess() {
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
@@ -51,51 +126,42 @@ export default function PaymentSuccess() {
   }, [paymentKey, orderId, amount])
 
   return (
-    <div className="text-center py-20 px-4">
+    <Shell>
       {status === 'loading' && (
-        <div className="space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto"></div>
-          <p className="text-lg font-medium">{message}</p>
-        </div>
+        <LoadingStack>
+          <Spinner />
+          <LoadingMessage>{message}</LoadingMessage>
+        </LoadingStack>
       )}
 
       {status === 'success' && (
-        <div className="space-y-6">
-          <div className="text-6xl text-green-500">✓</div>
-          <h1 className="text-3xl font-bold">결제 완료!</h1>
-          <p className="text-gray-600">{message}</p>
-          <div className="pt-8 flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/orders"
-              className="px-8 py-3 bg-black text-white font-bold rounded-md hover:bg-gray-800 transition-colors"
-            >
+        <Stack>
+          <Icon style={{ color: '#22c55e' }}>✓</Icon>
+          <Title>결제 완료!</Title>
+          <Message>{message}</Message>
+          <ActionRow>
+            <PrimaryLink href="/orders">
               주문 내역 보기
-            </Link>
-            <Link
-              href="/products"
-              className="px-8 py-3 border border-gray-300 font-bold rounded-md hover:bg-gray-50 transition-colors"
-            >
+            </PrimaryLink>
+            <SecondaryLink href="/products">
               쇼핑 계속하기
-            </Link>
-          </div>
-        </div>
+            </SecondaryLink>
+          </ActionRow>
+        </Stack>
       )}
 
       {status === 'error' && (
-        <div className="space-y-6">
-          <div className="text-6xl text-red-500">✕</div>
-          <h1 className="text-3xl font-bold">결제 실패</h1>
-          <p className="text-gray-600">{message}</p>
-          <div className="pt-8">
-            <Link
-              href="/checkout"
-              className="px-8 py-3 bg-black text-white font-bold rounded-md hover:bg-gray-800 transition-colors"
-            >
+        <Stack>
+          <Icon style={{ color: '#ef4444' }}>✕</Icon>
+          <Title>결제 실패</Title>
+          <Message>{message}</Message>
+          <ActionRow>
+            <PrimaryLink href="/checkout">
               다시 시도하기
-            </Link>
-          </div>
-        </div>
+            </PrimaryLink>
+          </ActionRow>
+        </Stack>
       )}
-    </div>
+    </Shell>
   )
 }

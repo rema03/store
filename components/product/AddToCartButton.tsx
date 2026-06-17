@@ -3,11 +3,32 @@
 import { useState } from 'react'
 import { addToCart } from '@/actions/cartActions'
 import { useRouter } from 'next/navigation'
+import { styled } from '@devup-ui/react'
 
 interface AddToCartButtonProps {
   productId: number
   stock: number
 }
+
+const CartButton = styled('button')({
+  width: '100%',
+  minHeight: '56px',
+  border: 0,
+  borderRadius: '16px',
+  background: '#171512',
+  color: '#fff',
+  fontSize: '13px',
+  fontWeight: 950,
+  letterSpacing: '0.1em',
+  cursor: 'pointer',
+  _hover: {
+    background: '#3a3128',
+  },
+  _disabled: {
+    background: '#b8aea1',
+    cursor: 'not-allowed',
+  },
+})
 
 export default function AddToCartButton({ productId, stock }: AddToCartButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
@@ -34,12 +55,11 @@ export default function AddToCartButton({ productId, stock }: AddToCartButtonPro
   }
 
   return (
-    <button
+    <CartButton
       onClick={handleAddToCart}
       disabled={isLoading || stock === 0}
-      className="w-full py-4 bg-black text-white font-bold rounded-md hover:bg-gray-800 disabled:bg-gray-400 transition-colors uppercase tracking-widest"
     >
       {isLoading ? 'Adding...' : 'Add to Cart'}
-    </button>
+    </CartButton>
   )
 }

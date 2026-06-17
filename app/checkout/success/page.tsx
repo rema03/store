@@ -1,17 +1,46 @@
 import { Suspense } from 'react'
 import PaymentSuccess from '@/components/checkout/PaymentSuccess'
+import { styled } from '@devup-ui/react'
+
+const Page = styled('div')({
+  width: '100%',
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: '80px 24px',
+})
+
+const Fallback = styled('div')({
+  display: 'grid',
+  justifyItems: 'center',
+  gap: '16px',
+  padding: '80px 0',
+  textAlign: 'center',
+})
+
+const Spinner = styled('div')({
+  width: '48px',
+  height: '48px',
+  borderRadius: '999px',
+  border: '2px solid #e5e7eb',
+  borderBottomColor: '#111',
+  animation: 'spin 0.8s linear infinite',
+})
+
+const Message = styled('p')({
+  color: '#666',
+})
 
 export default function SuccessPage() {
   return (
-    <div className="container-max py-20">
+    <Page>
       <Suspense fallback={
-        <div className="text-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto"></div>
-          <p className="mt-4 text-gray-600">페이지를 불러오는 중입니다...</p>
-        </div>
+        <Fallback>
+          <Spinner />
+          <Message>페이지를 불러오는 중입니다...</Message>
+        </Fallback>
       }>
         <PaymentSuccess />
       </Suspense>
-    </div>
+    </Page>
   )
 }

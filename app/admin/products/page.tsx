@@ -6,6 +6,133 @@ import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import Image from 'next/image'
 import DeleteProductButton from '@/components/admin/DeleteProductButton'
+import { styled } from '@devup-ui/react'
+
+const Page = styled('div')({
+  width: '100%',
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: '48px 24px',
+})
+
+const Header = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '16px',
+  marginBottom: '32px',
+  _media: {
+    '(max-width: 640px)': {
+      alignItems: 'stretch',
+      flexDirection: 'column',
+    },
+  },
+})
+
+const Title = styled('h1')({
+  fontSize: '30px',
+  fontWeight: 900,
+})
+
+const CreateLink = styled(Link)({
+  borderRadius: '6px',
+  background: '#111',
+  color: '#fff',
+  fontWeight: 900,
+  padding: '12px 24px',
+  textAlign: 'center',
+  transition: 'background 0.15s ease',
+  _hover: {
+    background: '#2a2a2a',
+  },
+})
+
+const TableWrap = styled('div')({
+  overflowX: 'auto',
+  border: '1px solid #ddd',
+  borderRadius: '8px',
+  background: '#fff',
+})
+
+const Table = styled('table')({
+  width: '100%',
+  minWidth: '760px',
+  borderCollapse: 'collapse',
+  textAlign: 'left',
+})
+
+const Thead = styled('thead')({
+  borderBottom: '1px solid #ddd',
+  background: '#f7f7f7',
+})
+
+const Th = styled('th')({
+  padding: '16px 24px',
+  fontSize: '14px',
+  fontWeight: 900,
+})
+
+const ThRight = styled(Th)({
+  textAlign: 'right',
+})
+
+const Tr = styled('tr')({
+  borderTop: '1px solid #ddd',
+  transition: 'background 0.15s ease',
+  _hover: {
+    background: '#fafafa',
+  },
+})
+
+const Td = styled('td')({
+  padding: '16px 24px',
+  fontSize: '14px',
+})
+
+const TdMuted = styled(Td)({
+  color: '#666',
+})
+
+const TdBold = styled(Td)({
+  fontWeight: 900,
+})
+
+const TdActions = styled(Td)({
+  textAlign: 'right',
+})
+
+const ProductCell = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '16px',
+})
+
+const Thumb = styled('div')({
+  position: 'relative',
+  width: '48px',
+  height: '64px',
+  flexShrink: 0,
+  overflow: 'hidden',
+  borderRadius: '6px',
+  background: '#f1f1f1',
+})
+
+const ProductImage = styled(Image)({
+  objectFit: 'cover',
+})
+
+const ProductName = styled('span')({
+  fontWeight: 700,
+})
+
+const EditLink = styled(Link)({
+  marginRight: '16px',
+  color: '#2563eb',
+  fontSize: '14px',
+  _hover: {
+    textDecoration: 'underline',
+  },
+})
 
 export default async function AdminProductsPage() {
   const session = await getServerSession(authOptions)
@@ -14,51 +141,48 @@ export default async function AdminProductsPage() {
   const products = await getProducts({})
 
   return (
-    <div className="container-max py-12">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">상품 관리</h1>
-        <Link
-          href="/admin/products/new"
-          className="bg-black text-white px-6 py-3 rounded-md font-bold hover:bg-gray-800"
-        >
+    <Page>
+      <Header>
+        <Title>상품 관리</Title>
+        <CreateLink href="/admin/products/new">
           새 상품 등록
-        </Link>
-      </div>
+        </CreateLink>
+      </Header>
 
-      <div className="overflow-x-auto border border-gray-200 rounded-lg">
-        <table className="w-full text-left">
-          <thead className="bg-gray-50 border-b border-gray-200">
+      <TableWrap>
+        <Table>
+          <Thead>
             <tr>
-              <th className="px-6 py-4 font-bold text-sm">상품</th>
-              <th className="px-6 py-4 font-bold text-sm">카테고리</th>
-              <th className="px-6 py-4 font-bold text-sm">가격</th>
-              <th className="px-6 py-4 font-bold text-sm">재고</th>
-              <th className="px-6 py-4 font-bold text-sm text-right">관리</th>
+              <Th>상품</Th>
+              <Th>카테고리</Th>
+              <Th>가격</Th>
+              <Th>재고</Th>
+              <ThRight>관리</ThRight>
             </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
+          </Thead>
+          <tbody>
             {products.map((product) => (
-              <tr key={product.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-16 bg-gray-100 relative rounded">
-                      {product.imageUrl && <Image src={product.imageUrl} alt={product.name} fill className="object-cover" />}
-                    </div>
-                    <span className="font-medium">{product.name}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-600">{product.category.name}</td>
-                <td className="px-6 py-4 text-sm font-bold">{formatPrice(product.price)}</td>
-                <td className="px-6 py-4 text-sm">{product.stock}개</td>
-                <td className="px-6 py-4 text-right space-x-4">
-                  <Link href={`/admin/products/${product.id}/edit`} className="text-blue-600 hover:underline text-sm">수정</Link>
+              <Tr key={product.id}>
+                <Td>
+                  <ProductCell>
+                    <Thumb>
+                      {product.imageUrl && <ProductImage src={product.imageUrl} alt={product.name} fill />}
+                    </Thumb>
+                    <ProductName>{product.name}</ProductName>
+                  </ProductCell>
+                </Td>
+                <TdMuted>{product.category.name}</TdMuted>
+                <TdBold>{formatPrice(product.price)}</TdBold>
+                <Td>{product.stock}개</Td>
+                <TdActions>
+                  <EditLink href={`/admin/products/${product.id}/edit`}>수정</EditLink>
                   <DeleteProductButton productId={product.id} />
-                </td>
-              </tr>
+                </TdActions>
+              </Tr>
             ))}
           </tbody>
-        </table>
-      </div>
-    </div>
+        </Table>
+      </TableWrap>
+    </Page>
   )
 }

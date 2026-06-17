@@ -2,53 +2,99 @@
 
 import { formatPrice } from '@/lib/utils'
 import Link from 'next/link'
+import { styled } from '@devup-ui/react'
 
 interface CartSummaryProps {
   totalPrice: number
 }
+
+const Summary = styled('div')({
+  display: 'grid',
+  gap: '20px',
+  padding: '24px',
+  border: '1px solid #e8e0d5',
+  borderRadius: '26px',
+  background: '#fff',
+  boxShadow: '0 22px 55px rgba(39,31,22,0.08)',
+})
+
+const Title = styled('h2')({
+  color: '#171512',
+  fontSize: '20px',
+  fontWeight: 950,
+})
+
+const Lines = styled('div')({
+  display: 'grid',
+  gap: '14px',
+})
+
+const Row = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+  gap: '16px',
+  color: '#5f554b',
+  fontSize: '14px',
+})
+
+const StrongRow = styled(Row)({
+  paddingTop: '16px',
+  borderTop: '1px solid #eee7dd',
+  color: '#171512',
+  fontSize: '16px',
+  fontWeight: 950,
+})
+
+const Hint = styled('p')({
+  color: '#9b8e80',
+  fontSize: '12px',
+  textAlign: 'right',
+})
+
+const CheckoutLink = styled(Link)({
+  display: 'grid',
+  placeItems: 'center',
+  minHeight: '52px',
+  borderRadius: '16px',
+  background: '#171512',
+  color: '#fff',
+  fontSize: '14px',
+  fontWeight: 950,
+})
+
+const ContinueLink = styled(Link)({
+  color: '#6f6256',
+  fontSize: '14px',
+  fontWeight: 800,
+  textAlign: 'center',
+})
 
 export default function CartSummary({ totalPrice }: CartSummaryProps) {
   const shippingFee = totalPrice >= 50000 ? 0 : 3000
   const finalPrice = totalPrice + shippingFee
 
   return (
-    <div className="bg-gray-50 rounded-lg p-6 lg:p-8 space-y-6">
-      <h2 className="text-lg font-bold">주문 요약</h2>
-      
-      <div className="space-y-4">
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600">총 상품 금액</span>
-          <span className="font-medium">{formatPrice(totalPrice)}</span>
-        </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600">배송비</span>
-          <span className="font-medium">
-            {shippingFee === 0 ? '무료' : formatPrice(shippingFee)}
-          </span>
-        </div>
-        {shippingFee > 0 && (
-          <p className="text-xs text-gray-400 text-right">
-            50,000원 이상 구매 시 무료배송
-          </p>
-        )}
-        <div className="border-t border-gray-200 pt-4 flex justify-between">
-          <span className="text-base font-bold">결제 예정 금액</span>
-          <span className="text-xl font-bold text-black">{formatPrice(finalPrice)}</span>
-        </div>
-      </div>
+    <Summary>
+      <Title>주문 요약</Title>
 
-      <Link
-        href="/checkout"
-        className="block w-full py-4 bg-black text-white text-center font-bold rounded-md hover:bg-gray-800 transition-colors"
-      >
-        주문하기
-      </Link>
+      <Lines>
+        <Row>
+          <span>총 상품 금액</span>
+          <strong>{formatPrice(totalPrice)}</strong>
+        </Row>
+        <Row>
+          <span>배송비</span>
+          <strong>{shippingFee === 0 ? '무료' : formatPrice(shippingFee)}</strong>
+        </Row>
+        {shippingFee > 0 && <Hint>50,000원 이상 구매 시 무료배송</Hint>}
+        <StrongRow>
+          <span>결제 예정 금액</span>
+          <span>{formatPrice(finalPrice)}</span>
+        </StrongRow>
+      </Lines>
 
-      <div className="text-center">
-        <Link href="/products" className="text-sm text-gray-500 hover:underline">
-          쇼핑 계속하기
-        </Link>
-      </div>
-    </div>
+      <CheckoutLink href="/checkout">주문하기</CheckoutLink>
+      <ContinueLink href="/products">쇼핑 계속하기</ContinueLink>
+    </Summary>
   )
 }

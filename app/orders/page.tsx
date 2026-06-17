@@ -2,66 +2,213 @@ import { getUserOrders } from '@/actions/orderActions'
 import { formatPrice } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
+import { styled } from '@devup-ui/react'
+
+const Page = styled('div')({
+  background: '#fbf8f2',
+})
+
+const Shell = styled('div')({
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: ['42px 20px 80px', '64px 20px 110px'],
+})
+
+const Title = styled('h1')({
+  marginBottom: '30px',
+  color: '#171512',
+  fontSize: ['40px', '64px'],
+  fontWeight: 950,
+  letterSpacing: '-0.055em',
+})
+
+const Empty = styled('div')({
+  display: 'grid',
+  placeItems: 'center',
+  gap: '18px',
+  minHeight: '300px',
+  border: '1px dashed #d9cec0',
+  borderRadius: '28px',
+  background: '#fff',
+  color: '#8c7d6d',
+  fontWeight: 800,
+})
+
+const ShopLink = styled(Link)({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: '48px',
+  padding: '0 18px',
+  borderRadius: '14px',
+  background: '#171512',
+  color: '#fff',
+  fontWeight: 900,
+})
+
+const OrderList = styled('div')({
+  display: 'grid',
+  gap: '20px',
+})
+
+const OrderCard = styled('article')({
+  overflow: 'hidden',
+  border: '1px solid #e8e0d5',
+  borderRadius: '26px',
+  background: '#fff',
+  boxShadow: '0 18px 45px rgba(39,31,22,0.06)',
+})
+
+const OrderHead = styled('div')({
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'space-between',
+  gap: '18px',
+  padding: '20px',
+  background: '#f5efe6',
+})
+
+const MetaGrid = styled('div')({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: ['16px', '34px'],
+})
+
+const MetaLabel = styled('p')({
+  marginBottom: '4px',
+  color: '#8c7d6d',
+  fontSize: '12px',
+  fontWeight: 800,
+})
+
+const MetaValue = styled('p')({
+  color: '#171512',
+  fontSize: '14px',
+  fontWeight: 900,
+})
+
+const Status = styled('div')({
+  alignSelf: 'start',
+  padding: '8px 12px',
+  border: '1px solid #e0d5c8',
+  borderRadius: '999px',
+  background: '#fff',
+  color: '#171512',
+  fontSize: '12px',
+  fontWeight: 950,
+})
+
+const Items = styled('div')({
+  display: 'grid',
+})
+
+const ItemRow = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '16px',
+  padding: '18px 20px',
+  borderTop: '1px solid #f0e9df',
+})
+
+const ProductInfo = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '14px',
+})
+
+const ProductImage = styled('div')({
+  position: 'relative',
+  width: '64px',
+  height: '80px',
+  overflow: 'hidden',
+  borderRadius: '14px',
+  background: '#efe7dc',
+})
+
+const ProductName = styled('p')({
+  color: '#171512',
+  fontWeight: 900,
+})
+
+const ProductMeta = styled('p')({
+  marginTop: '4px',
+  color: '#8c7d6d',
+  fontSize: '13px',
+})
+
+const ProductLink = styled(Link)({
+  padding: '10px 13px',
+  border: '1px solid #e0d5c8',
+  borderRadius: '13px',
+  color: '#171512',
+  fontSize: '13px',
+  fontWeight: 900,
+})
 
 export default async function OrdersPage() {
   const orders = await getUserOrders()
 
   return (
-    <div className="container-max py-12">
-      <h1 className="text-3xl font-bold mb-8">주문 내역</h1>
+    <Page>
+      <Shell>
+        <Title>주문 내역</Title>
 
-      {orders.length === 0 ? (
-        <div className="text-center py-20 bg-gray-50 rounded-lg">
-          <p className="text-gray-500 mb-6">주문 내역이 없습니다.</p>
-          <Link href="/products" className="inline-block px-8 py-3 bg-black text-white font-bold rounded-md hover:bg-gray-800 transition-colors">
-            쇼핑하러 가기
-          </Link>
-        </div>
-      ) : (
-        <div className="space-y-8">
-          {orders.map((order) => (
-            <div key={order.id} className="border border-gray-200 rounded-lg overflow-hidden">
-              <div className="bg-gray-50 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
-                <div className="flex gap-8 text-sm">
-                  <div>
-                    <p className="text-gray-500 mb-1">주문일자</p>
-                    <p className="font-bold">{new Date(order.createdAt).toLocaleDateString()}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500 mb-1">주문번호</p>
-                    <p className="font-bold">{order.orderNumber}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500 mb-1">총 결제금액</p>
-                    <p className="font-bold">{formatPrice(order.finalPrice)}</p>
-                  </div>
-                </div>
-                <div className="bg-white px-3 py-1 border border-gray-200 rounded text-sm font-bold">
-                  {order.status}
-                </div>
-              </div>
-              <div className="divide-y divide-gray-100">
-                {order.items.map((item) => (
-                  <div key={item.id} className="p-6 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="w-16 h-20 relative bg-gray-100 rounded overflow-hidden">
-                        {item.product.imageUrl && <Image src={item.product.imageUrl} alt={item.product.name} fill className="object-cover" />}
-                      </div>
-                      <div>
-                        <p className="font-medium">{item.product.name}</p>
-                        <p className="text-sm text-gray-500">{formatPrice(item.price)} | {item.quantity}개</p>
-                      </div>
+        {orders.length === 0 ? (
+          <Empty>
+            <p>주문 내역이 없습니다.</p>
+            <ShopLink href="/products">쇼핑하러 가기</ShopLink>
+          </Empty>
+        ) : (
+          <OrderList>
+            {orders.map((order) => (
+              <OrderCard key={order.id}>
+                <OrderHead>
+                  <MetaGrid>
+                    <div>
+                      <MetaLabel>주문일자</MetaLabel>
+                      <MetaValue>{new Date(order.createdAt).toLocaleDateString()}</MetaValue>
                     </div>
-                    <Link href={`/products/${item.productId}`} className="text-sm font-bold border border-gray-300 px-4 py-2 rounded hover:bg-gray-50">
-                      상품보기
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+                    <div>
+                      <MetaLabel>주문번호</MetaLabel>
+                      <MetaValue>{order.orderNumber}</MetaValue>
+                    </div>
+                    <div>
+                      <MetaLabel>총 결제금액</MetaLabel>
+                      <MetaValue>{formatPrice(order.finalPrice)}</MetaValue>
+                    </div>
+                  </MetaGrid>
+                  <Status>{order.status}</Status>
+                </OrderHead>
+                <Items>
+                  {order.items.map((item) => (
+                    <ItemRow key={item.id}>
+                      <ProductInfo>
+                        <ProductImage>
+                          {item.product.imageUrl && (
+                            <Image
+                              src={item.product.imageUrl}
+                              alt={item.product.name}
+                              fill
+                              sizes="64px"
+                              style={{ objectFit: 'cover' }}
+                            />
+                          )}
+                        </ProductImage>
+                        <div>
+                          <ProductName>{item.product.name}</ProductName>
+                          <ProductMeta>{formatPrice(item.price)} | {item.quantity}개</ProductMeta>
+                        </div>
+                      </ProductInfo>
+                      <ProductLink href={`/products/${item.productId}`}>상품보기</ProductLink>
+                    </ItemRow>
+                  ))}
+                </Items>
+              </OrderCard>
+            ))}
+          </OrderList>
+        )}
+      </Shell>
+    </Page>
   )
 }

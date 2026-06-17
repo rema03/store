@@ -2,10 +2,75 @@
 
 import { useState } from 'react'
 import { createReview } from '@/actions/reviewActions'
+import { styled } from '@devup-ui/react'
 
 interface ReviewFormProps {
   productId: number
 }
+
+const Form = styled('form')({
+  display: 'grid',
+  gap: '16px',
+  padding: '24px',
+  borderRadius: '8px',
+  background: '#f7f7f7',
+})
+
+const Title = styled('h3')({
+  fontWeight: 800,
+})
+
+const Field = styled('div')({
+  display: 'grid',
+  gap: '8px',
+})
+
+const Label = styled('label')({
+  color: '#666',
+  fontSize: '14px',
+})
+
+const StarGroup = styled('div')({
+  display: 'flex',
+  gap: '8px',
+})
+
+const StarButton = styled('button')({
+  fontSize: '24px',
+  lineHeight: 1,
+  transition: 'color 0.15s ease',
+})
+
+const Textarea = styled('textarea')({
+  width: '100%',
+  minHeight: '96px',
+  resize: 'vertical',
+  border: '1px solid #ddd',
+  borderRadius: '6px',
+  padding: '12px',
+  background: '#fff',
+  outline: 'none',
+  _focus: {
+    borderColor: '#111',
+  },
+})
+
+const SubmitButton = styled('button')({
+  justifySelf: 'start',
+  borderRadius: '6px',
+  background: '#111',
+  color: '#fff',
+  fontWeight: 800,
+  padding: '10px 24px',
+  transition: 'background 0.15s ease, opacity 0.15s ease',
+  _hover: {
+    background: '#2a2a2a',
+  },
+  _disabled: {
+    background: '#aaa',
+    cursor: 'not-allowed',
+  },
+})
 
 export default function ReviewForm({ productId }: ReviewFormProps) {
   const [rating, setRating] = useState(5)
@@ -30,43 +95,41 @@ export default function ReviewForm({ productId }: ReviewFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-50 p-6 rounded-lg space-y-4">
-      <h3 className="font-bold">리뷰 작성하기</h3>
+    <Form onSubmit={handleSubmit}>
+      <Title>리뷰 작성하기</Title>
       
-      <div>
-        <label className="block text-sm text-gray-500 mb-2">별점</label>
-        <div className="flex gap-2">
+      <Field>
+        <Label>별점</Label>
+        <StarGroup>
           {[1, 2, 3, 4, 5].map((star) => (
-            <button
+            <StarButton
               key={star}
               type="button"
               onClick={() => setRating(star)}
-              className={`text-2xl ${star <= rating ? 'text-black' : 'text-gray-300'}`}
+              style={{ color: star <= rating ? '#111' : '#d1d5db' }}
             >
               ★
-            </button>
+            </StarButton>
           ))}
-        </div>
-      </div>
+        </StarGroup>
+      </Field>
 
-      <div>
-        <label className="block text-sm text-gray-500 mb-2">내용 (최소 10자)</label>
-        <textarea
+      <Field>
+        <Label>내용 (최소 10자)</Label>
+        <Textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           rows={3}
-          className="w-full p-3 border border-gray-200 rounded-md focus:ring-black"
           placeholder="상품에 대한 솔직한 후기를 남겨주세요."
         />
-      </div>
+      </Field>
 
-      <button
+      <SubmitButton
         type="submit"
         disabled={isSubmitting}
-        className="px-6 py-2 bg-black text-white font-bold rounded-md hover:bg-gray-800 disabled:bg-gray-400"
       >
         {isSubmitting ? '등록 중...' : '리뷰 등록'}
-      </button>
-    </form>
+      </SubmitButton>
+    </Form>
   )
 }

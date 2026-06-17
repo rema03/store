@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 import Image from 'next/image'
 import type { Category, Product } from '@prisma/client'
+import { styled } from '@devup-ui/react'
 
 type ProductInput = z.infer<typeof productSchema>
 type ProductFormInitialData = Pick<Product, 'id' | 'name' | 'price' | 'description' | 'categoryId' | 'stock' | 'imageUrl'>
@@ -17,6 +18,164 @@ interface ProductFormProps {
   initialData?: ProductFormInitialData
   categories: Category[]
 }
+
+const Form = styled('form')({
+  display: 'grid',
+  gap: '32px',
+  maxWidth: '720px',
+  border: '1px solid #ddd',
+  borderRadius: '8px',
+  background: '#fff',
+  padding: '32px',
+})
+
+const Fields = styled('div')({
+  display: 'grid',
+  gap: '24px',
+})
+
+const Field = styled('div')({
+  display: 'grid',
+  gap: '8px',
+})
+
+const TwoColumn = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+  gap: '16px',
+  _media: {
+    '(max-width: 640px)': {
+      gridTemplateColumns: '1fr',
+    },
+  },
+})
+
+const Label = styled('label')({
+  fontSize: '14px',
+  fontWeight: 900,
+})
+
+const inputStyle = {
+  width: '100%',
+  border: '1px solid #d1d5db',
+  borderRadius: '6px',
+  background: '#fff',
+  padding: '12px',
+  outline: 'none',
+  _focus: {
+    borderColor: '#111',
+  },
+}
+
+const Input = styled('input')(inputStyle)
+const Select = styled('select')(inputStyle)
+const Textarea = styled('textarea')({
+  ...inputStyle,
+  minHeight: '140px',
+  resize: 'vertical',
+})
+
+const ErrorText = styled('p')({
+  color: '#ef4444',
+  fontSize: '12px',
+})
+
+const ImageRow = styled('div')({
+  display: 'flex',
+  alignItems: 'flex-start',
+  gap: '16px',
+  _media: {
+    '(max-width: 640px)': {
+      flexDirection: 'column',
+    },
+  },
+})
+
+const Preview = styled('div')({
+  position: 'relative',
+  width: '128px',
+  height: '160px',
+  flexShrink: 0,
+  overflow: 'hidden',
+  border: '1px solid #ddd',
+  borderRadius: '6px',
+  background: '#f1f1f1',
+})
+
+const PreviewImage = styled(Image)({
+  objectFit: 'cover',
+})
+
+const EmptyPreview = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '100%',
+  height: '100%',
+  color: '#999',
+  fontSize: '12px',
+})
+
+const ImageInputs = styled('div')({
+  flex: 1,
+  display: 'grid',
+  gap: '8px',
+})
+
+const FileInput = styled('input')({
+  width: '100%',
+  color: '#666',
+  fontSize: '14px',
+})
+
+const HelpText = styled('p')({
+  color: '#888',
+  fontSize: '12px',
+})
+
+const UploadingText = styled('p')({
+  color: '#2563eb',
+  fontSize: '12px',
+})
+
+const Actions = styled('div')({
+  display: 'flex',
+  gap: '16px',
+  _media: {
+    '(max-width: 640px)': {
+      flexDirection: 'column',
+    },
+  },
+})
+
+const SecondaryButton = styled('button')({
+  flex: 1,
+  border: '1px solid #d1d5db',
+  borderRadius: '6px',
+  fontWeight: 900,
+  padding: '16px',
+  transition: 'background 0.15s ease',
+  _hover: {
+    background: '#f7f7f7',
+  },
+})
+
+const PrimaryButton = styled('button')({
+  flex: 1,
+  borderRadius: '6px',
+  background: '#111',
+  color: '#fff',
+  fontWeight: 900,
+  padding: '16px',
+  transition: 'background 0.15s ease',
+  _hover: {
+    background: '#2a2a2a',
+  },
+  _disabled: {
+    background: '#aaa',
+    cursor: 'not-allowed',
+  },
+})
 
 export default function ProductForm({ initialData, categories }: ProductFormProps) {
   const [isLoading, setIsLoading] = useState(false)
@@ -96,105 +255,97 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl space-y-8 bg-white p-8 border border-gray-200 rounded-lg">
-      <div className="grid grid-cols-1 gap-6">
-        <div>
-          <label className="block text-sm font-bold mb-2">상품명</label>
-          <input
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <Fields>
+        <Field>
+          <Label>상품명</Label>
+          <Input
             {...register('name')}
-            className="w-full p-3 border border-gray-300 rounded focus:ring-black focus:border-black"
             placeholder="상품 이름을 입력하세요"
           />
-          {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
-        </div>
+          {errors.name && <ErrorText>{errors.name.message}</ErrorText>}
+        </Field>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-bold mb-2">가격 (원)</label>
-            <input
+        <TwoColumn>
+          <Field>
+            <Label>가격 (원)</Label>
+            <Input
               {...register('price')}
               type="number"
-              className="w-full p-3 border border-gray-300 rounded"
             />
-            {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price.message}</p>}
-          </div>
-          <div>
-            <label className="block text-sm font-bold mb-2">재고</label>
-            <input
+            {errors.price && <ErrorText>{errors.price.message}</ErrorText>}
+          </Field>
+          <Field>
+            <Label>재고</Label>
+            <Input
               {...register('stock')}
               type="number"
-              className="w-full p-3 border border-gray-300 rounded"
             />
-            {errors.stock && <p className="text-red-500 text-xs mt-1">{errors.stock.message}</p>}
-          </div>
-        </div>
+            {errors.stock && <ErrorText>{errors.stock.message}</ErrorText>}
+          </Field>
+        </TwoColumn>
 
-        <div>
-          <label className="block text-sm font-bold mb-2">카테고리</label>
-          <select {...register('categoryId')} className="w-full p-3 border border-gray-300 rounded">
+        <Field>
+          <Label>카테고리</Label>
+          <Select {...register('categoryId')}>
             <option value="">카테고리 선택</option>
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>{cat.name}</option>
             ))}
-          </select>
-          {errors.categoryId && <p className="text-red-500 text-xs mt-1">{errors.categoryId.message}</p>}
-        </div>
+          </Select>
+          {errors.categoryId && <ErrorText>{errors.categoryId.message}</ErrorText>}
+        </Field>
 
-        <div>
-          <label className="block text-sm font-bold mb-2">상품 이미지</label>
-          <div className="flex items-start gap-4">
-            <div className="relative w-32 h-40 bg-gray-100 border border-gray-200 rounded overflow-hidden">
+        <Field>
+          <Label>상품 이미지</Label>
+          <ImageRow>
+            <Preview>
               {previewUrl ? (
-                <Image src={previewUrl} alt="Preview" fill className="object-cover" />
+                <PreviewImage src={previewUrl} alt="Preview" fill />
               ) : (
-                <div className="flex h-full items-center justify-center text-xs text-gray-400">No Image</div>
+                <EmptyPreview>No Image</EmptyPreview>
               )}
-            </div>
-            <div className="flex-1">
-              <input
+            </Preview>
+            <ImageInputs>
+              <FileInput
                 type="file"
                 accept="image/*"
                 onChange={handleImageUpload}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-black file:text-white hover:file:bg-gray-800"
               />
-              <p className="text-xs text-gray-400 mt-2">이미지 파일을 직접 업로드하거나 아래에 URL을 입력하세요.</p>
-              <input
+              <HelpText>이미지 파일을 직접 업로드하거나 아래에 URL을 입력하세요.</HelpText>
+              <Input
                 {...register('imageUrl')}
-                className="w-full mt-2 p-2 border border-gray-200 rounded text-sm"
                 placeholder="이미지 URL"
               />
-            </div>
-          </div>
-          {isUploading && <p className="text-xs text-blue-500 mt-1">업로드 중...</p>}
-        </div>
+            </ImageInputs>
+          </ImageRow>
+          {isUploading && <UploadingText>업로드 중...</UploadingText>}
+        </Field>
 
-        <div>
-          <label className="block text-sm font-bold mb-2">상품 설명</label>
-          <textarea
+        <Field>
+          <Label>상품 설명</Label>
+          <Textarea
             {...register('description')}
             rows={5}
-            className="w-full p-3 border border-gray-300 rounded"
             placeholder="상품 상세 설명을 입력하세요"
           />
-        </div>
-      </div>
+        </Field>
+      </Fields>
 
-      <div className="flex gap-4">
-        <button
+      <Actions>
+        <SecondaryButton
           type="button"
           onClick={() => router.back()}
-          className="flex-1 py-4 border border-gray-300 rounded font-bold hover:bg-gray-50"
         >
           취소
-        </button>
-        <button
+        </SecondaryButton>
+        <PrimaryButton
           type="submit"
           disabled={isLoading}
-          className="flex-1 py-4 bg-black text-white rounded font-bold hover:bg-gray-800 disabled:bg-gray-400"
         >
           {isLoading ? '저장 중...' : initialData ? '수정하기' : '상품 등록'}
-        </button>
-      </div>
-    </form>
+        </PrimaryButton>
+      </Actions>
+    </Form>
   )
 }

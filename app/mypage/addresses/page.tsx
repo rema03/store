@@ -4,6 +4,45 @@ import AddressList from '@/components/user/AddressList'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
+import { styled } from '@devup-ui/react'
+
+const Page = styled('div')({
+  background: '#fbf8f2',
+})
+
+const Shell = styled('div')({
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: ['42px 20px 80px', '64px 20px 110px'],
+})
+
+const Head = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '18px',
+  marginBottom: '30px',
+})
+
+const Title = styled('h1')({
+  color: '#171512',
+  fontSize: ['36px', '54px'],
+  fontWeight: 950,
+  letterSpacing: '-0.055em',
+})
+
+const AddLink = styled(Link)({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: '46px',
+  padding: '0 16px',
+  borderRadius: '14px',
+  background: '#171512',
+  color: '#fff',
+  fontSize: '14px',
+  fontWeight: 900,
+})
 
 export default async function AddressesPage() {
   const session = await getServerSession(authOptions)
@@ -12,18 +51,15 @@ export default async function AddressesPage() {
   const addresses = await getAddresses()
 
   return (
-    <div className="container-max py-12">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">배송지 관리</h1>
-        <Link 
-          href="/mypage/addresses/new" 
-          className="px-6 py-2 bg-black text-white font-bold rounded hover:bg-gray-800"
-        >
-          새 배송지 추가
-        </Link>
-      </div>
+    <Page>
+      <Shell>
+        <Head>
+          <Title>배송지 관리</Title>
+          <AddLink href="/mypage/addresses/new">새 배송지 추가</AddLink>
+        </Head>
 
-      <AddressList initialAddresses={addresses} />
-    </div>
+        <AddressList initialAddresses={addresses} />
+      </Shell>
+    </Page>
   )
 }

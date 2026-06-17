@@ -1,9 +1,18 @@
 import LoginForm from '@/components/user/LoginForm'
+import { styled } from '@devup-ui/react'
+
+const AuthPage = styled('div')({
+  minHeight: 'calc(100vh - 260px)',
+  display: 'grid',
+  placeItems: 'center',
+  padding: '64px 20px',
+  background: '#fbf8f2',
+})
 
 export default function LoginPage() {
   return (
-    <div className="min-h-[calc(100-200px)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
+    <AuthPage>
       <LoginForm />
-    </div>
+    </AuthPage>
   )
 }
