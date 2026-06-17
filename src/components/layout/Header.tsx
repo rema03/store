@@ -214,7 +214,7 @@ export default function Header() {
     <SiteHeader>
       <HeaderInner>
         <HeaderRow>
-          <Brand href="/">FASHION MALL</Brand>
+          <Brand href="/">Jimin Store</Brand>
 
           <DesktopNav>
             <NavLink href="/products">전체 상품</NavLink>

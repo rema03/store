@@ -232,25 +232,6 @@ const StoryText = styled('p')({
   lineHeight: 1.8,
 })
 
-const StoryStats = styled('div')({
-  display: 'flex',
-  gap: '24px',
-  marginTop: '32px',
-})
-
-const StatValue = styled('p')({
-  fontSize: '34px',
-  fontWeight: 950,
-})
-
-const StatLabel = styled('p')({
-  marginTop: '4px',
-  color: '#8e857a',
-  fontSize: '12px',
-  fontWeight: 800,
-  letterSpacing: '0.12em',
-})
-
 const StoryMedia = styled('div')({
   position: 'relative',
   minHeight: ['420px', '580px'],
@@ -362,16 +343,6 @@ export default async function Home() {
               우리는 단순한 옷을 파는 것이 아니라, 당신만의 이야기를 담을 수 있는 스타일을 만듭니다.
               지속 가능한 소재와 변하지 않는 가치를 담은 컬렉션을 경험해보세요.
             </StoryText>
-            <StoryStats>
-              <div>
-                <StatValue>10K+</StatValue>
-                <StatLabel>CUSTOMERS</StatLabel>
-              </div>
-              <div>
-                <StatValue>500+</StatValue>
-                <StatLabel>STYLES</StatLabel>
-              </div>
-            </StoryStats>
           </div>
           <StoryMedia>
             <StoryImageLarge>

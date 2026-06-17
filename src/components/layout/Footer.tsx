@@ -79,7 +79,7 @@ export default function Footer() {
       <FooterInner>
         <FooterGrid>
           <div>
-            <Brand>FASHION MALL</Brand>
+            <Brand>Jimin Store</Brand>
             <Description>
               감각적인 셀렉션과 단정한 쇼핑 경험을 함께 제안합니다.
               오래 입을 수 있는 스타일을 더 쉽게 고를 수 있도록 큐레이션합니다.
@@ -87,7 +87,7 @@ export default function Footer() {
           </div>
           <div>
             <ColumnTitle>CS CENTER</ColumnTitle>
-            <FooterText>1234-5678</FooterText>
+            <FooterText>jjm4216@gmail.com</FooterText>
             <FooterText>10:00 - 18:00</FooterText>
             <FooterText>Weekend Off</FooterText>
           </div>
@@ -101,8 +101,10 @@ export default function Footer() {
           </div>
         </FooterGrid>
         <Bottom>
-          <span>© 2026 Fashion Mall. All rights reserved.</span>
-          <span>shop.jimindev.com</span>
+          <span>
+            © 2026 <FooterLink href="https://jimindev.com">jimindev.com</FooterLink>. All rights reserved.
+          </span>
+          <FooterLink href="https://shop.jimindev.com">shop.jimindev.com</FooterLink>
         </Bottom>
       </FooterInner>
     </FooterShell>

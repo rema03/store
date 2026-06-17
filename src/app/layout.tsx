@@ -5,8 +5,8 @@ import Footer from '@/components/layout/Footer'
 import Providers from '@/components/common/Providers'
 
 export const metadata: Metadata = {
-  title: 'Fashion Mall - 패션 쇼핑몰',
-  description: 'Premium fashion shopping experience',
+  title: 'Jimin Store - 패션 쇼핑몰',
+  description: 'Jimin Store fashion shopping experience',
 }
 
 export default function RootLayout({

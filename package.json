@@ -1,7 +1,7 @@
 {
-  "name": "fashion-mall",
+  "name": "jimin-store",
   "version": "1.0.0",
-  "description": "Full-featured fashion shopping mall built with Next.js, TypeScript, DevUp UI, Prisma, and Toss Payments",
+  "description": "Jimin Store built with Next.js, TypeScript, DevUp UI, Prisma, and Toss Payments",
   "scripts": {
     "postinstall": "node scripts/patch-devup-ui-next-plugin.mjs",
     "dev": "next dev",
@@ -47,4 +47,3 @@
     "typescript": "^5.3.3"
   }
 }
-
