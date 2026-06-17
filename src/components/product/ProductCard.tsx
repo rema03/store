@@ -22,7 +22,7 @@ const CardLink = styled(Link)({
 
 const Media = styled('div')({
   position: 'relative',
-  aspectRatio: '3 / 4',
+  aspectRatio: '0.75',
   overflow: 'hidden',
   border: '1px solid #eee7dd',
   borderRadius: '22px',

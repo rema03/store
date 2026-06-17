@@ -48,7 +48,14 @@ export async function updateProduct(id: number, data: ProductInput) {
   try {
     await prisma.product.update({
       where: { id },
-      data: validated,
+      data: {
+        name: validated.name,
+        price: validated.price,
+        description: validated.description,
+        imageUrl: validated.imageUrl,
+        categoryId: validated.categoryId,
+        stock: validated.stock,
+      },
     })
     revalidatePath(`/products/${id}`)
     revalidatePath('/admin/products')

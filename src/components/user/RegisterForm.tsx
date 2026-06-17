@@ -1,20 +1,20 @@
 'use client'
 
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { loginSchema } from '@/lib/validators'
-import { signIn } from 'next-auth/react'
+import { registerSchema } from '@/lib/validators'
+import { register } from '@/actions/authActions'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { z } from 'zod'
 import { styled } from '@devup-ui/react'
 
-type LoginInput = z.infer<typeof loginSchema>
+type RegisterInput = z.infer<typeof registerSchema>
 
 const Card = styled('div')({
   width: '100%',
-  maxWidth: '440px',
+  maxWidth: '460px',
   padding: '34px',
   border: '1px solid #e8e0d5',
   borderRadius: '28px',
@@ -98,38 +98,38 @@ const FooterLink = styled(Link)({
   fontWeight: 900,
 })
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginInput>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<RegisterInput>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+    }
   })
 
-  const onSubmit = async (data: LoginInput) => {
+  const onSubmit = async (data: RegisterInput) => {
     setIsLoading(true)
     setError(null)
 
     try {
-      const result = await signIn('credentials', {
-        email: data.email,
-        password: data.password,
-        redirect: false,
-      })
-
-      if (result?.error) {
+      const result = await register(data)
+      if (result.error) {
         setError(result.error)
       } else {
-        router.push('/')
-        router.refresh()
+        alert('회원가입이 완료되었습니다. 로그인해주세요.')
+        router.push('/login')
       }
     } catch (err) {
-      setError('로그인 중 오류가 발생했습니다.')
+      setError('회원가입 중 오류가 발생했습니다.')
     } finally {
       setIsLoading(false)
     }
@@ -137,30 +137,66 @@ export default function LoginForm() {
 
   return (
     <Card>
-      <Title>로그인</Title>
+      <Title>회원가입</Title>
 
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Field>
+          <Label>이름</Label>
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <Input 
+                {...field}
+                type="text" 
+                placeholder="홍길동" 
+              />
+            )}
+          />
+          {errors.name && <ErrorText>{errors.name.message}</ErrorText>}
+        </Field>
+
+        <Field>
           <Label>이메일</Label>
-          <Input {...register('email')} type="email" placeholder="example@email.com" />
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <Input 
+                {...field}
+                type="email" 
+                placeholder="example@email.com" 
+              />
+            )}
+          />
           {errors.email && <ErrorText>{errors.email.message}</ErrorText>}
         </Field>
 
         <Field>
           <Label>비밀번호</Label>
-          <Input {...register('password')} type="password" placeholder="비밀번호 입력" />
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <Input 
+                {...field}
+                type="password" 
+                placeholder="8자 이상 입력" 
+              />
+            )}
+          />
           {errors.password && <ErrorText>{errors.password.message}</ErrorText>}
         </Field>
 
         {error && <ErrorText>{error}</ErrorText>}
 
         <Submit type="submit" disabled={isLoading}>
-          {isLoading ? '로그인 중...' : '로그인'}
+          {isLoading ? '처리 중...' : '가입하기'}
         </Submit>
       </Form>
 
       <FooterText>
-        계정이 없으신가요? <FooterLink href="/register">회원가입</FooterLink>
+        이미 계정이 있으신가요? <FooterLink href="/login">로그인</FooterLink>
       </FooterText>
     </Card>
   )

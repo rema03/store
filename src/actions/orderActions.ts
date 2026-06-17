@@ -18,7 +18,7 @@ export async function createOrder(data: {
 
   try {
     return await prisma.$transaction(async (tx) => {
-      // 1. 장바구니 아이템 확인
+      // 1. 장바구니 아이템 확인 (tx 내에서 조회)
       const cartItems = await tx.cartItem.findMany({
         where: { id: { in: data.cartItemIds }, userId },
         include: { product: true },
@@ -29,9 +29,21 @@ export async function createOrder(data: {
         throw new Error('장바구니 정보를 다시 확인해주세요.')
       }
 
+      // 1.1 재고 차감 (선점형)
       for (const item of cartItems) {
-        if (!item.product.isActive) throw new Error('판매 중이 아닌 상품이 포함되어 있습니다.')
-        if (item.product.stock < item.quantity) throw new Error(`${item.product.name} 재고가 부족합니다.`)
+        if (!item.product.isActive) throw new Error(`${item.product.name}은(는) 현재 판매 중이 아닙니다.`)
+        
+        const stockUpdate = await tx.product.updateMany({
+          where: { 
+            id: item.productId, 
+            stock: { gte: item.quantity } 
+          },
+          data: { stock: { decrement: item.quantity } }
+        })
+
+        if (stockUpdate.count !== 1) {
+          throw new Error(`${item.product.name}의 재고가 부족합니다.`)
+        }
       }
 
       // 2. 금액 계산
@@ -43,7 +55,8 @@ export async function createOrder(data: {
       let discountAmount = 0
       let userCouponId: number | undefined
       if (data.userCouponId) {
-        const userCoupon = await tx.userCoupon.findFirst({
+        // 2.1 쿠폰 확인 및 사용 처리 (선점형)
+        const userCouponUpdate = await tx.userCoupon.updateMany({
           where: {
             id: data.userCouponId,
             userId,
@@ -52,21 +65,30 @@ export async function createOrder(data: {
               isActive: true,
               startsAt: { lte: new Date() },
               endsAt: { gte: new Date() },
+              minOrderPrice: { lte: totalPrice }
             },
           },
-          include: { coupon: true },
+          data: { isUsed: true, usedAt: new Date() }
         })
 
-        if (!userCoupon) throw new Error('사용할 수 없는 쿠폰입니다.')
-        if (totalPrice < userCoupon.coupon.minOrderPrice) throw new Error('쿠폰 최소 주문 금액을 충족하지 못했습니다.')
+        if (userCouponUpdate.count !== 1) {
+          throw new Error('사용할 수 없는 쿠폰이거나 최소 주문 금액을 충족하지 못했습니다.')
+        }
 
-        discountAmount = calculateDiscount(
-          userCoupon.coupon.discountType,
-          userCoupon.coupon.discountValue,
-          totalPrice,
-          userCoupon.coupon.maxDiscount,
-        )
-        userCouponId = userCoupon.id
+        const userCoupon = await tx.userCoupon.findUnique({
+          where: { id: data.userCouponId },
+          include: { coupon: true }
+        })
+
+        if (userCoupon) {
+          discountAmount = calculateDiscount(
+            userCoupon.coupon.discountType,
+            userCoupon.coupon.discountValue,
+            totalPrice,
+            userCoupon.coupon.maxDiscount,
+          )
+          userCouponId = userCoupon.id
+        }
       }
 
       const finalPrice = totalPrice - discountAmount + getShippingFee(totalPrice)

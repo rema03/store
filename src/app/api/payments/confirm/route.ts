@@ -64,9 +64,14 @@ export async function POST(req: NextRequest) {
     }
 
     // 3. 결제 성공 처리 (Transaction)
+    // 재고와 쿠폰은 createOrder 시점에 이미 선점(차감/사용처리)되었으므로 
+    // 여기서는 주문 상태만 최종적으로 PAID로 변경하고 장바구니를 비웁니다.
     await prisma.$transaction(async (tx) => {
       const orderUpdate = await tx.order.updateMany({
-        where: { id: order.id, userId: parseInt(session.user.id), status: 'PENDING' },
+        where: { 
+          id: order.id, 
+          status: 'PENDING' 
+        },
         data: {
           status: 'PAID',
           paymentKey,
@@ -76,28 +81,10 @@ export async function POST(req: NextRequest) {
       })
 
       if (orderUpdate.count !== 1) {
-        throw new Error('이미 처리된 주문입니다.')
+        throw new Error('ALREADY_PROCESSED')
       }
 
-      // 재고 감소 및 장바구니 비우기
-      for (const item of order.items) {
-        const stockUpdate = await tx.product.updateMany({
-          where: { id: item.productId, stock: { gte: item.quantity } },
-          data: { stock: { decrement: item.quantity } },
-        })
-
-        if (stockUpdate.count !== 1) {
-          throw new Error('상품 재고가 부족합니다.')
-        }
-      }
-
-      if (order.userCouponId) {
-        await tx.userCoupon.update({
-          where: { id: order.userCouponId },
-          data: { isUsed: true, usedAt: new Date() },
-        })
-      }
-
+      // 3.1 장바구니 비우기
       await tx.cartItem.deleteMany({
         where: { userId: parseInt(session.user.id) },
       })
@@ -106,6 +93,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, orderId: order.id })
   } catch (error) {
     console.error('Confirm API error:', error)
-    return NextResponse.json({ error: '서버 오류가 발생했습니다.' }, { status: 500 })
+    const message = error instanceof Error ? error.message : ''
+    
+    if (message === 'ALREADY_PROCESSED') {
+      return NextResponse.json({ error: '이미 처리된 주문입니다.' }, { status: 400 })
+    }
+    
+    return NextResponse.json({ error: '서버 오류가 발생했습니다. 고객센터에 문의해주세요.' }, { status: 500 })
   }
 }

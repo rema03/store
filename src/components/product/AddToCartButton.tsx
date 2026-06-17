@@ -38,7 +38,7 @@ export default function AddToCartButton({ productId, stock }: AddToCartButtonPro
     setIsLoading(true)
     const result = await addToCart(productId, 1)
 
-    if (result.error) {
+    if ('error' in result && result.error) {
       if (result.error === '로그인이 필요합니다.') {
         if (confirm('로그인이 필요한 기능입니다. 로그인 페이지로 이동하시겠습니까?')) {
           router.push('/login')
@@ -46,7 +46,7 @@ export default function AddToCartButton({ productId, stock }: AddToCartButtonPro
       } else {
         alert(result.error)
       }
-    } else {
+    } else if ('success' in result && result.success) {
       if (confirm('상품이 장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?')) {
         router.push('/cart')
       }

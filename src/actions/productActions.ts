@@ -82,10 +82,24 @@ export async function recordRecentView(productId: number) {
   const userId = parseInt(session.user.id)
 
   try {
-    await prisma.recentView.upsert({
-      where: { userId_productId: { userId, productId } },
-      update: { viewedAt: new Date() },
-      create: { userId, productId }
+    await prisma.$transaction(async (tx) => {
+      await tx.recentView.upsert({
+        where: { userId_productId: { userId, productId } },
+        update: { viewedAt: new Date() },
+        create: { userId, productId }
+      })
+
+      // 최근 본 상품 20개 초과 시 오래된 것 삭제
+      const count = await tx.recentView.count({ where: { userId } })
+      if (count > 20) {
+        const oldest = await tx.recentView.findFirst({
+          where: { userId },
+          orderBy: { viewedAt: 'asc' }
+        })
+        if (oldest) {
+          await tx.recentView.delete({ where: { id: oldest.id } })
+        }
+      }
     })
   } catch (error) {
     console.error('Error recording recent view:', error)

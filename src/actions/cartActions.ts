@@ -42,43 +42,50 @@ export async function addToCart(productId: number, quantity: number = 1) {
   if (!validated.success) return { error: '유효하지 않은 장바구니 정보입니다.' }
 
   try {
-    // 재고 확인
-    const product = await prisma.product.findUnique({ where: { id: validated.data.productId } })
-    if (!product) return { error: '상품을 찾을 수 없습니다.' }
-    if (!product.isActive) return { error: '판매 중인 상품이 아닙니다.' }
-    if (product.stock < validated.data.quantity) return { error: '재고가 부족합니다.' }
-
-    // 이미 장바구니에 있는지 확인
-    const existingItem = await prisma.cartItem.findUnique({
-      where: {
-        userId_productId: { userId, productId: validated.data.productId },
-      },
-    })
-
-    if (existingItem) {
-      // 수량 업데이트
-      const newQuantity = existingItem.quantity + validated.data.quantity
-      if (product.stock < newQuantity) return { error: '재고가 부족합니다.' }
-
-      await prisma.cartItem.update({
-        where: { id: existingItem.id },
-        data: { quantity: newQuantity },
+    const result = await prisma.$transaction(async (tx) => {
+      // 1. 상품 정보 및 재고 확인 (tx 내에서 조회)
+      const product = await tx.product.findUnique({ 
+        where: { id: validated.data.productId } 
       })
-    } else {
-      // 신규 추가
-      await prisma.cartItem.create({
-        data: {
-          userId,
-          productId: validated.data.productId,
-          quantity: validated.data.quantity,
+      
+      if (!product) throw new Error('PRODUCT_NOT_FOUND')
+      if (!product.isActive) throw new Error('PRODUCT_INACTIVE')
+
+      // 2. 이미 장바구니에 있는지 확인
+      const existingItem = await tx.cartItem.findUnique({
+        where: {
+          userId_productId: { userId, productId: validated.data.productId },
         },
       })
-    }
+
+      const totalNeeded = (existingItem?.quantity || 0) + validated.data.quantity
+      if (product.stock < totalNeeded) throw new Error('INSUFFICIENT_STOCK')
+
+      if (existingItem) {
+        await tx.cartItem.update({
+          where: { id: existingItem.id },
+          data: { quantity: totalNeeded },
+        })
+      } else {
+        await tx.cartItem.create({
+          data: {
+            userId,
+            productId: validated.data.productId,
+            quantity: validated.data.quantity,
+          },
+        })
+      }
+      return { success: true }
+    })
 
     revalidatePath('/cart')
-    return { success: true }
+    return result
   } catch (error) {
     console.error('Add to cart error:', error)
+    const message = error instanceof Error ? error.message : ''
+    if (message === 'PRODUCT_NOT_FOUND') return { error: '상품을 찾을 수 없습니다.' }
+    if (message === 'PRODUCT_INACTIVE') return { error: '판매 중인 상품이 아닙니다.' }
+    if (message === 'INSUFFICIENT_STOCK') return { error: '재고가 부족합니다.' }
     return { error: '장바구니 담기에 실패했습니다.' }
   }
 }

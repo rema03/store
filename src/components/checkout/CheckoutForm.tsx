@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { formatPrice } from '@/lib/utils'
 import { createOrder } from '@/actions/orderActions'
 import { loadTossPayments } from '@tosspayments/payment-sdk'
@@ -60,7 +61,8 @@ const MutedText = styled('p')({
   color: '#666',
 })
 
-const LinkButton = styled('button')({
+const LinkButton = styled(Link)({
+  display: 'inline-block',
   marginTop: '16px',
   color: '#111',
   fontWeight: 800,
@@ -331,11 +333,18 @@ export default function CheckoutForm({ cartItems, addresses, coupons }: Checkout
     <Layout>
       <MainColumn>
         <Section>
-          <SectionTitle>배송지 정보</SectionTitle>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <SectionTitle>배송지 정보</SectionTitle>
+            {addresses.length > 0 && (
+              <Link href="/mypage/addresses" style={{ fontSize: '13px', color: '#666', textDecoration: 'underline' }}>
+                배송지 관리
+              </Link>
+            )}
+          </div>
           {addresses.length === 0 ? (
             <EmptyBox>
               <MutedText>등록된 배송지가 없습니다.</MutedText>
-              <LinkButton type="button">새 배송지 추가</LinkButton>
+              <LinkButton href="/mypage/addresses/new">새 배송지 추가</LinkButton>
             </EmptyBox>
           ) : (
             <AddressList>

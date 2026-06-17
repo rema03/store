@@ -30,23 +30,25 @@ export async function addAddress(formData: z.infer<typeof addressSchema>) {
   if (!validated.success) return { error: '유효하지 않은 배송지 정보입니다.' }
 
   try {
-    if (validated.data.isDefault) {
-      await prisma.address.updateMany({
-        where: { userId, isDefault: true },
-        data: { isDefault: false },
-      })
-    }
+    const address = await prisma.$transaction(async (tx) => {
+      if (validated.data.isDefault) {
+        await tx.address.updateMany({
+          where: { userId, isDefault: true },
+          data: { isDefault: false },
+        })
+      }
 
-    const address = await prisma.address.create({
-      data: {
-        userId,
-        receiverName: validated.data.receiverName,
-        phone: validated.data.phone,
-        zipCode: validated.data.zipCode,
-        address1: validated.data.address1,
-        address2: validated.data.address2,
-        isDefault: validated.data.isDefault,
-      },
+      return await tx.address.create({
+        data: {
+          userId,
+          receiverName: validated.data.receiverName,
+          phone: validated.data.phone,
+          zipCode: validated.data.zipCode,
+          address1: validated.data.address1,
+          address2: validated.data.address2,
+          isDefault: validated.data.isDefault,
+        },
+      })
     })
 
     revalidatePath('/mypage/addresses')

@@ -238,18 +238,25 @@ export default function Header() {
 
             {session ? (
               <UserMenuWrap role="group">
-                <UserButton aria-label="사용자 메뉴">
+                <UserButton 
+                  aria-label="사용자 메뉴"
+                  onClick={() => setIsMenuOpen(!isMenuOpen)} // 상태 사용
+                >
                   <User size={19} />
                 </UserButton>
-                <UserDropdown>
+                <UserDropdown style={{ 
+                  opacity: isMenuOpen ? 1 : 0, 
+                  visibility: isMenuOpen ? 'visible' : 'hidden',
+                  transform: isMenuOpen ? 'translateY(0)' : 'translateY(-6px)'
+                }}>
                   <DropdownHead>
                     <Muted>Logged in as</Muted>
                     <StrongLine>{session.user?.name}</StrongLine>
                   </DropdownHead>
-                  <DropdownLink href="/mypage">마이페이지</DropdownLink>
-                  <DropdownLink href="/orders">주문내역</DropdownLink>
+                  <DropdownLink href="/mypage" onClick={() => setIsMenuOpen(false)}>마이페이지</DropdownLink>
+                  <DropdownLink href="/orders" onClick={() => setIsMenuOpen(false)}>주문내역</DropdownLink>
                   {session.user?.role === 'ADMIN' && (
-                    <DropdownLink href="/admin">관리자 대시보드</DropdownLink>
+                    <DropdownLink href="/admin" onClick={() => setIsMenuOpen(false)}>관리자 대시보드</DropdownLink>
                   )}
                   <SignOutButton onClick={() => signOut()}>로그아웃</SignOutButton>
                 </UserDropdown>

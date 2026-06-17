@@ -3,22 +3,11 @@ import './globals.css'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import Providers from '@/components/common/Providers'
-import { styled } from '@devup-ui/react'
 
 export const metadata: Metadata = {
   title: 'Fashion Mall - 패션 쇼핑몰',
   description: 'Premium fashion shopping experience',
 }
-
-const AppShell = styled('div')({
-  minHeight: '100vh',
-  display: 'flex',
-  flexDirection: 'column',
-})
-
-const Main = styled('main')({
-  flex: 1,
-})
 
 export default function RootLayout({
   children,
@@ -27,13 +16,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body>
+      <body style={{ margin: 0 }}>
         <Providers>
-          <AppShell>
+          <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             <Header />
-            <Main>{children}</Main>
+            <main style={{ flex: 1 }}>{children}</main>
             <Footer />
-          </AppShell>
+          </div>
         </Providers>
       </body>
     </html>

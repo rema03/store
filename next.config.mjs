@@ -3,6 +3,15 @@ import { DevupUI } from '@devup-ui/next-plugin'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  webpack: (config) => {
+    config.watchOptions = {
+      ignored: ['**/df/**', '**/node_modules/**'],
+    }
+    return config
+  },
+  experimental: {
+    optimizePackageImports: ['@devup-ui/react', 'lucide-react'],
+  },
   typescript: {
     ignoreBuildErrors: false,
   },
