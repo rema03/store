@@ -86,6 +86,14 @@ async function main() {
         stock: 100,
       },
       {
+        name: '결제 테스트용 100원 티셔츠',
+        price: 100,
+        description: 'Toss Payments 테스트 결제를 위한 100원 상품입니다.',
+        categoryId: catTop?.id || 2,
+        imageUrl: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=900',
+        stock: 999,
+      },
+      {
         name: '니트 가디건',
         price: 79000,
         description: '부드러운 뉴트럼 톤의 니트 가디건',

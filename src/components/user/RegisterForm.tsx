@@ -139,13 +139,13 @@ export default function RegisterForm() {
     <Card>
       <Title>회원가입</Title>
 
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Field>
           <Label>이름</Label>
           <Controller
             name="name"
             control={control}
-            render={({ field }) => (
+            render={({ field: { ref, ...field } }) => (
               <Input 
                 {...field}
                 type="text" 
@@ -161,7 +161,7 @@ export default function RegisterForm() {
           <Controller
             name="email"
             control={control}
-            render={({ field }) => (
+            render={({ field: { ref, ...field } }) => (
               <Input 
                 {...field}
                 type="email" 
@@ -177,7 +177,7 @@ export default function RegisterForm() {
           <Controller
             name="password"
             control={control}
-            render={({ field }) => (
+            render={({ field: { ref, ...field } }) => (
               <Input 
                 {...field}
                 type="password" 

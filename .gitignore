@@ -5,6 +5,7 @@ node_modules/
 .next/
 out/
 df/
+public/uploads/
 
 # production
 build/

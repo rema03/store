@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { productSchema } from '@/lib/validators'
 import { createProduct, updateProduct } from '@/actions/adminActions'
@@ -184,7 +184,7 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
   const router = useRouter()
 
   const {
-    register,
+    control,
     handleSubmit,
     setValue,
     formState: { errors },
@@ -255,13 +255,19 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onSubmit)} noValidate>
       <Fields>
         <Field>
           <Label>상품명</Label>
-          <Input
-            {...register('name')}
-            placeholder="상품 이름을 입력하세요"
+          <Controller
+            name="name"
+            control={control}
+            render={({ field: { ref, ...field } }) => (
+              <Input
+                {...field}
+                placeholder="상품 이름을 입력하세요"
+              />
+            )}
           />
           {errors.name && <ErrorText>{errors.name.message}</ErrorText>}
         </Field>
@@ -269,17 +275,31 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
         <TwoColumn>
           <Field>
             <Label>가격 (원)</Label>
-            <Input
-              {...register('price')}
-              type="number"
+            <Controller
+              name="price"
+              control={control}
+              render={({ field: { ref, value, ...field } }) => (
+                <Input
+                  {...field}
+                  value={value ?? ''}
+                  type="number"
+                />
+              )}
             />
             {errors.price && <ErrorText>{errors.price.message}</ErrorText>}
           </Field>
           <Field>
             <Label>재고</Label>
-            <Input
-              {...register('stock')}
-              type="number"
+            <Controller
+              name="stock"
+              control={control}
+              render={({ field: { ref, value, ...field } }) => (
+                <Input
+                  {...field}
+                  value={value ?? ''}
+                  type="number"
+                />
+              )}
             />
             {errors.stock && <ErrorText>{errors.stock.message}</ErrorText>}
           </Field>
@@ -287,12 +307,18 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
 
         <Field>
           <Label>카테고리</Label>
-          <Select {...register('categoryId')}>
-            <option value="">카테고리 선택</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>{cat.name}</option>
-            ))}
-          </Select>
+          <Controller
+            name="categoryId"
+            control={control}
+            render={({ field: { ref, value, ...field } }) => (
+              <Select {...field} value={value ?? ''}>
+                <option value="">카테고리 선택</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
+              </Select>
+            )}
+          />
           {errors.categoryId && <ErrorText>{errors.categoryId.message}</ErrorText>}
         </Field>
 
@@ -313,9 +339,16 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
                 onChange={handleImageUpload}
               />
               <HelpText>이미지 파일을 직접 업로드하거나 아래에 URL을 입력하세요.</HelpText>
-              <Input
-                {...register('imageUrl')}
-                placeholder="이미지 URL"
+              <Controller
+                name="imageUrl"
+                control={control}
+                render={({ field: { ref, value, ...field } }) => (
+                  <Input
+                    {...field}
+                    value={value ?? ''}
+                    placeholder="이미지 URL"
+                  />
+                )}
               />
             </ImageInputs>
           </ImageRow>
@@ -324,10 +357,17 @@ export default function ProductForm({ initialData, categories }: ProductFormProp
 
         <Field>
           <Label>상품 설명</Label>
-          <Textarea
-            {...register('description')}
-            rows={5}
-            placeholder="상품 상세 설명을 입력하세요"
+          <Controller
+            name="description"
+            control={control}
+            render={({ field: { ref, value, ...field } }) => (
+              <Textarea
+                {...field}
+                value={value ?? ''}
+                rows={5}
+                placeholder="상품 상세 설명을 입력하세요"
+              />
+            )}
           />
         </Field>
       </Fields>

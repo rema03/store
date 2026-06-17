@@ -143,13 +143,13 @@ export default function LoginForm() {
     <Card>
       <Title>로그인</Title>
 
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Field>
           <Label>이메일</Label>
           <Controller
             name="email"
             control={control}
-            render={({ field }) => (
+            render={({ field: { ref, ...field } }) => (
               <Input 
                 {...field}
                 type="email" 
@@ -165,7 +165,7 @@ export default function LoginForm() {
           <Controller
             name="password"
             control={control}
-            render={({ field }) => (
+            render={({ field: { ref, ...field } }) => (
               <Input 
                 {...field}
                 type="password" 

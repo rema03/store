@@ -128,7 +128,7 @@ export default function AddressForm() {
     try {
       const result = await addAddress(data)
       if ('error' in result) {
-        setError(result.error)
+        setError(result.error ?? '배송지 등록 중 오류가 발생했습니다.')
       } else {
         router.push('/mypage/addresses')
         router.refresh()
@@ -141,13 +141,13 @@ export default function AddressForm() {
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onSubmit)} noValidate>
       <Field>
         <Label>수령인 이름</Label>
         <Controller
           name="receiverName"
           control={control}
-          render={({ field }) => <Input {...field} placeholder="이름을 입력하세요" />}
+          render={({ field: { ref, ...field } }) => <Input {...field} placeholder="이름을 입력하세요" />}
         />
         {errors.receiverName && <ErrorText>{errors.receiverName.message}</ErrorText>}
       </Field>
@@ -157,7 +157,7 @@ export default function AddressForm() {
         <Controller
           name="phone"
           control={control}
-          render={({ field }) => <Input {...field} placeholder="010-0000-0000" />}
+          render={({ field: { ref, ...field } }) => <Input {...field} placeholder="010-0000-0000" />}
         />
         {errors.phone && <ErrorText>{errors.phone.message}</ErrorText>}
       </Field>
@@ -167,7 +167,7 @@ export default function AddressForm() {
         <Controller
           name="zipCode"
           control={control}
-          render={({ field }) => <Input {...field} placeholder="12345" />}
+          render={({ field: { ref, ...field } }) => <Input {...field} placeholder="12345" />}
         />
         {errors.zipCode && <ErrorText>{errors.zipCode.message}</ErrorText>}
       </Field>
@@ -177,7 +177,7 @@ export default function AddressForm() {
         <Controller
           name="address1"
           control={control}
-          render={({ field }) => <Input {...field} placeholder="기본 주소" />}
+          render={({ field: { ref, ...field } }) => <Input {...field} placeholder="기본 주소" />}
         />
         {errors.address1 && <ErrorText>{errors.address1.message}</ErrorText>}
       </Field>
@@ -187,7 +187,7 @@ export default function AddressForm() {
         <Controller
           name="address2"
           control={control}
-          render={({ field: { value, ...rest } }) => (
+          render={({ field: { ref, value, ...rest } }) => (
             <Input {...rest} value={value || ''} placeholder="나머지 주소" />
           )}
         />

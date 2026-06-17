@@ -1,301 +1,125 @@
-# 🛍️ Fashion Mall - 풀기능 패션 쇼핑몰
+# Fashion Mall Store
 
-프로젝트 초기 구성이 완료되었습니다!  
-이 프로젝트는 **Next.js + TypeScript + Tailwind CSS + Prisma + PostgreSQL + Toss Payments**로 구축된 풀기능 패션 쇼핑몰입니다.
+Next.js 14 App Router 기반의 패션 커머스 애플리케이션입니다. 상품 탐색, 회원 인증, 장바구니, 주문/결제, 배송지, 리뷰, 위시리스트, 쿠폰, 관리자 상품/주문 관리를 하나의 풀스택 앱으로 제공합니다.
 
-## 📋 프로젝트 개요
+## 기술 스택
 
-### 주요 기능
-- ✅ 상품 목록/상세/검색/필터/정렬
-- ✅ 회원가입/로그인/로그아웃
-- ✅ 장바구니 (담기/수량변경/삭제)
-- ✅ 주문/결제 (Toss Payments)
-- ✅ 리뷰/별점/찜하기
-- ✅ 배송지 관리/쿠폰
-- ✅ 최근 본 상품/추천 상품
-- ✅ 관리자 대시보드/통계
-- ✅ 반응형 UI (모바일 최적화)
+- Next.js 14, React 18, TypeScript
+- DevUp UI (`@devup-ui/react`, `@devup-ui/next-plugin`)
+- Prisma ORM, PostgreSQL
+- NextAuth Credentials Provider
+- Toss Payments SDK
+- React Hook Form, Zod
+- Docker standalone output
 
-## 🛠 기술 스택
+## 주요 기능
 
-### Frontend
-- **Next.js 14** - App Router, Server Components
-- **React 18** - UI 라이브러리
-- **TypeScript** - 타입 안정성
-- **Tailwind CSS** - 스타일링
+- 쇼핑: 홈, 상품 목록, 카테고리 필터, 검색, 가격 정렬, 상품 상세, 최근 본 상품
+- 사용자: 회원가입, 로그인, 마이페이지, 배송지 등록/기본 배송지 설정
+- 장바구니: 상품 추가, 수량 변경, 삭제, 재고 확인
+- 주문/결제: 배송지 선택, 쿠폰 적용, Toss Payments 결제 승인, 주문 내역
+- 리뷰: 구매 완료 사용자의 상품 리뷰 작성
+- 위시리스트: 상품 관심 등록/해제
+- 관리자: 상품 등록/수정/비활성화, 이미지 업로드, 주문 상태 변경, 간단 대시보드
 
-### Backend
-- **Next.js Route Handler** - API 엔드포인트
-- **Next.js Server Actions** - 서버 함수
-- **Prisma ORM** - 데이터베이스 접근
+## 프로젝트 구조
 
-### Database & Auth
-- **PostgreSQL** - 관계형 데이터베이스
-- **NextAuth.js** - 인증 (이메일/비밀번호)
-- **bcryptjs** - 비밀번호 해싱
-
-### Payment
-- **Toss Payments API** - 결제 처리
-- **Toss Payments SDK** - 결제창
-
-### Image Storage
-- **Cloudinary** 또는 **Supabase Storage** - 이미지 업로드
-
-## 📁 폴더 구조
-
-```
+```text
 store/
-├── app/
-│   ├── layout.tsx              # 루트 레이아웃
-│   ├── page.tsx                # 메인 페이지
-│   ├── globals.css             # 전역 스타일
-│   ├── products/               # 상품 페이지
-│   ├── cart/                   # 장바구니
-│   ├── checkout/               # 결제 페이지
-│   ├── orders/                 # 주문 내역
-│   ├── login/register/         # 인증 페이지
-│   ├── mypage/                 # 마이페이지
-│   ├── admin/                  # 관리자 페이지
-│   └── api/                    # API 라우트
-├── components/                 # 컴포넌트
-│   ├── layout/                 # Header, Footer
-│   ├── product/                # 상품 관련
-│   ├── cart/                   # 장바구니
-│   ├── checkout/               # 결제 관련
-│   ├── order/                  # 주문 관련
-│   ├── review/                 # 리뷰
-│   ├── user/                   # 사용자
-│   ├── admin/                  # 관리자
-│   └── common/                 # 공통 컴포넌트
-├── lib/
-│   ├── prisma.ts               # Prisma 클라이언트 ✅
-│   ├── validators.ts           # Zod 유효성 검사 ✅
-│   ├── utils.ts                # 유틸리티 함수 ✅
-│   ├── auth.ts                 # 인증 설정
-│   ├── toss.ts                 # Toss Payments API
-│   └── upload.ts               # 이미지 업로드
-├── actions/                    # Server Actions
-│   ├── productActions.ts
-│   ├── cartActions.ts
-│   ├── orderActions.ts
-│   ├── authActions.ts
-│   ├── reviewActions.ts
-│   ├── wishlistActions.ts
-│   ├── couponActions.ts
-│   ├── addressActions.ts
-│   └── adminActions.ts
-├── prisma/
-│   ├── schema.prisma           # 데이터베이스 스키마 ✅
-│   └── seed.ts                 # 시드 데이터 ✅
-├── public/
-│   └── images/                 # 이미지 디렉토리
-├── .env.example                # 환경 변수 예시 ✅
-├── .env.local                  # 개발 환경 변수 ✅
-├── package.json                # 패키지 설정 ✅
-├── tsconfig.json               # TypeScript 설정 ✅
-├── devup.json                  # DevUp UI 테마 설정
-├── next.config.ts              # Next.js 설정 ✅
-└── README.md                   # 이 파일
+  prisma/
+    schema.prisma        # User, Product, Order, Coupon 등 DB 모델
+    seed.ts              # 테스트 계정, 카테고리, 상품, 쿠폰 시드
+  src/
+    actions/             # Server Actions: cart/order/admin/address/auth 등
+    app/                 # App Router pages and API routes
+    components/          # UI 컴포넌트
+    lib/                 # auth, prisma, config, validators, utils
+    types/               # NextAuth/bcrypt 타입 보강
+  scripts/
+    patch-devup-ui-next-plugin.mjs
+    start-standalone.mjs
 ```
 
-## 🚀 시작 가이드
+## 환경 변수
 
-### 1. 환경 설정
+로컬 개발은 `.env.local`을 사용합니다. 이 파일은 git에 올리지 않습니다.
 
-`.env.local` 파일이 이미 생성되었습니다. 필요시 수정하세요:
-
-```bash
-# 데이터베이스 설정
-DATABASE_URL="postgresql://user:password@localhost:5432/fashion_mall"
-
-# 인증
-NEXTAUTH_SECRET="your-secret"
+```env
+DATABASE_URL="postgresql://store:store_password@127.0.0.1:5433/store"
+NEXTAUTH_SECRET="local-store-development-secret-change-before-production"
 NEXTAUTH_URL="http://localhost:3000"
 
-# Toss Payments (테스트 키)
-TOSS_CLIENT_KEY="test_ck_..."
-TOSS_SECRET_KEY="test_sk_..."
+NEXT_PUBLIC_TOSS_CLIENT_KEY="..."
+TOSS_SECRET_KEY="..."
+TOSS_SUCCESS_URL="http://localhost:3000/checkout/success"
+TOSS_FAIL_URL="http://localhost:3000/checkout/fail"
 
-# 이미지 업로드 (Cloudinary)
-CLOUDINARY_CLOUD_NAME="your_cloud_name"
-CLOUDINARY_API_KEY="your_api_key"
-CLOUDINARY_API_SECRET="your_api_secret"
+NEXT_PUBLIC_FREE_SHIPPING_THRESHOLD="50000"
+NEXT_PUBLIC_SHIPPING_FEE="3000"
+MAX_UPLOAD_BYTES="5242880"
 ```
 
-### 2. 데이터베이스 설정
+루트 `compose.yaml`에서 실행할 때는 루트 `.env`에 `STORE_*` 변수들이 사용됩니다. 예시는 루트 `.env.example`을 참고하세요.
 
-PostgreSQL을 설치하고 다음 명령을 실행하세요:
+## 로컬 실행
 
 ```bash
-# 1. 데이터베이스 마이그레이션
-npm run db:migrate
-
-# 또는 프로덕션 환경에서
+npm install
+npm run db:generate
 npm run db:push
-
-# 2. 시드 데이터 입력
 npm run db:seed
-```
-
-### 3. 개발 서버 실행
-
-```bash
 npm run dev
 ```
 
-브라우저에서 http://localhost:3000 을 열어보세요.
+접속 주소는 [http://localhost:3000](http://localhost:3000)입니다.
 
-## 👤 테스트 계정
+macOS 로컬에서 Docker PostgreSQL에 접속할 때는 `localhost`보다 `127.0.0.1`을 권장합니다. 현재 로컬 기본값은 `127.0.0.1:5433`입니다.
 
-### 관리자 계정
-- **이메일**: admin@example.com
-- **비밀번호**: admin1234
+## 테스트 계정
 
-### 일반 사용자
-- **이메일**: user@example.com
-- **비밀번호**: user1234
+`npm run db:seed` 실행 후 사용할 수 있습니다.
 
-## 💳 Toss Payments 테스트
+- 관리자: `admin@example.com` / `admin1234`
+- 사용자: `user@example.com` / `user1234`
 
-### 테스트 결제 카드
-- **카드번호**: 4330 1234 5678 9010
-- **유효기간**: 12/26
-- **CVC**: 123
-- **비밀번호**: 00
+## 주요 명령어
 
-[Toss Developers 문서](https://docs.tosspayments.com)에서 더 많은 테스트 카드를 확인할 수 있습니다.
+- `npm run dev`: 개발 서버 실행
+- `npm run build`: 프로덕션 빌드
+- `npm run start`: standalone 서버 실행
+- `npm run lint`: Next lint
+- `npm run db:generate`: Prisma Client 생성
+- `npm run db:push`: 현재 Prisma schema를 DB에 반영
+- `npm run db:seed`: 테스트 데이터 생성
+- `npm run db:migrate`: Prisma migrate dev
 
-## 📦 초기 구성 완료 체크리스트
+## 결제 흐름
 
-### Phase 1: 기본 세팅 ✅
-- [x] Next.js 프로젝트 생성
-- [x] TypeScript 설정
-- [x] Tailwind CSS 설정
-- [x] 기본 레이아웃
-- [x] 폴더 구조
-- [x] 환경 변수 설정
+1. 체크아웃 화면에서 배송지, 쿠폰, 장바구니 항목을 선택합니다.
+2. `createOrder` Server Action이 `PENDING` 주문을 만들고, 현재 구현에서는 재고와 쿠폰을 주문 생성 시점에 선점합니다.
+3. 클라이언트가 Toss Payments 결제창을 엽니다.
+4. 성공 리다이렉트 후 `/api/payments/confirm`이 Toss 승인 API를 호출합니다.
+5. 승인 성공 시 주문 상태를 `PAID`로 바꾸고 사용자의 장바구니를 비웁니다.
 
-### Phase 2: DB 세팅 ✅
-- [x] Prisma 설치
-- [x] schema.prisma 완성
-- [x] Migration 파일 준비
-- [x] Seed 데이터 작성
+주의: 결제 실패/이탈 시 `PENDING` 주문의 재고와 쿠폰 선점을 복구하는 자동 작업은 아직 없습니다. 운영 전에는 만료된 `PENDING` 주문을 취소하고 재고/쿠폰을 복구하는 배치 또는 취소 API가 필요합니다.
 
-### Phase 3~10: 기능 구현 (예정)
-- [ ] 인증 (회원가입/로그인)
-- [ ] 상품 (목록/상세/검색)
-- [ ] 장바구니
-- [ ] 주문/결제
-- [ ] 리뷰/찜/배송지/쿠폰
-- [ ] 관리자 페이지
-- [ ] 반응형 UI 완성
+## 업로드
 
-## 🔧 npm 명령어
+관리자만 `/api/upload`를 사용할 수 있습니다. 허용 MIME 타입은 JPEG, PNG, WebP, GIF이며 기본 최대 크기는 5MB입니다. 현재 구현은 `public/uploads`에 로컬 파일로 저장합니다. 컨테이너/운영 환경에서 영속성이 필요하면 볼륨 또는 외부 스토리지를 연결해야 합니다.
+
+## Docker
+
+`Dockerfile`은 Next standalone output을 빌드합니다. 컨테이너 시작 시 `docker-entrypoint.sh`가 기본적으로 `npx prisma db push`를 실행합니다.
 
 ```bash
-npm run dev        # 개발 서버 실행
-npm run build      # 프로덕션 빌드
-npm start          # 프로덕션 서버 실행
-npm run lint       # ESLint 실행
-
-# 데이터베이스
-npm run db:push    # Prisma schema를 DB에 적용
-npm run db:generate # Prisma Client 재생성
-npm run db:seed    # 시드 데이터 입력
-npm run db:migrate # 마이그레이션 생성 및 실행
+docker compose up --build store store-db
 ```
 
-## 📝 주요 파일 설명
+루트 `compose.yaml`은 `store` 서비스에 `DATABASE_URL`, NextAuth, Toss, 정책 관련 환경 변수를 주입합니다.
 
-### prisma/schema.prisma
-- User, Product, Category, Order 등 모든 데이터베이스 모델 정의
-- 관계(Relationship) 설정
-- Enum (Role, OrderStatus, PaymentStatus 등)
+## 현재 확인된 주의사항
 
-### lib/validators.ts
-- Zod를 사용한 폼 유효성 검사
-- registerSchema, loginSchema, productSchema 등
-
-### lib/utils.ts
-- formatPrice: 가격 포맷팅
-- generateOrderNumber: 주문번호 생성
-- calculateDiscount: 할인 계산
-
-## 🔒 보안 주의사항
-
-1. **TOSS_SECRET_KEY는 절대 클라이언트에 노출하면 안 됩니다** ❌
-2. **클라이언트에서 받은 가격을 그대로 믿지 말고 서버 DB와 검증하세요** ✅
-3. **.env.local 파일을 절대 git에 커밋하면 안 됩니다** ✅
-4. **비밀번호는 bcryptjs로 해시 처리합니다** ✅
-
-## 📚 다음 단계
-
-1. **Phase 2: DB 세팅**
-   ```bash
-   npm run db:push
-   npm run db:seed
-   ```
-
-2. **Phase 3: 인증 구현**
-   - Auth.js/NextAuth.js 설정
-   - 회원가입/로그인 페이지
-   - 미들웨어 설정
-
-3. **Phase 4: 상품 구현**
-   - 상품 목록 페이지
-   - 상품 상세 페이지
-   - 검색/필터/정렬
-
-4. 그 외 차근차근 계속 진행...
-
-## ⚠️ 주의사항
-
-- 데이터베이스 연결 없이는 마이그레이션을 실행할 수 없습니다
-- PostgreSQL 9.6 이상 필요
-- Node.js 16.x 이상 필요
-
-## 📞 문제 해결
-
-### "DATABASE_URL not found" 오류
-- `.env.local` 파일이 프로젝트 루트에 있는지 확인하세요
-
-### "Prisma Client 오류"
-```bash
-npm run db:generate
-```
-
-### 포트 3000이 이미 사용 중
-```bash
-npm run dev -- -p 3001
-```
-
-## 🎯 배포
-
-### Vercel 배포
-```bash
-# Vercel CLI 설치
-npm i -g vercel
-
-# 배포
-vercel
-```
-
-### 환경 변수 설정
-Vercel 대시보드에서 모든 `.env.local` 변수를 설정해야 합니다.
-
-### 데이터베이스 (클라우드)
-- **Supabase**: PostgreSQL 호스팅
-- **Neon**: PostgreSQL 호스팅
-
-## 📖 참고 자료
-
-- [Next.js 공식 문서](https://nextjs.org/docs)
-- [Prisma 공식 문서](https://www.prisma.io/docs)
-- [DevUp UI](https://devup-ui.com)
-- [NextAuth.js](https://next-auth.js.org)
-- [Toss Payments](https://docs.tosspayments.com)
-
----
-
-✨ **프로젝트 구성이 완료되었습니다!**  
-이제 Phase 2 (DB 세팅)로 진행할 준비가 되었습니다.
+- `npx tsc --noEmit` 기준 `src/components/user/AddressForm.tsx`의 `setError(result.error)` 타입 오류가 남아 있습니다.
+- 관리자 주문 상태 변경은 현재 DB status만 바꿉니다. `CANCELED`/`REFUNDED` 처리 시 Toss 취소, 재고 복구, 쿠폰 복구 로직은 별도로 추가해야 합니다.
+- `next.config.mjs`는 이미지 최적화를 `unoptimized: true`로 둡니다. 외부 이미지 최적화 전략이 정해지면 재검토하세요.
+- DevUp UI가 생성하는 `df/` 폴더는 webpack watch ignore 대상입니다.

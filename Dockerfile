@@ -9,6 +9,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
+COPY scripts ./scripts
 RUN npm ci
 
 COPY . .

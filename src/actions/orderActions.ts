@@ -150,7 +150,12 @@ export async function getUserOrders() {
   if (!session?.user) return []
 
   return await prisma.order.findMany({
-    where: { userId: parseInt(session.user.id) },
+    where: {
+      userId: parseInt(session.user.id),
+      status: {
+        not: 'PENDING',
+      },
+    },
     include: {
       items: { include: { product: true } },
     },

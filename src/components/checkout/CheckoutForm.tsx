@@ -253,10 +253,19 @@ const PayButton = styled('button')({
   },
 })
 
+const PaymentError = styled('p')({
+  color: '#dc2626',
+  fontSize: '13px',
+  fontWeight: 700,
+  lineHeight: 1.5,
+  whiteSpace: 'pre-wrap',
+})
+
 export default function CheckoutForm({ cartItems, addresses, coupons }: CheckoutFormProps) {
   const [selectedAddressId, setSelectedAddressId] = useState(addresses.find(a => a.isDefault)?.id || addresses[0]?.id)
   const [selectedCouponId, setSelectedCouponId] = useState<number | undefined>(undefined)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [paymentError, setPaymentError] = useState<string | null>(null)
 
   const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY
 
@@ -282,10 +291,11 @@ export default function CheckoutForm({ cartItems, addresses, coupons }: Checkout
     if (!selectedAddressId) return alert('배송지를 선택해주세요.')
     
     setIsSubmitting(true)
+    setPaymentError(null)
     
     try {
       if (!clientKey) {
-        alert('결제 클라이언트 키가 설정되지 않았습니다.')
+        setPaymentError('결제 클라이언트 키가 설정되지 않았습니다.')
         setIsSubmitting(false)
         return
       }
@@ -298,13 +308,13 @@ export default function CheckoutForm({ cartItems, addresses, coupons }: Checkout
       })
 
       if ('error' in result) {
-        alert(result.error)
+        setPaymentError(result.error)
         setIsSubmitting(false)
         return
       }
 
       if (!result.tossOrderId) {
-        alert('결제 주문번호 생성에 실패했습니다.')
+        setPaymentError('결제 주문번호 생성에 실패했습니다.')
         setIsSubmitting(false)
         return
       }
@@ -323,7 +333,8 @@ export default function CheckoutForm({ cartItems, addresses, coupons }: Checkout
       })
     } catch (error) {
       console.error('Payment error:', error)
-      alert('결제 준비 중 오류가 발생했습니다.')
+      const message = error instanceof Error ? error.message : '알 수 없는 오류'
+      setPaymentError(`결제 준비 중 오류가 발생했습니다.\n${message}`)
     } finally {
       setIsSubmitting(false)
     }
@@ -442,6 +453,7 @@ export default function CheckoutForm({ cartItems, addresses, coupons }: Checkout
           >
             {isSubmitting ? 'Processing...' : '결제하기'}
           </PayButton>
+          {paymentError && <PaymentError>{paymentError}</PaymentError>}
         </SummaryBox>
       </SummaryAside>
     </Layout>
