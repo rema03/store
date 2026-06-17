@@ -11,11 +11,11 @@
     "lint": "next lint",
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
-    "db:seed": "ts-node --files --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts",
+    "db:seed": "tsx prisma/seed.ts",
     "db:migrate": "prisma migrate dev"
   },
   "prisma": {
-    "seed": "node --loader ts-node/esm prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@devup-ui/next-plugin": "^1.0.78",
@@ -43,7 +43,8 @@
     "eslint": "^8.55.0",
     "eslint-config-next": "^14.1.0",
     "prisma": "^5.7.1",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   }
 }
+
