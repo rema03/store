@@ -24,6 +24,9 @@ ENV DATABASE_URL=postgresql://store:store_password@localhost:5432/store
 
 RUN npx prisma generate \
   && npm run build \
+  && cp -r public .next/standalone/public \
+  && mkdir -p .next/standalone/.next \
+  && cp -r .next/static .next/standalone/.next/static \
   && chmod +x /app/docker-entrypoint.sh
 
 ENV NODE_ENV=production
