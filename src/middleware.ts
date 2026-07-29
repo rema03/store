@@ -25,7 +25,8 @@ export async function middleware(request: NextRequest) {
     
     if (!isValid) {
       const accountsUrl = process.env.NEXT_PUBLIC_ACCOUNTS_URL || 'http://accounts.localhost:3000'
-      const callbackUrl = encodeURIComponent(`http://${request.headers.get('host') || 'localhost:3000'}${pathname}${search}`)
+      const proto = request.headers.get('x-forwarded-proto') || 'http'
+      const callbackUrl = encodeURIComponent(`${proto}://${request.headers.get('host') || 'localhost:3000'}${pathname}${search}`)
       return NextResponse.redirect(`${accountsUrl}/login?callbackUrl=${callbackUrl}`)
     }
   }
