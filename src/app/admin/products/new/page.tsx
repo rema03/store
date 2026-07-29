@@ -1,7 +1,7 @@
 import { getCategories } from '@/actions/productActions'
 import ProductForm from '@/components/admin/ProductForm'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
+
 import { redirect } from 'next/navigation'
 import { styled } from '@devup-ui/react'
 
@@ -27,7 +27,7 @@ const Description = styled('p')({
 })
 
 export default async function NewProductPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   
   if (session?.user?.role !== 'ADMIN') {
     redirect('/')

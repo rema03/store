@@ -1,8 +1,8 @@
 import { getProducts } from '@/actions/productActions'
 import { formatPrice } from '@/lib/utils'
 import Link from 'next/link'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
+
 import { redirect } from 'next/navigation'
 import Image from 'next/image'
 import DeleteProductButton from '@/components/admin/DeleteProductButton'
@@ -135,7 +135,7 @@ const EditLink = styled(Link)({
 })
 
 export default async function AdminProductsPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (session?.user?.role !== 'ADMIN') redirect('/')
 
   const products = await getProducts({})

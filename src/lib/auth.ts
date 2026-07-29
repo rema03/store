@@ -1,69 +1,72 @@
-import { NextAuthOptions } from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
+import { cookies } from 'next/headers'
 import { prisma } from '@/lib/prisma'
-import bcryptjs from 'bcryptjs'
+import * as jwt from 'jsonwebtoken'
 
-export const authOptions: NextAuthOptions = {
-  providers: [
-    CredentialsProvider({
-      name: 'Credentials',
-      credentials: {
-        email: { label: 'Email', type: 'text' },
-        password: { label: 'Password', type: 'password' },
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret'
+
+export async function verifyJiminToken(token: string) {
+  try {
+    const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload
+    return payload
+  } catch (error) {
+    return null
+  }
+}
+
+export async function getCurrentUser() {
+  const cookieStore = cookies()
+  const token = cookieStore.get('jimin_token')?.value
+
+  if (!token) {
+    return null
+  }
+
+  const payload = await verifyJiminToken(token)
+  if (!payload) {
+    return null
+  }
+
+  return payload
+}
+
+export async function getOrCreateLocalUser(payload: any) {
+  let user = await prisma.user.findUnique({
+    where: { email: payload.email },
+  })
+
+  if (!user) {
+    user = await prisma.user.create({
+      data: {
+        email: payload.email,
+        password: '',
+        name: payload.name || payload.username || 'Unknown',
+        role: payload.role || 'USER',
       },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error('이메일과 비밀번호를 입력해주세요.')
-        }
+    })
+  }
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        })
+  return user
+}
 
-        if (!user) {
-          throw new Error('가입되지 않은 이메일입니다.')
-        }
+export async function getAuthUser() {
+  const jwtUser = await getCurrentUser()
+  if (!jwtUser) {
+    return null
+  }
 
-        const isPasswordCorrect = await bcryptjs.compare(
-          credentials.password,
-          user.password
-        )
+  const localUser = await getOrCreateLocalUser(jwtUser)
+  return {
+    ...localUser,
+    id: localUser.id.toString(),
+  }
+}
 
-        if (!isPasswordCorrect) {
-          throw new Error('비밀번호가 일치하지 않습니다.')
-        }
+// Deprecated, do not use
+export const authOptions = {}
 
-        return {
-          id: user.id.toString(),
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        }
-      },
-    }),
-  ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id
-        token.role = user.role
-      }
-      return token
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string
-        session.user.role = token.role as string
-      }
-      return session
-    },
-  },
-  pages: {
-    signIn: '/login',
-  },
-  session: {
-    strategy: 'jwt',
-  },
-  useSecureCookies: process.env.NODE_ENV === 'production',
-  secret: process.env.NEXTAUTH_SECRET,
+// For compatibility
+export async function getServerSession() {
+  const user = await getAuthUser()
+  if (!user) return null
+  return { user }
 }

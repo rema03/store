@@ -1,14 +1,14 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
+
 import { revalidatePath } from 'next/cache'
 import { addressSchema } from '@/lib/validators'
 import { z } from 'zod'
 
 async function getSession() {
-  return await getServerSession(authOptions)
+  return await getServerSession()
 }
 
 export async function getAddresses() {

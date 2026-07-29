@@ -2,8 +2,8 @@ import { getCartItems } from '@/actions/cartActions'
 import { getAddresses } from '@/actions/addressActions'
 import { getUserCoupons } from '@/actions/couponActions'
 import CheckoutForm from '@/components/checkout/CheckoutForm'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
+
 import { redirect } from 'next/navigation'
 import { styled } from '@devup-ui/react'
 
@@ -21,7 +21,7 @@ const Title = styled('h1')({
 })
 
 export default async function CheckoutPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session) {
     redirect('/login?callbackUrl=/checkout')
   }

@@ -1,5 +1,5 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
+
 import { redirect } from 'next/navigation'
 import { getUserOrders } from '@/actions/orderActions'
 import { formatPrice, formatDate } from '@/lib/utils'
@@ -148,7 +148,7 @@ const EmptyState = styled('div')({
 })
 
 export default async function MyPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user) {
     redirect('/login')
   }

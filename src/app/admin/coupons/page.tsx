@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { formatPrice } from '@/lib/utils'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
+
 import { redirect } from 'next/navigation'
 import { styled } from '@devup-ui/react'
 
@@ -68,7 +68,7 @@ function formatDiscount(type: string, value: number, maxDiscount: number | null)
 }
 
 export default async function AdminCouponsPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (session?.user?.role !== 'ADMIN') redirect('/')
 
   const coupons = await prisma.coupon.findMany({

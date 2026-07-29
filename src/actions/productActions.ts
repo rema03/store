@@ -1,8 +1,8 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
+
 import { Prisma } from '@prisma/client'
 
 export async function getProducts(params: {
@@ -76,7 +76,7 @@ export async function getCategories() {
 }
 
 export async function recordRecentView(productId: number) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user) return
 
   const userId = parseInt(session.user.id)
@@ -107,7 +107,7 @@ export async function recordRecentView(productId: number) {
 }
 
 export async function getRecentViews() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user) return []
 
   return await prisma.recentView.findMany({

@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { formatPrice } from '@/lib/utils'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
+
 import { redirect } from 'next/navigation'
 import { styled } from '@devup-ui/react'
 
@@ -44,7 +44,7 @@ const Value = styled('p')({
 })
 
 export default async function AdminStatisticsPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (session?.user?.role !== 'ADMIN') redirect('/')
 
   const [paidOrders, pendingOrders, productCount, userCount, sales] = await Promise.all([

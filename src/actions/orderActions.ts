@@ -1,8 +1,8 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
+
 import { calculateDiscount, generateOrderNumber, generateTossOrderId } from '@/lib/utils'
 import { getShippingFee } from '@/lib/config'
 
@@ -11,7 +11,7 @@ export async function createOrder(data: {
   userCouponId?: number
   cartItemIds: number[]
 }) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user) return { error: '로그인이 필요합니다.' }
 
   const userId = parseInt(session.user.id)
@@ -132,7 +132,7 @@ export async function createOrder(data: {
 }
 
 export async function getOrderById(id: number) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user) return null
 
   return await prisma.order.findUnique({
@@ -146,7 +146,7 @@ export async function getOrderById(id: number) {
 }
 
 export async function getUserOrders() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user) return []
 
   return await prisma.order.findMany({

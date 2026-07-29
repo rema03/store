@@ -1,15 +1,15 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
+
 import { productSchema } from '@/lib/validators'
 import { revalidatePath } from 'next/cache'
 import { OrderStatus } from '@prisma/client'
 import { z } from 'zod'
 
 async function checkAdmin() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (session?.user?.role !== 'ADMIN') {
     throw new Error('관리자 권한이 필요합니다.')
   }

@@ -5,8 +5,8 @@ import { notFound } from 'next/navigation'
 import AddToCartButton from '@/components/product/AddToCartButton'
 import ReviewForm from '@/components/review/ReviewForm'
 import WishlistButton from '@/components/product/WishlistButton'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
+
 import { prisma } from '@/lib/prisma'
 import { styled } from '@devup-ui/react'
 
@@ -222,7 +222,7 @@ const ReviewContent = styled('p')({
 })
 
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   const product = await getProductById(parseInt(params.id))
 
   if (!product) {

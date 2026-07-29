@@ -1,11 +1,11 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
+
 
 export async function getUserCoupons() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user) return []
 
   return await prisma.userCoupon.findMany({

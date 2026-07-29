@@ -1,18 +1,11 @@
-import RegisterForm from '@/components/user/RegisterForm'
-import { styled } from '@devup-ui/react'
+import { redirect } from 'next/navigation'
 
-const AuthPage = styled('div')({
-  minHeight: 'calc(100vh - 260px)',
-  display: 'grid',
-  placeItems: 'center',
-  padding: '64px 20px',
-  background: '#fbf8f2',
-})
-
-export default function RegisterPage() {
-  return (
-    <AuthPage>
-      <RegisterForm />
-    </AuthPage>
-  )
+export default function RegisterPage({
+  searchParams,
+}: {
+  searchParams: { callbackUrl?: string }
+}) {
+  const accountsUrl = process.env.NEXT_PUBLIC_ACCOUNTS_URL || 'http://accounts.localhost:3000'
+  const callbackUrl = searchParams.callbackUrl || (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000')
+  redirect(`${accountsUrl}/register?callbackUrl=${encodeURIComponent(callbackUrl)}`)
 }

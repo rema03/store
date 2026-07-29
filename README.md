@@ -1,12 +1,12 @@
 # Jimin Store 프로젝트 보고서
 
-Next.js App Router 기반으로 구현한 패션 쇼핑몰 풀스택 웹 애플리케이션입니다. 상품 탐색부터 회원 인증, 장바구니, 배송지, 쿠폰, Toss Payments 테스트 결제, 주문 내역, 리뷰, 위시리스트, 관리자 상품/주문 관리까지 커머스 서비스의 핵심 흐름을 하나의 프로젝트 안에서 구현했습니다.
+Next.js App Router 기반으로 구현한 패션 쇼핑몰 풀스택 웹 애플리케이션이다. 상품 탐색부터 회원 인증, 장바구니, 배송지, 쿠폰, Toss Payments 테스트 결제, 주문 내역, 리뷰, 위시리스트, 관리자 상품/주문 관리까지 커머스 서비스의 핵심 흐름을 하나의 프로젝트 안에서 구현했다.
 
 ## 1. 프로젝트 개요
 
-이 프로젝트는 실제 쇼핑몰의 사용자 흐름과 운영자 관리 흐름을 함께 다루는 것을 목표로 합니다.
+이 프로젝트는 실제 쇼핑몰의 사용자 흐름과 운영자 관리 흐름을 함께 다루는 것을 목표로 한다.
 
-사용자는 상품을 둘러보고 장바구니에 담은 뒤 배송지와 쿠폰을 선택해 결제를 진행할 수 있습니다. 관리자는 별도 관리자 페이지에서 상품을 등록/수정/비활성화하고 주문 상태를 관리할 수 있습니다. 결제는 Toss Payments 테스트 API를 연동해 실제 승인 요청 흐름과 유사하게 구성했습니다.
+사용자는 상품을 둘러보고 장바구니에 담은 뒤 배송지와 쿠폰을 선택해 결제를 진행할 수 있다. 관리자는 별도 관리자 페이지에서 상품을 등록/수정/비활성화하고 주문 상태를 관리할 수 있다. 결제는 Toss Payments 테스트 API를 연동해 실제 승인 요청 흐름과 유사하게 구성했다.
 
 ### 서비스 주소
 
@@ -16,7 +16,7 @@ Next.js App Router 기반으로 구현한 패션 쇼핑몰 풀스택 웹 애플�
 
 ### 테스트 계정
 
-`npm run db:seed` 실행 후 사용할 수 있습니다.
+`npm run db:seed` 실행 후 사용할 수 있다.
 
 | 역할 | 이메일 | 비밀번호 |
 | --- | --- | --- |
@@ -77,7 +77,7 @@ Next.js App Router 기반으로 구현한 패션 쇼핑몰 풀스택 웹 애플�
 
 ### 결제 테스트 기능
 
-시드 데이터에 `결제 테스트용 100원 티셔츠`를 추가했습니다. Toss Payments 테스트 결제를 부담 없이 확인할 수 있도록 만든 상품입니다.
+시드 데이터에 `결제 테스트용 100원 티셔츠`를 추가했다. Toss Payments 테스트 결제를 부담 없이 확인할 수 있도록 만든 상품이다.
 
 ## 5. 화면 및 라우트 구성
 
@@ -164,7 +164,7 @@ store/
 
 ## 7. 데이터베이스 설계
 
-Prisma ORM을 사용해 PostgreSQL에 데이터를 저장합니다. 로컬 Docker 실행 시 DB 데이터는 루트 `compose.yaml`의 Docker volume인 `store_db`에 저장됩니다.
+Prisma ORM을 사용해 PostgreSQL에 데이터를 저장한다. 로컬 Docker 실행 시 DB 데이터는 루트 `compose.yaml`의 Docker volume인 `store_db`에 저장된다.
 
 ### 주요 모델
 
@@ -211,7 +211,7 @@ flowchart TD
   J --> K["장바구니 비우기"]
 ```
 
-주문 생성 시점에는 `PENDING` 상태의 주문을 만들고, 결제 승인 API가 성공하면 `PAID` 상태로 변경합니다. 사용자 주문 내역에서는 `PENDING` 주문을 제외해 결제 취소 또는 결제 이탈 주문이 일반 주문 내역에 노출되지 않도록 처리했습니다.
+주문 생성 시점에는 `PENDING` 상태의 주문을 만들고, 결제 승인 API가 성공하면 `PAID` 상태로 변경한다. 사용자 주문 내역에서는 `PENDING` 주문을 제외해 결제 취소 또는 결제 이탈 주문이 일반 주문 내역에 노출되지 않도록 처리했다.
 
 ### 인증/권한 흐름
 
@@ -227,11 +227,54 @@ flowchart TD
   G -->|아니오| I["일반 사용자 기능 접근"]
 ```
 
-관리자 페이지와 관리자 Server Action은 세션의 `role`이 `ADMIN`인지 확인한 뒤 실행됩니다.
+관리자 페이지와 관리자 Server Action은 세션의 `role`이 `ADMIN`인지 확인한 뒤 실행된다.
 
-## 9. 환경 변수
+## 9. 주요 핵심 함수
 
-로컬 개발은 `.env.local`을 사용합니다. 실제 값은 git에 올리지 않고, 형식은 `.env.example`을 기준으로 맞춥니다.
+프로젝트의 핵심 비즈니스 로직은 Server Actions, Route Handler, 인증 설정에 분산되어 있다. 그중 커머스 흐름을 대표하는 함수는 다음과 같다.
+
+| 함수 | 위치 | 기능 |
+| --- | --- | --- |
+| `createOrder` | `src/actions/orderActions.ts` | 체크아웃 단계에서 장바구니 항목, 배송지, 쿠폰을 검증한 뒤 `PENDING` 주문을 생성한다. 트랜잭션 안에서 재고를 차감하고 쿠폰을 사용 처리해 주문 생성 중 데이터 불일치를 줄인다. |
+| `POST` | `src/app/api/payments/confirm/route.ts` | Toss Payments 결제 성공 리다이렉트 후 호출되는 승인 API이다. 주문 소유자, 결제 금액, 주문 상태를 검증한 뒤 Toss 승인 API를 호출하고 성공 시 주문을 `PAID`로 변경한다. |
+| `authorize` | `src/lib/auth.ts` | NextAuth Credentials Provider의 로그인 검증 함수이다. 이메일로 사용자를 조회하고 `bcryptjs.compare`로 비밀번호를 확인한 뒤 JWT 세션에 사용자 id와 role을 전달한다. |
+| `getProducts` | `src/actions/productActions.ts` | 상품 목록 화면의 데이터 조회 함수이다. 활성 상품만 조회하며 카테고리, 검색어, 가격 정렬 조건을 Prisma query에 반영한다. |
+| `updateOrderStatus` | `src/actions/adminActions.ts` | 관리자 주문 관리 화면에서 주문 상태를 변경하는 함수이다. 관리자 권한을 확인한 뒤 주문 상태를 수정하고 관련 페이지 캐시를 갱신한다. |
+| `getShippingFee` | `src/lib/config.ts` | 주문 금액이 무료배송 기준 이상인지 판단해 배송비를 계산하는 순수 함수이다. 배송비 정책을 환경 변수 기반으로 관리할 수 있게 한다. |
+
+### 핵심 함수 예시
+
+```ts
+export async function createOrder(data: {
+  addressId: number
+  userCouponId?: number
+  cartItemIds: number[]
+}) {
+  const session = await getServerSession(authOptions)
+  if (!session?.user) return { error: '로그인이 필요하다.' }
+
+  return await prisma.$transaction(async (tx) => {
+    // 장바구니 검증, 재고 차감, 쿠폰 선점, 배송지 확인, 주문 생성을 하나의 트랜잭션으로 처리한다.
+  })
+}
+```
+
+`createOrder`는 결제 전 주문 데이터를 준비하는 핵심 함수이다. 주문할 상품이 실제 사용자 장바구니에 있는지 확인하고, 재고 부족 여부를 검사하며, 쿠폰 사용 조건을 검증한다. 이후 배송지 정보를 주문에 스냅샷으로 저장해 결제 후 배송 정보가 바뀌어도 주문 당시의 정보를 유지한다.
+
+```ts
+export async function POST(req: NextRequest) {
+  const { paymentKey, orderId, amount } = await req.json()
+
+  // DB 주문 검증 후 Toss Payments 승인 API를 호출한다.
+  // 승인 성공 시 주문 상태와 결제 상태를 갱신하고 장바구니를 비운다.
+}
+```
+
+`/api/payments/confirm`의 `POST` 함수는 결제 승인 단계의 중심이다. 클라이언트에서 전달된 금액과 DB에 저장된 주문 금액이 일치하는지 확인하고, 이미 처리된 주문인지 검사한다. 이 검증을 통과한 경우에만 Toss Payments 승인 API를 호출해 결제 위조나 중복 처리를 방지한다.
+
+## 10. 환경 변수
+
+로컬 개발은 `.env.local`을 사용한다. 실제 값은 git에 올리지 않고, 형식은 `.env.example`을 기준으로 맞춘다.
 
 ```env
 DATABASE_URL="postgresql://store:store_password@127.0.0.1:5433/store"
@@ -248,7 +291,7 @@ NEXT_PUBLIC_SHIPPING_FEE="3000"
 MAX_UPLOAD_BYTES="5242880"
 ```
 
-배포 환경에서는 루트 `.env`의 `STORE_*` 변수를 사용합니다.
+배포 환경에서는 루트 `.env`의 `STORE_*` 변수를 사용한다.
 
 | 변수 | 설명 |
 | --- | --- |
@@ -264,7 +307,7 @@ MAX_UPLOAD_BYTES="5242880"
 | `STORE_MAX_UPLOAD_BYTES` | 이미지 업로드 최대 크기 |
 | `STORE_DB_PUSH` | 컨테이너 시작 시 `prisma db push` 실행 여부 |
 
-## 10. 로컬 실행 방법
+## 11. 로컬 실행 방법
 
 ### 1. 패키지 설치
 
@@ -296,9 +339,9 @@ npm run db:seed
 npm run dev
 ```
 
-접속 주소는 `http://localhost:3000`입니다.
+접속 주소는 `http://localhost:3000`이다.
 
-## 11. 주요 npm 명령어
+## 12. 주요 npm 명령어
 
 | 명령어 | 설명 |
 | --- | --- |
@@ -311,9 +354,9 @@ npm run dev
 | `npm run db:seed` | 테스트 데이터 생성 |
 | `npm run db:migrate` | Prisma migration 생성/적용 |
 
-## 12. Docker 및 배포 구조
+## 13. Docker 및 배포 구조
 
-이 프로젝트는 루트 `/Users/jimin/web_service`의 `compose.yaml`에 포함되어 배포됩니다.
+이 프로젝트는 루트 `/Users/jimin/web_service`의 `compose.yaml`에 포함되어 배포된다.
 
 ### 배포 구조
 
@@ -328,7 +371,7 @@ flowchart LR
 
 ### Caddy 라우팅
 
-`Caddyfile`에서 `shop.jimindev.com` 요청은 Docker 내부 네트워크의 `store:3000`으로 reverse proxy 됩니다.
+`Caddyfile`에서 `shop.jimindev.com` 요청은 Docker 내부 네트워크의 `store:3000`으로 reverse proxy 된다.
 
 ```caddy
 shop.jimindev.com {
@@ -336,17 +379,17 @@ shop.jimindev.com {
 }
 ```
 
-실제 파일에서는 `SHOP_DOMAIN` 환경 변수를 통해 도메인을 바꿀 수 있습니다.
+실제 파일에서는 `SHOP_DOMAIN` 환경 변수를 통해 도메인을 바꿀 수 있다.
 
 ### Docker image
 
-스토어 서비스 이미지는 다음 이름으로 배포됩니다.
+스토어 서비스 이미지는 다음 이름으로 배포된다.
 
 ```text
 rema03/jimin-store:latest
 ```
 
-`Dockerfile`은 Next.js standalone output을 사용합니다. AWS에서 CSS/JS가 깨지지 않도록 빌드 후 다음 정적 리소스를 standalone 서버 위치로 복사합니다.
+`Dockerfile`은 Next.js standalone output을 사용한다. AWS에서 CSS/JS가 깨지지 않도록 빌드 후 다음 정적 리소스를 standalone 서버 위치로 복사한다.
 
 ```dockerfile
 cp -r public .next/standalone/public
@@ -362,7 +405,7 @@ docker compose up -d store caddy
 
 ### AWS 보안 그룹
 
-외부 공개 포트는 다음만 필요합니다.
+외부 공개 포트는 다음만 필요하다.
 
 | 포트 | 용도 | 공개 범위 |
 | --- | --- | --- |
@@ -370,9 +413,9 @@ docker compose up -d store caddy
 | `443` | HTTPS 서비스 | 전체 |
 | `22` | SSH | 본인 IP 권장 |
 
-`3000`, `5432`, `5433`은 외부에 열 필요가 없습니다. `store`와 `store-db`는 Docker 내부 네트워크에서 통신합니다.
+`3000`, `5432`, `5433`은 외부에 열 필요가 없다. `store`와 `store-db`는 Docker 내부 네트워크에서 통신한다.
 
-## 13. 현재 한계와 개선 방향
+## 14. 현재 한계와 개선 방향
 
 | 항목 | 현재 상태 | 개선 방향 |
 | --- | --- | --- |
@@ -383,9 +426,9 @@ docker compose up -d store caddy
 | 재고 정책 | 주문 생성 시 선점 | 결제 승인 시점 차감 또는 선점 만료 정책 선택 |
 | 접근성 | 기본 폼/버튼 구조 적용 | 키보드 이동, ARIA, 포커스 상태 점검 강화 |
 
-## 14. 시드 데이터
+## 15. 시드 데이터
 
-시드 실행 시 다음 데이터가 생성됩니다.
+시드 실행 시 다음 데이터가 생성된다.
 
 - 관리자 계정 1개
 - 일반 사용자 계정 1개
@@ -397,10 +440,10 @@ docker compose up -d store caddy
   - `WELCOME10`: 신규 회원 10% 할인
   - `FREE5000`: 5,000원 할인
 
-## 15. 프로젝트 의의
+## 16. 프로젝트 의의
 
-이 프로젝트는 단순 상품 목록 페이지가 아니라, 커머스 서비스에서 실제로 이어져야 하는 흐름을 끝까지 연결했다는 점에 의미가 있습니다.
+이 프로젝트는 단순 상품 목록 페이지가 아니라, 커머스 서비스에서 실제로 이어져야 하는 흐름을 끝까지 연결했다는 점에 의미가 있다.
 
-회원은 상품 탐색부터 결제까지 진행할 수 있고, 관리자는 상품과 주문을 관리할 수 있습니다. 데이터 모델은 장바구니, 주문, 결제, 배송지, 쿠폰, 리뷰, 위시리스트처럼 커머스 도메인의 관계를 반영하며, 배포는 Docker와 Caddy를 통해 실제 도메인에서 접근 가능한 형태로 구성했습니다.
+회원은 상품 탐색부터 결제까지 진행할 수 있고, 관리자는 상품과 주문을 관리할 수 있다. 데이터 모델은 장바구니, 주문, 결제, 배송지, 쿠폰, 리뷰, 위시리스트처럼 커머스 도메인의 관계를 반영하며, 배포는 Docker와 Caddy를 통해 실제 도메인에서 접근 가능한 형태로 구성했다.
 
-특히 Toss Payments 테스트 결제와 AWS 배포 과정에서 발생한 오류를 직접 수정하면서, 프론트엔드 화면 구현뿐 아니라 결제 승인, 서버 환경 변수, Docker image, reverse proxy, 정적 파일 서빙까지 전체 서비스 운영 흐름을 경험한 프로젝트입니다.
+특히 Toss Payments 테스트 결제와 AWS 배포 과정에서 발생한 오류를 직접 수정하면서, 프론트엔드 화면 구현뿐 아니라 결제 승인, 서버 환경 변수, Docker image, reverse proxy, 정적 파일 서빙까지 전체 서비스 운영 흐름을 경험한 프로젝트이다.

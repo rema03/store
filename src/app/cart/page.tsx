@@ -1,8 +1,8 @@
 import { getCartItems } from '@/actions/cartActions'
 import CartItemRow from '@/components/cart/CartItemRow'
 import CartSummary from '@/components/cart/CartSummary'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
+
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { styled } from '@devup-ui/react'
@@ -67,7 +67,7 @@ const Sticky = styled('div')({
 })
 
 export default async function CartPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session) {
     redirect('/login?callbackUrl=/cart')
   }

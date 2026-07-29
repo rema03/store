@@ -1,7 +1,7 @@
 import { getWishlistItems } from '@/actions/wishlistActions'
 import ProductCard from '@/components/product/ProductCard'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
+
 import { redirect } from 'next/navigation'
 import { styled } from '@devup-ui/react'
 
@@ -41,7 +41,7 @@ const ProductGrid = styled('div')({
 })
 
 export default async function WishlistPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session) redirect('/login?callbackUrl=/wishlist')
 
   const wishlistItems = await getWishlistItems()

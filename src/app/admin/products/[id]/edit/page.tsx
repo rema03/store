@@ -1,8 +1,8 @@
 import { getAdminProductById } from '@/actions/adminActions'
 import { getCategories } from '@/actions/productActions'
 import ProductForm from '@/components/admin/ProductForm'
-import { authOptions } from '@/lib/auth'
-import { getServerSession } from 'next-auth'
+
+import { getServerSession } from '@/lib/auth'
 import { notFound, redirect } from 'next/navigation'
 import { styled } from '@devup-ui/react'
 
@@ -34,7 +34,7 @@ const Description = styled('p')({
 })
 
 export default async function EditProductPage({ params }: EditProductPageProps) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (session?.user?.role !== 'ADMIN') redirect('/')
 
   const productId = Number(params.id)

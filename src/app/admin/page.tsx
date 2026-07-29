@@ -1,8 +1,8 @@
 import { prisma } from '@/lib/prisma'
 import { formatPrice } from '@/lib/utils'
 import Link from 'next/link'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
+
 import { redirect } from 'next/navigation'
 import { styled } from '@devup-ui/react'
 
@@ -101,7 +101,7 @@ const QuickLink = styled(Link)({
 })
 
 export default async function AdminDashboardPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (session?.user?.role !== 'ADMIN') redirect('/')
 
   // 대시보드 통계 데이터 가져오기
