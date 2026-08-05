@@ -84,9 +84,13 @@ export async function POST(req: NextRequest) {
         throw new Error('ALREADY_PROCESSED')
       }
 
-      // 3.1 장바구니 비우기
+      // 3.1 결제된 상품만 장바구니에서 제거
+      const purchasedProductIds = order.items.map(item => item.productId)
       await tx.cartItem.deleteMany({
-        where: { userId: parseInt(session.user.id) },
+        where: {
+          userId: parseInt(session.user.id),
+          productId: { in: purchasedProductIds },
+        },
       })
     })
 
