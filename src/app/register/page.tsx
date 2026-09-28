@@ -11,7 +11,7 @@ export default function RegisterPage({
   const host = headersList.get('host') || 'localhost:3000'
   const fallbackUrl = `${proto}://${host}`
 
-  const accountsUrl = process.env.NEXT_PUBLIC_ACCOUNTS_URL || 'http://accounts.localhost:3000'
+  const accountsUrl = process.env.NEXT_PUBLIC_ACCOUNTS_URL || 'http://accounts.localhost'
   const callbackUrl = searchParams.callbackUrl || (process.env.NEXT_PUBLIC_APP_URL || fallbackUrl)
   redirect(`${accountsUrl}/signup?callbackUrl=${encodeURIComponent(callbackUrl)}`)
 }

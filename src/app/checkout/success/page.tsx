@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import PaymentSuccess from '@/components/checkout/PaymentSuccess'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
   width: '100%',
@@ -20,7 +20,7 @@ const Fallback = styled('div')({
 const Spinner = styled('div')({
   width: '48px',
   height: '48px',
-  borderRadius: '999px',
+  borderRadius: '16px',
   border: '2px solid #e5e7eb',
   borderBottomColor: '#111',
   animation: 'spin 0.8s linear infinite',

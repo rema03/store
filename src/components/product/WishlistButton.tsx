@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { toggleWishlist } from '@/actions/wishlistActions'
 import { useRouter } from 'next/navigation'
 import { Heart } from 'lucide-react'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 interface WishlistButtonProps {
   productId: number
@@ -22,7 +22,7 @@ const WishButton = styled('button')({
   color: '#8c7d6d',
   cursor: 'pointer',
   _hover: {
-    borderColor: '#171512',
+    borderColor: '#000000',
   },
   _disabled: {
     opacity: 0.6,
@@ -35,9 +35,9 @@ const WishButtonActive = styled('button')({
   height: '56px',
   display: 'grid',
   placeItems: 'center',
-  border: '1px solid #171512',
+  border: '1px solid rgba(0,0,0,0.08)',
   borderRadius: '16px',
-  background: '#171512',
+  background: '#000000',
   color: '#fff',
   cursor: 'pointer',
   _disabled: {

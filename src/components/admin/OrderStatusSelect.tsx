@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { OrderStatus } from '@prisma/client'
 import { updateOrderStatus } from '@/actions/adminActions'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 interface OrderStatusSelectProps {
   orderId: number
@@ -12,7 +12,7 @@ interface OrderStatusSelectProps {
 
 const Select = styled('select')({
   border: '1px solid #d1d5db',
-  borderRadius: '6px',
+  borderRadius: '16px',
   background: '#fff',
   fontSize: '12px',
   padding: '8px',
@@ -44,7 +44,7 @@ export default function OrderStatusSelect({ orderId, initialStatus }: OrderStatu
     <Select
       value={status}
       disabled={isUpdating}
-      onChange={(e) => handleChange(e.target.value as OrderStatus)}
+      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e.target.value as OrderStatus)}
     >
       {Object.values(OrderStatus).map((s) => (
         <option key={s} value={s}>{s}</option>

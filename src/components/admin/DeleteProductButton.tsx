@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { deleteProduct } from '@/actions/adminActions'
 import { useRouter } from 'next/navigation'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 interface DeleteProductButtonProps {
   productId: number

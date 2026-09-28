@@ -1,7 +1,7 @@
 import { getProducts, getCategories } from '@/actions/productActions'
 import ProductCard from '@/components/product/ProductCard'
 import Link from 'next/link'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 interface ProductsPageProps {
   searchParams: {
@@ -34,14 +34,14 @@ const Eyebrow = styled('p')({
   marginBottom: '10px',
   color: '#8c7d6d',
   fontSize: '12px',
-  fontWeight: 900,
+  fontWeight: 400,
   letterSpacing: '0.14em',
 })
 
 const Title = styled('h1')({
-  color: '#171512',
+  color: '#000000',
   fontSize: ['40px', '64px'],
-  fontWeight: 950,
+  fontWeight: 400,
   lineHeight: 0.98,
   letterSpacing: '-0.055em',
 })
@@ -49,11 +49,11 @@ const Title = styled('h1')({
 const Count = styled('p')({
   padding: '12px 16px',
   border: '1px solid #e8e0d5',
-  borderRadius: '999px',
+  borderRadius: '16px',
   background: '#fff',
   color: '#675d52',
   fontSize: '14px',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 const Layout = styled('div')({
@@ -73,16 +73,16 @@ const Sidebar = styled('aside')({
 const FilterBox = styled('div')({
   padding: '18px',
   border: '1px solid #e8e0d5',
-  borderRadius: '22px',
+  borderRadius: '16px',
   background: '#fff',
   boxShadow: '0 18px 45px rgba(39, 31, 22, 0.06)',
 })
 
 const FilterTitle = styled('h2')({
   marginBottom: '12px',
-  color: '#171512',
+  color: '#000000',
   fontSize: '14px',
-  fontWeight: 950,
+  fontWeight: 400,
 })
 
 const FilterList = styled('ul')({
@@ -94,24 +94,24 @@ const FilterList = styled('ul')({
 const FilterLink = styled(Link)({
   display: 'block',
   padding: '10px 12px',
-  borderRadius: '13px',
+  borderRadius: '16px',
   color: '#5c5147',
   fontSize: '14px',
-  fontWeight: 800,
+  fontWeight: 400,
   _hover: {
     background: '#f5efe6',
-    color: '#171512',
+    color: '#000000',
   },
 })
 
 const ActiveFilterLink = styled(Link)({
   display: 'block',
   padding: '10px 12px',
-  borderRadius: '13px',
-  background: '#171512',
+  borderRadius: '16px',
+  background: '#000000',
   color: '#fff',
   fontSize: '14px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const ProductGrid = styled('div')({
@@ -125,11 +125,11 @@ const Empty = styled('div')({
   placeItems: 'center',
   minHeight: '320px',
   border: '1px dashed #d9cec0',
-  borderRadius: '28px',
+  borderRadius: '16px',
   background: '#fff',
   color: '#8c7d6d',
   fontSize: '15px',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 function buildSortHref(searchParams: ProductsPageProps['searchParams'], sort: string) {

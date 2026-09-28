@@ -6,7 +6,7 @@ import { getServerSession } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import Image from 'next/image'
 import DeleteProductButton from '@/components/admin/DeleteProductButton'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
   width: '100%',
@@ -31,14 +31,14 @@ const Header = styled('div')({
 
 const Title = styled('h1')({
   fontSize: '30px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const CreateLink = styled(Link)({
-  borderRadius: '6px',
+  borderRadius: '16px',
   background: '#111',
   color: '#fff',
-  fontWeight: 900,
+  fontWeight: 400,
   padding: '12px 24px',
   textAlign: 'center',
   transition: 'background 0.15s ease',
@@ -50,7 +50,7 @@ const CreateLink = styled(Link)({
 const TableWrap = styled('div')({
   overflowX: 'auto',
   border: '1px solid #ddd',
-  borderRadius: '8px',
+  borderRadius: '16px',
   background: '#fff',
 })
 
@@ -69,7 +69,7 @@ const Thead = styled('thead')({
 const Th = styled('th')({
   padding: '16px 24px',
   fontSize: '14px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const ThRight = styled(Th)({
@@ -94,7 +94,7 @@ const TdMuted = styled(Td)({
 })
 
 const TdBold = styled(Td)({
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const TdActions = styled(Td)({
@@ -113,7 +113,7 @@ const Thumb = styled('div')({
   height: '64px',
   flexShrink: 0,
   overflow: 'hidden',
-  borderRadius: '6px',
+  borderRadius: '16px',
   background: '#f1f1f1',
 })
 
@@ -122,7 +122,7 @@ const ProductImage = styled(Image)({
 })
 
 const ProductName = styled('span')({
-  fontWeight: 700,
+  fontWeight: 400,
 })
 
 const EditLink = styled(Link)({

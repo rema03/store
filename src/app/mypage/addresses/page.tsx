@@ -4,7 +4,7 @@ import AddressList from '@/components/user/AddressList'
 import { getServerSession } from '@/lib/auth'
 
 import { redirect } from 'next/navigation'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
   background: '#fbf8f2',
@@ -25,9 +25,9 @@ const Head = styled('div')({
 })
 
 const Title = styled('h1')({
-  color: '#171512',
+  color: '#000000',
   fontSize: ['36px', '54px'],
-  fontWeight: 950,
+  fontWeight: 400,
   letterSpacing: '-0.055em',
 })
 
@@ -37,11 +37,11 @@ const AddLink = styled(Link)({
   justifyContent: 'center',
   minHeight: '46px',
   padding: '0 16px',
-  borderRadius: '14px',
-  background: '#171512',
+  borderRadius: '16px',
+  background: '#000000',
   color: '#fff',
   fontSize: '14px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 export default async function AddressesPage() {

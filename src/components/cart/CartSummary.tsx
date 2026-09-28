@@ -2,7 +2,7 @@
 
 import { formatPrice } from '@/lib/utils'
 import Link from 'next/link'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 interface CartSummaryProps {
   totalPrice: number
@@ -13,15 +13,15 @@ const Summary = styled('div')({
   gap: '20px',
   padding: '24px',
   border: '1px solid #e8e0d5',
-  borderRadius: '26px',
+  borderRadius: '16px',
   background: '#fff',
   boxShadow: '0 22px 55px rgba(39,31,22,0.08)',
 })
 
 const Title = styled('h2')({
-  color: '#171512',
+  color: '#000000',
   fontSize: '20px',
-  fontWeight: 950,
+  fontWeight: 400,
 })
 
 const Lines = styled('div')({
@@ -40,9 +40,9 @@ const Row = styled('div')({
 const StrongRow = styled(Row)({
   paddingTop: '16px',
   borderTop: '1px solid #eee7dd',
-  color: '#171512',
+  color: '#000000',
   fontSize: '16px',
-  fontWeight: 950,
+  fontWeight: 400,
 })
 
 const Hint = styled('p')({
@@ -56,16 +56,16 @@ const CheckoutLink = styled(Link)({
   placeItems: 'center',
   minHeight: '52px',
   borderRadius: '16px',
-  background: '#171512',
+  background: '#000000',
   color: '#fff',
   fontSize: '14px',
-  fontWeight: 950,
+  fontWeight: 400,
 })
 
 const ContinueLink = styled(Link)({
   color: '#6f6256',
   fontSize: '14px',
-  fontWeight: 800,
+  fontWeight: 400,
   textAlign: 'center',
 })
 

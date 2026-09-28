@@ -3,7 +3,7 @@ import ProductForm from '@/components/admin/ProductForm'
 import { getServerSession } from '@/lib/auth'
 
 import { redirect } from 'next/navigation'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
   width: '100%',
@@ -18,7 +18,7 @@ const Header = styled('div')({
 
 const Title = styled('h1')({
   fontSize: '30px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const Description = styled('p')({

@@ -1,63 +1,78 @@
 import Link from 'next/link'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const FooterShell = styled('footer')({
-  borderTop: '1px solid #e8e2d8',
-  background: '#171512',
-  color: '#fff',
+  borderTop: '1px solid rgba(0, 0, 0, 0.08)',
+  background: '#fafafa',
+  color: '#111111',
+  fontFamily: "'Pretendard', sans-serif",
 })
 
 const FooterInner = styled('div')({
-  maxWidth: '1200px',
+  maxWidth: '1280px',
   margin: '0 auto',
-  padding: ['48px 20px 28px', '72px 20px 34px'],
+  padding: ['64px 24px 32px', '80px 40px 40px'],
 })
 
 const FooterGrid = styled('div')({
   display: 'grid',
-  gridTemplateColumns: ['1fr', '1.4fr 0.8fr 0.8fr'],
-  gap: ['32px', '56px'],
+  gridTemplateColumns: ['1fr', '2fr 1fr 1fr 1fr'],
+  gap: ['48px', '64px'],
+})
+
+const BrandSection = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '16px',
 })
 
 const Brand = styled('h2')({
-  fontSize: ['26px', '36px'],
-  fontWeight: 950,
-  letterSpacing: '-0.04em',
+  fontSize: ['24px', '28px'],
+  fontWeight: 800,
+  letterSpacing: '-0.02em',
+  color: '#111111',
 })
 
 const Description = styled('p')({
-  maxWidth: '420px',
-  marginTop: '16px',
-  color: '#b8aea1',
+  maxWidth: '320px',
+  color: '#666666',
   fontSize: '15px',
-  lineHeight: 1.8,
+  lineHeight: 1.6,
+  fontWeight: 400,
 })
 
 const ColumnTitle = styled('h3')({
-  marginBottom: '14px',
-  color: '#f4ede2',
-  fontSize: '12px',
-  fontWeight: 900,
-  letterSpacing: '0.12em',
+  marginBottom: '20px',
+  color: '#111111',
+  fontSize: '13px',
+  fontWeight: 700,
+  letterSpacing: '0.05em',
+  textTransform: 'uppercase',
 })
 
 const FooterText = styled('p')({
-  color: '#b8aea1',
-  fontSize: '14px',
+  color: '#666666',
+  fontSize: '15px',
   lineHeight: 1.8,
+  fontWeight: 400,
 })
 
 const LinkList = styled('ul')({
-  display: 'grid',
-  gap: '10px',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '12px',
   listStyle: 'none',
+  padding: 0,
+  margin: 0,
 })
 
 const FooterLink = styled(Link)({
-  color: '#b8aea1',
-  fontSize: '14px',
+  color: '#666666',
+  fontSize: '15px',
+  fontWeight: 500,
+  transition: 'color 0.2s ease',
   _hover: {
-    color: '#fff',
+    color: '#111111',
   },
 })
 
@@ -65,12 +80,19 @@ const Bottom = styled('div')({
   display: 'flex',
   flexDirection: ['column', 'row'],
   justifyContent: 'space-between',
-  gap: '12px',
-  marginTop: '54px',
-  paddingTop: '22px',
-  borderTop: '1px solid rgba(255,255,255,0.1)',
-  color: '#8e857a',
-  fontSize: '12px',
+  alignItems: ['flex-start', 'center'],
+  gap: '16px',
+  marginTop: '80px',
+  paddingTop: '32px',
+  borderTop: '1px solid rgba(0, 0, 0, 0.08)',
+  color: '#999999',
+  fontSize: '14px',
+  fontWeight: 400,
+})
+
+const LegalLinks = styled('div')({
+  display: 'flex',
+  gap: '24px',
 })
 
 export default function Footer() {
@@ -78,33 +100,49 @@ export default function Footer() {
     <FooterShell>
       <FooterInner>
         <FooterGrid>
-          <div>
+          <BrandSection>
             <Brand>Jimin Store</Brand>
             <Description>
-              감각적인 셀렉션과 단정한 쇼핑 경험을 함께 제안합니다.
-              오래 입을 수 있는 스타일을 더 쉽게 고를 수 있도록 큐레이션합니다.
+              본질에 충실한 프리미엄 라이프스타일 큐레이션. 
+              최고의 퀄리티와 변하지 않는 모던함을 제안합니다.
             </Description>
-          </div>
+          </BrandSection>
+          
           <div>
-            <ColumnTitle>CS CENTER</ColumnTitle>
-            <FooterText>jjm4216@gmail.com</FooterText>
-            <FooterText>10:00 - 18:00</FooterText>
-            <FooterText>Weekend Off</FooterText>
-          </div>
-          <div>
-            <ColumnTitle>QUICK LINKS</ColumnTitle>
+            <ColumnTitle>Shop</ColumnTitle>
             <LinkList>
-              <li><FooterLink href="/products">전체 상품</FooterLink></li>
-              <li><FooterLink href="/orders">주문내역</FooterLink></li>
-              <li><FooterLink href="/mypage">마이페이지</FooterLink></li>
+              <li><FooterLink href="/products">All Products</FooterLink></li>
+              <li><FooterLink href="/products?category=new">New Arrivals</FooterLink></li>
+              <li><FooterLink href="/products?category=best">Best Sellers</FooterLink></li>
+            </LinkList>
+          </div>
+
+          <div>
+            <ColumnTitle>Support</ColumnTitle>
+            <LinkList>
+              <li><FooterLink href="/orders">Order Tracking</FooterLink></li>
+              <li><FooterLink href="/mypage">My Account</FooterLink></li>
+              <li><FooterLink href="/faq">FAQ & Returns</FooterLink></li>
+            </LinkList>
+          </div>
+
+          <div>
+            <ColumnTitle>Contact</ColumnTitle>
+            <LinkList>
+              <li><FooterText>jjm4216@gmail.com</FooterText></li>
+              <li><FooterText>Mon - Fri, 10am - 6pm</FooterText></li>
             </LinkList>
           </div>
         </FooterGrid>
+        
         <Bottom>
           <span>
-            © 2026 <FooterLink href="https://jimindev.com">jimindev.com</FooterLink>. All rights reserved.
+            © 2026 Jimin Store. All rights reserved.
           </span>
-          <FooterLink href="https://shop.jimindev.com">shop.jimindev.com</FooterLink>
+          <LegalLinks>
+            <FooterLink href="/privacy" style={{ fontSize: '13px' }}>Privacy Policy</FooterLink>
+            <FooterLink href="/terms" style={{ fontSize: '13px' }}>Terms of Service</FooterLink>
+          </LegalLinks>
         </Bottom>
       </FooterInner>
     </FooterShell>

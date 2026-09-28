@@ -8,7 +8,7 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { z } from 'zod'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 type LoginInput = z.infer<typeof loginSchema>
 
@@ -17,16 +17,16 @@ const Card = styled('div')({
   maxWidth: '440px',
   padding: '34px',
   border: '1px solid #e8e0d5',
-  borderRadius: '28px',
+  borderRadius: '16px',
   background: '#fff',
   boxShadow: '0 24px 60px rgba(39,31,22,0.08)',
 })
 
 const Title = styled('h1')({
   marginBottom: '26px',
-  color: '#171512',
+  color: '#000000',
   fontSize: '30px',
-  fontWeight: 950,
+  fontWeight: 400,
   letterSpacing: '-0.04em',
   textAlign: 'center',
 })
@@ -52,12 +52,12 @@ const Input = styled('input')({
   height: '48px',
   padding: '0 14px',
   border: '1px solid #ded3c6',
-  borderRadius: '14px',
+  borderRadius: '16px',
   outline: 0,
-  color: '#171512',
+  color: '#000000',
   fontSize: '15px',
   _focus: {
-    borderColor: '#171512',
+    borderColor: '#000000',
     boxShadow: '0 0 0 3px rgba(23,21,18,0.08)',
   },
 })
@@ -65,7 +65,7 @@ const Input = styled('input')({
 const ErrorText = styled('p')({
   color: '#b91c1c',
   fontSize: '12px',
-  fontWeight: 700,
+  fontWeight: 400,
 })
 
 const Submit = styled('button')({
@@ -73,9 +73,9 @@ const Submit = styled('button')({
   height: '52px',
   border: 0,
   borderRadius: '16px',
-  background: '#171512',
+  background: '#000000',
   color: '#fff',
-  fontWeight: 950,
+  fontWeight: 400,
   cursor: 'pointer',
   _hover: {
     background: '#3a3128',
@@ -94,8 +94,8 @@ const FooterText = styled('p')({
 })
 
 const FooterLink = styled(Link)({
-  color: '#171512',
-  fontWeight: 900,
+  color: '#000000',
+  fontWeight: 400,
 })
 
 export default function LoginForm() {

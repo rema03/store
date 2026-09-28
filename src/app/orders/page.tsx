@@ -2,7 +2,7 @@ import { getUserOrders } from '@/actions/orderActions'
 import { formatPrice } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
   background: '#fbf8f2',
@@ -16,9 +16,9 @@ const Shell = styled('div')({
 
 const Title = styled('h1')({
   marginBottom: '30px',
-  color: '#171512',
+  color: '#000000',
   fontSize: ['40px', '64px'],
-  fontWeight: 950,
+  fontWeight: 400,
   letterSpacing: '-0.055em',
 })
 
@@ -28,10 +28,10 @@ const Empty = styled('div')({
   gap: '18px',
   minHeight: '300px',
   border: '1px dashed #d9cec0',
-  borderRadius: '28px',
+  borderRadius: '16px',
   background: '#fff',
   color: '#8c7d6d',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 const ShopLink = styled(Link)({
@@ -40,10 +40,10 @@ const ShopLink = styled(Link)({
   justifyContent: 'center',
   minHeight: '48px',
   padding: '0 18px',
-  borderRadius: '14px',
-  background: '#171512',
+  borderRadius: '16px',
+  background: '#000000',
   color: '#fff',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const OrderList = styled('div')({
@@ -54,7 +54,7 @@ const OrderList = styled('div')({
 const OrderCard = styled('article')({
   overflow: 'hidden',
   border: '1px solid #e8e0d5',
-  borderRadius: '26px',
+  borderRadius: '16px',
   background: '#fff',
   boxShadow: '0 18px 45px rgba(39,31,22,0.06)',
 })
@@ -78,24 +78,24 @@ const MetaLabel = styled('p')({
   marginBottom: '4px',
   color: '#8c7d6d',
   fontSize: '12px',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 const MetaValue = styled('p')({
-  color: '#171512',
+  color: '#000000',
   fontSize: '14px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const Status = styled('div')({
   alignSelf: 'start',
   padding: '8px 12px',
   border: '1px solid #e0d5c8',
-  borderRadius: '999px',
+  borderRadius: '16px',
   background: '#fff',
-  color: '#171512',
+  color: '#000000',
   fontSize: '12px',
-  fontWeight: 950,
+  fontWeight: 400,
 })
 
 const Items = styled('div')({
@@ -122,13 +122,13 @@ const ProductImage = styled('div')({
   width: '64px',
   height: '80px',
   overflow: 'hidden',
-  borderRadius: '14px',
+  borderRadius: '16px',
   background: '#efe7dc',
 })
 
 const ProductName = styled('p')({
-  color: '#171512',
-  fontWeight: 900,
+  color: '#000000',
+  fontWeight: 400,
 })
 
 const ProductMeta = styled('p')({
@@ -140,10 +140,10 @@ const ProductMeta = styled('p')({
 const ProductLink = styled(Link)({
   padding: '10px 13px',
   border: '1px solid #e0d5c8',
-  borderRadius: '13px',
-  color: '#171512',
+  borderRadius: '16px',
+  color: '#000000',
   fontSize: '13px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 export default async function OrdersPage() {

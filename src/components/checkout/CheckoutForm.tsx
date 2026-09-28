@@ -8,7 +8,7 @@ import { createOrder } from '@/actions/orderActions'
 import { loadTossPayments } from '@tosspayments/payment-sdk'
 import { getShippingFee } from '@/lib/config'
 import type { Address, CartItem, Coupon, Product, UserCoupon } from '@prisma/client'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 type CheckoutCartItem = CartItem & {
   product: Product
@@ -47,12 +47,12 @@ const Section = styled('section')({
 
 const SectionTitle = styled('h2')({
   fontSize: '20px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const EmptyBox = styled('div')({
   border: '2px dashed #ddd',
-  borderRadius: '8px',
+  borderRadius: '16px',
   padding: '32px',
   textAlign: 'center',
 })
@@ -65,7 +65,7 @@ const LinkButton = styled(Link)({
   display: 'inline-block',
   marginTop: '16px',
   color: '#111',
-  fontWeight: 800,
+  fontWeight: 400,
   textDecoration: 'underline',
 })
 
@@ -76,7 +76,7 @@ const AddressList = styled('div')({
 
 const AddressOption = styled('label')({
   display: 'block',
-  borderRadius: '8px',
+  borderRadius: '16px',
   cursor: 'pointer',
   padding: '16px',
   transition: 'border-color 0.15s ease, background 0.15s ease',
@@ -106,11 +106,11 @@ const NameRow = styled('div')({
 })
 
 const Name = styled('span')({
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const Badge = styled('span')({
-  borderRadius: '4px',
+  borderRadius: '16px',
   background: '#e5e7eb',
   fontSize: '10px',
   padding: '2px 6px',
@@ -124,7 +124,7 @@ const SmallMuted = styled('p')({
 const Select = styled('select')({
   width: '100%',
   border: '1px solid #d1d5db',
-  borderRadius: '6px',
+  borderRadius: '16px',
   background: '#fff',
   padding: '12px',
   outline: 'none',
@@ -159,7 +159,7 @@ const Thumb = styled('div')({
   height: '80px',
   flexShrink: 0,
   overflow: 'hidden',
-  borderRadius: '6px',
+  borderRadius: '16px',
   background: '#f1f1f1',
 })
 
@@ -169,7 +169,7 @@ const CoverImage = styled(Image)({
 
 const ProductName = styled('p')({
   fontSize: '14px',
-  fontWeight: 700,
+  fontWeight: 400,
 })
 
 const Quantity = styled('p')({
@@ -179,7 +179,7 @@ const Quantity = styled('p')({
 
 const Price = styled('p')({
   fontSize: '14px',
-  fontWeight: 900,
+  fontWeight: 400,
   whiteSpace: 'nowrap',
 })
 
@@ -192,14 +192,14 @@ const SummaryBox = styled('div')({
   top: '96px',
   display: 'grid',
   gap: '24px',
-  borderRadius: '8px',
+  borderRadius: '16px',
   background: '#f7f7f7',
   padding: '24px',
 })
 
 const SummaryTitle = styled('h2')({
   fontSize: '18px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const SummaryRows = styled('div')({
@@ -226,7 +226,7 @@ const TotalRow = styled(SummaryRow)({
   borderTop: '1px solid #ddd',
   paddingTop: '16px',
   fontSize: '16px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const TotalPrice = styled('span')({
@@ -236,10 +236,10 @@ const TotalPrice = styled('span')({
 
 const PayButton = styled('button')({
   width: '100%',
-  borderRadius: '6px',
+  borderRadius: '16px',
   background: '#111',
   color: '#fff',
-  fontWeight: 900,
+  fontWeight: 400,
   letterSpacing: '0.08em',
   padding: '16px',
   textTransform: 'uppercase',
@@ -256,7 +256,7 @@ const PayButton = styled('button')({
 const PaymentError = styled('p')({
   color: '#dc2626',
   fontSize: '13px',
-  fontWeight: 700,
+  fontWeight: 400,
   lineHeight: 1.5,
   whiteSpace: 'pre-wrap',
 })
@@ -393,7 +393,7 @@ export default function CheckoutForm({ cartItems, addresses, coupons }: Checkout
           <SectionTitle>쿠폰 할인</SectionTitle>
           <Select
             value={selectedCouponId || ''}
-            onChange={(e) => setSelectedCouponId(e.target.value ? parseInt(e.target.value) : undefined)}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedCouponId(e.target.value ? parseInt(e.target.value) : undefined)}
           >
             <option value="">쿠폰 선택 안 함</option>
             {coupons.map((c) => (

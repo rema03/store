@@ -4,7 +4,7 @@ import ProductForm from '@/components/admin/ProductForm'
 
 import { getServerSession } from '@/lib/auth'
 import { notFound, redirect } from 'next/navigation'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 interface EditProductPageProps {
   params: {
@@ -25,7 +25,7 @@ const Header = styled('div')({
 
 const Title = styled('h1')({
   fontSize: '30px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const Description = styled('p')({

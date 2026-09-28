@@ -7,7 +7,7 @@ import { addressSchema } from '@/lib/validators'
 import { addAddress } from '@/actions/addressActions'
 import { useRouter } from 'next/navigation'
 import { z } from 'zod'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 type AddressInput = z.infer<typeof addressSchema>
 
@@ -35,11 +35,11 @@ const Input = styled('input')({
   border: '1px solid #ded3c6',
   borderRadius: '16px',
   outline: 0,
-  color: '#171512',
+  color: '#000000',
   fontSize: '15px',
   boxSizing: 'border-box',
   _focus: {
-    borderColor: '#171512',
+    borderColor: '#000000',
     boxShadow: '0 0 0 3px rgba(23,21,18,0.08)',
   },
 })
@@ -47,7 +47,7 @@ const Input = styled('input')({
 const ErrorText = styled('p')({
   color: '#b91c1c',
   fontSize: '12px',
-  fontWeight: 700,
+  fontWeight: 400,
 })
 
 const CheckboxLabel = styled('label')({
@@ -56,8 +56,8 @@ const CheckboxLabel = styled('label')({
   gap: '10px',
   cursor: 'pointer',
   fontSize: '14px',
-  fontWeight: 800,
-  color: '#171512',
+  fontWeight: 400,
+  color: '#000000',
 })
 
 const Actions = styled('div')({
@@ -70,11 +70,11 @@ const SubmitButton = styled('button')({
   flex: 1,
   height: '56px',
   border: 0,
-  borderRadius: '18px',
-  background: '#171512',
+  borderRadius: '16px',
+  background: '#000000',
   color: '#fff',
   fontSize: '15px',
-  fontWeight: 950,
+  fontWeight: 400,
   cursor: 'pointer',
   _hover: {
     background: '#3a3128',
@@ -89,11 +89,11 @@ const CancelButton = styled('button')({
   height: '56px',
   padding: '0 24px',
   border: '1px solid #e8e0d5',
-  borderRadius: '18px',
+  borderRadius: '16px',
   background: '#fff',
   color: '#5c5147',
   fontSize: '15px',
-  fontWeight: 900,
+  fontWeight: 400,
   cursor: 'pointer',
   _hover: {
     background: '#fbf8f2',
@@ -203,8 +203,8 @@ export default function AddressForm() {
               <input
                 type="checkbox"
                 checked={value}
-                onChange={(e) => onChange(e.target.checked)}
-                style={{ width: '18px', height: '18px', accentColor: '#171512' }}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.checked)}
+                style={{ width: '18px', height: '18px', accentColor: '#000000' }}
               />
               기본 배송지로 설정
             </CheckboxLabel>

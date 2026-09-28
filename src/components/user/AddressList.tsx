@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { deleteAddress, setDefaultAddress } from '@/actions/addressActions'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 interface Address {
   id: number
@@ -26,23 +26,23 @@ const Empty = styled('div')({
   placeItems: 'center',
   minHeight: '220px',
   border: '1px dashed #d9cec0',
-  borderRadius: '24px',
+  borderRadius: '16px',
   background: '#fff',
   color: '#8c7d6d',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 const Card = styled('div')({
   padding: '20px',
   border: '1px solid #e8e0d5',
-  borderRadius: '22px',
+  borderRadius: '16px',
   background: '#fff',
 })
 
 const DefaultCard = styled('div')({
   padding: '20px',
-  border: '1px solid #171512',
-  borderRadius: '22px',
+  border: '1px solid rgba(0,0,0,0.08)',
+  borderRadius: '16px',
   background: '#fff',
 })
 
@@ -55,19 +55,19 @@ const Head = styled('div')({
 })
 
 const Receiver = styled('span')({
-  color: '#171512',
+  color: '#000000',
   fontSize: '18px',
-  fontWeight: 950,
+  fontWeight: 400,
 })
 
 const Badge = styled('span')({
   marginLeft: '8px',
   padding: '4px 7px',
-  borderRadius: '999px',
-  background: '#171512',
+  borderRadius: '16px',
+  background: '#000000',
   color: '#fff',
   fontSize: '10px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const Actions = styled('div')({
@@ -80,10 +80,10 @@ const TextButton = styled('button')({
   background: 'transparent',
   color: '#8c7d6d',
   fontSize: '12px',
-  fontWeight: 900,
+  fontWeight: 400,
   cursor: 'pointer',
   _hover: {
-    color: '#171512',
+    color: '#000000',
   },
 })
 

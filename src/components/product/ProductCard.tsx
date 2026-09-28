@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 import { formatPrice } from '@/lib/utils'
 
 interface ProductCardProps {
@@ -25,7 +25,7 @@ const Media = styled('div')({
   aspectRatio: '0.75',
   overflow: 'hidden',
   border: '1px solid #eee7dd',
-  borderRadius: '22px',
+  borderRadius: '16px',
   background: '#f3eee6',
   boxShadow: '0 18px 40px rgba(36, 29, 21, 0.08)',
 })
@@ -36,7 +36,7 @@ const Placeholder = styled('div')({
   placeItems: 'center',
   color: '#9a8d7f',
   fontSize: '13px',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 const Badge = styled('span')({
@@ -45,11 +45,11 @@ const Badge = styled('span')({
   top: '12px',
   zIndex: 1,
   padding: '7px 10px',
-  borderRadius: '999px',
+  borderRadius: '16px',
   background: 'rgba(255,255,255,0.88)',
   color: '#2b241d',
   fontSize: '11px',
-  fontWeight: 900,
+  fontWeight: 400,
   backdropFilter: 'blur(10px)',
 })
 
@@ -70,7 +70,7 @@ const Name = styled('h3')({
 const Price = styled('p')({
   color: '#493f35',
   fontSize: '15px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 export default function ProductCard({ product }: ProductCardProps) {

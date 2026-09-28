@@ -1,7 +1,7 @@
 'use client'
 
-import { SessionProvider } from 'next-auth/react'
+import { JiminSessionProvider } from '@/lib/session'
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-  return <SessionProvider>{children}</SessionProvider>
+  return <JiminSessionProvider>{children}</JiminSessionProvider>
 }

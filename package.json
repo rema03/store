@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Jimin Store built with Next.js, TypeScript, DevUp UI, Prisma, and Toss Payments",
   "scripts": {
-    "postinstall": "node scripts/patch-devup-ui-next-plugin.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "node scripts/start-standalone.mjs",
@@ -18,9 +17,6 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@devup-ui/next-plugin": "^1.0.78",
-    "@devup-ui/react": "^1.0.37",
-    "@devup-ui/reset-css": "^1.0.24",
     "@hookform/resolvers": "^3.3.4",
     "@prisma/client": "^5.7.1",
     "@tosspayments/payment-sdk": "^1.9.3",

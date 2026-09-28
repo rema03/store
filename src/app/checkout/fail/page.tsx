@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
   width: '100%',
@@ -19,7 +19,7 @@ const Icon = styled('div')({
 const Title = styled('h1')({
   marginBottom: '16px',
   fontSize: '30px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const Message = styled('p')({
@@ -41,10 +41,10 @@ const Actions = styled('div')({
 })
 
 const PrimaryLink = styled(Link)({
-  borderRadius: '6px',
+  borderRadius: '16px',
   background: '#111',
   color: '#fff',
-  fontWeight: 900,
+  fontWeight: 400,
   padding: '12px 32px',
   transition: 'background 0.15s ease',
   _hover: {
@@ -54,8 +54,8 @@ const PrimaryLink = styled(Link)({
 
 const SecondaryLink = styled(Link)({
   border: '1px solid #d1d5db',
-  borderRadius: '6px',
-  fontWeight: 900,
+  borderRadius: '16px',
+  fontWeight: 400,
   padding: '12px 32px',
   transition: 'background 0.15s ease',
   _hover: {

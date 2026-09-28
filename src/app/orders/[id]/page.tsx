@@ -3,7 +3,7 @@ import { formatPrice } from '@/lib/utils'
 import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 interface OrderDetailPageProps {
   params: {
@@ -23,18 +23,18 @@ const BackLink = styled(Link)({
   marginBottom: '24px',
   color: '#666',
   fontSize: '14px',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 const Title = styled('h1')({
   marginBottom: '28px',
   fontSize: '30px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const Panel = styled('section')({
   border: '1px solid #ddd',
-  borderRadius: '8px',
+  borderRadius: '16px',
   background: '#fff',
   padding: ['20px', '28px'],
 })
@@ -49,19 +49,19 @@ const MetaGrid = styled('div')({
 const Label = styled('p')({
   color: '#777',
   fontSize: '12px',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 const Value = styled('p')({
   marginTop: '5px',
   fontSize: '15px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const SectionTitle = styled('h2')({
   margin: '28px 0 16px',
   fontSize: '18px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const ItemList = styled('div')({
@@ -83,7 +83,7 @@ const Thumb = styled('div')({
   height: '80px',
   flexShrink: 0,
   overflow: 'hidden',
-  borderRadius: '6px',
+  borderRadius: '16px',
   background: '#f1f1f1',
 })
 
@@ -92,7 +92,7 @@ const ItemBody = styled('div')({
 })
 
 const ItemName = styled(Link)({
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const Muted = styled('p')({

@@ -3,7 +3,7 @@ import { formatPrice } from '@/lib/utils'
 import { getServerSession } from '@/lib/auth'
 
 import { redirect } from 'next/navigation'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
   width: '100%',
@@ -15,13 +15,13 @@ const Page = styled('div')({
 const Title = styled('h1')({
   marginBottom: '32px',
   fontSize: '30px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const TableWrap = styled('div')({
   overflowX: 'auto',
   border: '1px solid #ddd',
-  borderRadius: '8px',
+  borderRadius: '16px',
   background: '#fff',
 })
 
@@ -40,7 +40,7 @@ const Thead = styled('thead')({
 const Th = styled('th')({
   padding: '16px 24px',
   fontSize: '14px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const Tr = styled('tr')({
@@ -53,10 +53,10 @@ const Td = styled('td')({
 })
 
 const Code = styled('code')({
-  borderRadius: '6px',
+  borderRadius: '16px',
   background: '#f2eee6',
   padding: '5px 8px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 function formatDiscount(type: string, value: number, maxDiscount: number | null) {

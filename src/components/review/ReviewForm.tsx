@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { createReview } from '@/actions/reviewActions'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 interface ReviewFormProps {
   productId: number
@@ -12,12 +12,12 @@ const Form = styled('form')({
   display: 'grid',
   gap: '16px',
   padding: '24px',
-  borderRadius: '8px',
+  borderRadius: '16px',
   background: '#f7f7f7',
 })
 
 const Title = styled('h3')({
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 const Field = styled('div')({
@@ -46,7 +46,7 @@ const Textarea = styled('textarea')({
   minHeight: '96px',
   resize: 'vertical',
   border: '1px solid #ddd',
-  borderRadius: '6px',
+  borderRadius: '16px',
   padding: '12px',
   background: '#fff',
   outline: 'none',
@@ -57,10 +57,10 @@ const Textarea = styled('textarea')({
 
 const SubmitButton = styled('button')({
   justifySelf: 'start',
-  borderRadius: '6px',
+  borderRadius: '16px',
   background: '#111',
   color: '#fff',
-  fontWeight: 800,
+  fontWeight: 400,
   padding: '10px 24px',
   transition: 'background 0.15s ease, opacity 0.15s ease',
   _hover: {
@@ -118,7 +118,7 @@ export default function ReviewForm({ productId }: ReviewFormProps) {
         <Label>내용 (최소 10자)</Label>
         <Textarea
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value)}
           rows={3}
           placeholder="상품에 대한 솔직한 후기를 남겨주세요."
         />

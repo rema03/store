@@ -2,111 +2,106 @@ import { getProducts, getCategories } from '@/actions/productActions'
 import ProductCard from '@/components/product/ProductCard'
 import Link from 'next/link'
 import Image from 'next/image'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 export const dynamic = 'force-dynamic'
 
-const heroImage =
-  'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2200'
+const heroImage = 'https://images.unsplash.com/photo-1491904768633-2b7e3e7fede5?q=80&w=2400'
 
 const categoryImages = [
-  'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?q=80&w=1000',
-  'https://images.unsplash.com/photo-1523381294911-8d3cead13475?q=80&w=1000',
-  'https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=1000',
-  'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000',
+  'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?q=80&w=1000', // headphone/tech
+  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000', // sneaker
+  'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000', // watch
+  'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000', // audio
 ]
 
 const storyImages = [
-  'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1200',
-  'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1000',
+  'https://images.unsplash.com/photo-1449247613801-ab06418e2861?q=80&w=1200', // premium lifestyle
+  'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000', // architecture/clean
 ]
 
 const Page = styled('div')({
-  background: '#fbf8f2',
+  background: '#fafafa',
 })
 
 const Hero = styled('section')({
   position: 'relative',
-  minHeight: ['620px', '720px'],
+  minHeight: ['680px', '820px'],
   overflow: 'hidden',
-  background: '#171512',
+  background: '#111',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 })
 
-const HeroOverlay = styled('div')({
+const HeroImageWrapper = styled('div')({
   position: 'absolute',
   inset: 0,
   zIndex: 1,
-  background:
-    'linear-gradient(90deg, rgba(16,13,10,0.78) 0%, rgba(16,13,10,0.42) 48%, rgba(16,13,10,0.12) 100%)',
+  opacity: 0.6,
 })
 
 const HeroContent = styled('div')({
   position: 'relative',
   zIndex: 2,
-  maxWidth: '1200px',
-  minHeight: ['620px', '720px'],
+  maxWidth: '900px',
   margin: '0 auto',
-  padding: ['72px 20px', '92px 20px'],
+  padding: ['0 24px', '0 40px'],
+  textAlign: 'center',
   display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center',
-})
-
-const HeroCopy = styled('div')({
-  maxWidth: '720px',
 })
 
 const Eyebrow = styled('p')({
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: '8px',
-  marginBottom: '18px',
-  padding: '8px 12px',
-  border: '1px solid rgba(255,255,255,0.22)',
-  borderRadius: '999px',
-  background: 'rgba(255,255,255,0.1)',
-  color: '#fff',
-  fontSize: '12px',
-  fontWeight: 900,
-  letterSpacing: '0.12em',
-  backdropFilter: 'blur(10px)',
+  marginBottom: '24px',
+  color: 'rgba(255,255,255,0.8)',
+  fontSize: '14px',
+  fontWeight: 600,
+  letterSpacing: '0.2em',
+  textTransform: 'uppercase',
 })
 
 const HeroTitle = styled('h1')({
-  color: '#fff',
-  fontSize: ['58px', '96px'],
-  fontWeight: 950,
-  lineHeight: 0.92,
-  letterSpacing: '-0.065em',
+  color: '#ffffff',
+  fontSize: ['48px', '82px'],
+  fontWeight: 800,
+  lineHeight: 1.05,
+  letterSpacing: '-0.04em',
+  textShadow: '0 20px 40px rgba(0,0,0,0.4)',
 })
 
 const HeroText = styled('p')({
-  maxWidth: '560px',
-  marginTop: '26px',
-  color: 'rgba(255,255,255,0.82)',
-  fontSize: ['17px', '20px'],
-  lineHeight: 1.7,
+  maxWidth: '600px',
+  marginTop: '32px',
+  color: 'rgba(255,255,255,0.9)',
+  fontSize: ['18px', '22px'],
+  lineHeight: 1.6,
+  fontWeight: 400,
 })
 
 const HeroActions = styled('div')({
   display: 'flex',
   flexDirection: ['column', 'row'],
-  gap: '12px',
-  marginTop: '34px',
+  gap: '16px',
+  marginTop: '48px',
 })
 
 const PrimaryLink = styled(Link)({
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  minHeight: '52px',
-  padding: '0 22px',
-  borderRadius: '16px',
-  background: '#fff',
-  color: '#171512',
-  fontSize: '14px',
-  fontWeight: 900,
+  minHeight: '56px',
+  padding: '0 32px',
+  borderRadius: '999px',
+  background: '#ffffff',
+  color: '#111111',
+  fontSize: '16px',
+  fontWeight: 600,
+  transition: 'all 0.3s ease',
   _hover: {
-    background: '#f0e7d8',
+    transform: 'translateY(-2px)',
+    boxShadow: '0 10px 25px rgba(255,255,255,0.2)',
   },
 })
 
@@ -114,22 +109,26 @@ const SecondaryLink = styled(Link)({
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  minHeight: '52px',
-  padding: '0 22px',
-  border: '1px solid rgba(255,255,255,0.42)',
-  borderRadius: '16px',
-  color: '#fff',
-  fontSize: '14px',
-  fontWeight: 900,
+  minHeight: '56px',
+  padding: '0 32px',
+  borderRadius: '999px',
+  background: 'rgba(255,255,255,0.1)',
+  backdropFilter: 'blur(10px)',
+  border: '1px solid rgba(255,255,255,0.2)',
+  color: '#ffffff',
+  fontSize: '16px',
+  fontWeight: 600,
+  transition: 'all 0.3s ease',
   _hover: {
-    background: 'rgba(255,255,255,0.12)',
+    background: 'rgba(255,255,255,0.2)',
+    transform: 'translateY(-2px)',
   },
 })
 
 const Section = styled('section')({
-  maxWidth: '1200px',
+  maxWidth: '1280px',
   margin: '0 auto',
-  padding: ['64px 20px', '96px 20px'],
+  padding: ['80px 24px', '120px 40px'],
 })
 
 const SectionHeader = styled('div')({
@@ -137,127 +136,136 @@ const SectionHeader = styled('div')({
   alignItems: ['flex-start', 'flex-end'],
   justifyContent: 'space-between',
   flexDirection: ['column', 'row'],
-  gap: '18px',
-  marginBottom: '28px',
+  gap: '16px',
+  marginBottom: '48px',
 })
 
 const SectionTitle = styled('h2')({
-  color: '#171512',
-  fontSize: ['30px', '46px'],
-  fontWeight: 950,
-  letterSpacing: '-0.045em',
+  color: '#111111',
+  fontSize: ['32px', '48px'],
+  fontWeight: 800,
+  letterSpacing: '-0.04em',
 })
 
 const SectionSub = styled('p')({
-  marginTop: '8px',
-  color: '#7e7468',
-  fontSize: '15px',
+  marginTop: '12px',
+  color: '#666666',
+  fontSize: '18px',
 })
 
 const TextLink = styled(Link)({
   display: 'inline-flex',
   alignItems: 'center',
   gap: '8px',
-  color: '#171512',
-  fontSize: '14px',
-  fontWeight: 900,
+  color: '#111111',
+  fontSize: '16px',
+  fontWeight: 600,
+  transition: 'opacity 0.2s',
+  _hover: {
+    opacity: 0.7,
+  },
 })
 
 const CategoryGrid = styled('div')({
   display: 'grid',
-  gridTemplateColumns: ['1fr 1fr', 'repeat(4, 1fr)'],
-  gap: ['12px', '18px'],
+  gridTemplateColumns: ['1fr', 'repeat(4, 1fr)'],
+  gap: ['16px', '24px'],
 })
 
 const CategoryCard = styled(Link)({
   position: 'relative',
-  minHeight: ['220px', '330px'],
+  minHeight: ['280px', '400px'],
   overflow: 'hidden',
   borderRadius: '24px',
-  background: '#ebe3d7',
-  boxShadow: '0 20px 45px rgba(36, 29, 21, 0.08)',
+  background: '#ffffff',
+  boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+  _hover: {
+    transform: 'translateY(-8px)',
+    boxShadow: '0 20px 40px rgba(0,0,0,0.08)',
+  },
 })
 
 const CategoryShade = styled('div')({
   position: 'absolute',
   inset: 0,
   zIndex: 1,
-  background: 'linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.55))',
+  background: 'linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.6) 100%)',
 })
 
 const CategoryName = styled('span')({
   position: 'absolute',
-  left: '18px',
-  bottom: '18px',
+  left: '24px',
+  bottom: '24px',
   zIndex: 2,
-  color: '#fff',
-  fontSize: ['22px', '28px'],
-  fontWeight: 950,
-  letterSpacing: '-0.04em',
+  color: '#ffffff',
+  fontSize: ['24px', '28px'],
+  fontWeight: 700,
+  letterSpacing: '-0.02em',
 })
 
 const ProductGrid = styled('div')({
   display: 'grid',
   gridTemplateColumns: ['1fr 1fr', 'repeat(4, 1fr)'],
-  gap: ['28px 12px', '38px 18px'],
+  gap: ['32px 16px', '48px 24px'],
 })
 
 const Story = styled('section')({
-  background: '#171512',
-  color: '#fff',
+  background: '#ffffff',
+  padding: ['80px 0', '140px 0'],
 })
 
 const StoryInner = styled('div')({
-  maxWidth: '1200px',
+  maxWidth: '1280px',
   margin: '0 auto',
-  padding: ['72px 20px', '110px 20px'],
+  padding: ['0 24px', '0 40px'],
   display: 'grid',
-  gridTemplateColumns: ['1fr', '0.9fr 1.1fr'],
-  gap: ['42px', '72px'],
+  gridTemplateColumns: ['1fr', '1fr 1.2fr'],
+  gap: ['60px', '100px'],
   alignItems: 'center',
 })
 
 const StoryTitle = styled('h2')({
-  fontSize: ['42px', '66px'],
-  fontWeight: 950,
-  lineHeight: 0.98,
-  letterSpacing: '-0.055em',
+  fontSize: ['40px', '64px'],
+  fontWeight: 800,
+  lineHeight: 1.1,
+  letterSpacing: '-0.04em',
+  color: '#111111',
 })
 
 const StoryText = styled('p')({
-  maxWidth: '520px',
-  marginTop: '24px',
-  color: '#beb3a5',
-  fontSize: '17px',
-  lineHeight: 1.8,
+  marginTop: '32px',
+  color: '#666666',
+  fontSize: '18px',
+  lineHeight: 1.7,
 })
 
 const StoryMedia = styled('div')({
   position: 'relative',
-  minHeight: ['420px', '580px'],
+  minHeight: ['400px', '640px'],
 })
 
 const StoryImageLarge = styled('div')({
   position: 'absolute',
   top: 0,
   right: 0,
-  width: '82%',
-  height: '78%',
+  width: '85%',
+  height: '85%',
   overflow: 'hidden',
-  border: '8px solid #26211c',
-  borderRadius: '28px',
+  borderRadius: '32px',
+  boxShadow: '0 30px 60px rgba(0,0,0,0.08)',
 })
 
 const StoryImageSmall = styled('div')({
   position: 'absolute',
   left: 0,
   bottom: 0,
-  width: '58%',
-  height: '56%',
+  width: '50%',
+  height: '50%',
   overflow: 'hidden',
-  border: '8px solid #171512',
-  borderRadius: '28px',
-  boxShadow: '0 25px 60px rgba(0,0,0,0.34)',
+  borderRadius: '24px',
+  border: '8px solid #ffffff',
+  boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
 })
 
 export default async function Home() {
@@ -271,36 +279,35 @@ export default async function Home() {
   return (
     <Page>
       <Hero>
-        <Image
-          src={heroImage}
-          alt="Fashion store display"
-          fill
-          priority
-          sizes="100vw"
-          style={{ objectFit: 'cover' }}
-        />
-        <HeroOverlay />
+        <HeroImageWrapper>
+          <Image
+            src={heroImage}
+            alt="Premium curated collection"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: 'cover', filter: 'brightness(0.8)' }}
+          />
+        </HeroImageWrapper>
         <HeroContent>
-          <HeroCopy>
-            <Eyebrow>SEASON CURATION</Eyebrow>
-            <HeroTitle>THE NEW COLLECTION</HeroTitle>
-            <HeroText>
-              당신의 무드를 완성하는 감각적인 패션 큐레이션.
-              매일 입기 좋은 스타일을 더 단정하고 빠르게 만나보세요.
-            </HeroText>
-            <HeroActions>
-              <PrimaryLink href="/products">상품 보러가기</PrimaryLink>
-              <SecondaryLink href="#categories">카테고리 보기</SecondaryLink>
-            </HeroActions>
-          </HeroCopy>
+          <Eyebrow>New Collection</Eyebrow>
+          <HeroTitle>Experience the Excellence</HeroTitle>
+          <HeroText>
+            엄선된 프리미엄 아이템, 당신의 일상에 특별함을 더합니다.
+            타협하지 않는 퀄리티와 모던한 감각을 지금 바로 만나보세요.
+          </HeroText>
+          <HeroActions>
+            <PrimaryLink href="/products">컬렉션 보기</PrimaryLink>
+            <SecondaryLink href="#categories">카테고리 탐색</SecondaryLink>
+          </HeroActions>
         </HeroContent>
       </Hero>
 
       <Section id="categories">
         <SectionHeader>
           <div>
-            <SectionTitle>Shop by Category</SectionTitle>
-            <SectionSub>자주 찾는 카테고리를 빠르게 둘러보세요.</SectionSub>
+            <SectionTitle>Curated Categories</SectionTitle>
+            <SectionSub>라이프스타일을 업그레이드할 카테고리를 선택하세요.</SectionSub>
           </div>
         </SectionHeader>
         <CategoryGrid>
@@ -310,7 +317,7 @@ export default async function Home() {
                 src={categoryImages[index % categoryImages.length]}
                 alt={cat.name}
                 fill
-                sizes="(max-width: 768px) 50vw, 25vw"
+                sizes="(max-width: 768px) 100vw, 25vw"
                 style={{ objectFit: 'cover' }}
               />
               <CategoryShade />
@@ -323,10 +330,10 @@ export default async function Home() {
       <Section>
         <SectionHeader>
           <div>
-            <SectionTitle>New Arrivals</SectionTitle>
-            <SectionSub>방금 업데이트된 신상품을 확인해보세요.</SectionSub>
+            <SectionTitle>Latest Exclusives</SectionTitle>
+            <SectionSub>가장 먼저 만나보는 신상품 라인업.</SectionSub>
           </div>
-          <TextLink href="/products">전체 보기 →</TextLink>
+          <TextLink href="/products">전체 상품 보기 &rarr;</TextLink>
         </SectionHeader>
         <ProductGrid>
           {newArrivals.map((product) => (
@@ -338,17 +345,18 @@ export default async function Home() {
       <Story>
         <StoryInner>
           <div>
-            <StoryTitle>More than just fashion</StoryTitle>
+            <StoryTitle>Designed for<br/>Modern Life.</StoryTitle>
             <StoryText>
-              우리는 단순한 옷을 파는 것이 아니라, 당신만의 이야기를 담을 수 있는 스타일을 만듭니다.
-              지속 가능한 소재와 변하지 않는 가치를 담은 컬렉션을 경험해보세요.
+              우리는 트렌드를 넘어 변하지 않는 가치를 추구합니다.
+              최고의 소재와 세심한 디테일, 미니멀한 디자인 철학을 바탕으로
+              당신의 모든 순간을 빛나게 해줄 특별한 제품만을 제안합니다.
             </StoryText>
           </div>
           <StoryMedia>
             <StoryImageLarge>
               <Image
                 src={storyImages[0]}
-                alt="Curated fashion rack"
+                alt="Premium lifestyle"
                 fill
                 sizes="50vw"
                 style={{ objectFit: 'cover' }}
@@ -357,7 +365,7 @@ export default async function Home() {
             <StoryImageSmall>
               <Image
                 src={storyImages[1]}
-                alt="Leather bag detail"
+                alt="Minimalist design"
                 fill
                 sizes="30vw"
                 style={{ objectFit: 'cover' }}

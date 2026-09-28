@@ -8,7 +8,7 @@ import WishlistButton from '@/components/product/WishlistButton'
 import { getServerSession } from '@/lib/auth'
 
 import { prisma } from '@/lib/prisma'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 interface ProductDetailPageProps {
   params: {
@@ -43,7 +43,7 @@ const MainImage = styled('div')({
   aspectRatio: '3 / 4',
   overflow: 'hidden',
   border: '1px solid #e9e0d5',
-  borderRadius: '30px',
+  borderRadius: '16px',
   background: '#efe7dc',
   boxShadow: '0 24px 60px rgba(39,31,22,0.10)',
 })
@@ -53,7 +53,7 @@ const Placeholder = styled('div')({
   display: 'grid',
   placeItems: 'center',
   color: '#9a8d7f',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const ThumbGrid = styled('div')({
@@ -67,7 +67,7 @@ const Thumb = styled('div')({
   aspectRatio: '3 / 4',
   overflow: 'hidden',
   border: '1px solid #e9e0d5',
-  borderRadius: '18px',
+  borderRadius: '16px',
   background: '#efe7dc',
 })
 
@@ -81,15 +81,15 @@ const Info = styled('div')({
 const Category = styled('p')({
   color: '#8c7d6d',
   fontSize: '13px',
-  fontWeight: 900,
+  fontWeight: 400,
   letterSpacing: '0.12em',
 })
 
 const Title = styled('h1')({
   marginTop: '10px',
-  color: '#171512',
+  color: '#000000',
   fontSize: ['38px', '56px'],
-  fontWeight: 950,
+  fontWeight: 400,
   lineHeight: 1,
   letterSpacing: '-0.055em',
 })
@@ -98,13 +98,13 @@ const Price = styled('p')({
   marginTop: '18px',
   color: '#2d261f',
   fontSize: '26px',
-  fontWeight: 950,
+  fontWeight: 400,
 })
 
 const Panel = styled('div')({
   padding: '22px',
   border: '1px solid #e8e0d5',
-  borderRadius: '24px',
+  borderRadius: '16px',
   background: '#fff',
   boxShadow: '0 18px 45px rgba(39,31,22,0.06)',
 })
@@ -113,7 +113,7 @@ const PanelTitle = styled('h2')({
   marginBottom: '12px',
   color: '#8c7d6d',
   fontSize: '12px',
-  fontWeight: 950,
+  fontWeight: 400,
   letterSpacing: '0.14em',
 })
 
@@ -135,12 +135,12 @@ const StockRow = styled('div')({
 
 const StockValue = styled('span')({
   color: '#166534',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const SoldOutValue = styled('span')({
   color: '#b91c1c',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const ActionRow = styled('div')({
@@ -163,9 +163,9 @@ const ReviewHead = styled('div')({
 })
 
 const ReviewTitle = styled('h2')({
-  color: '#171512',
+  color: '#000000',
   fontSize: ['28px', '36px'],
-  fontWeight: 950,
+  fontWeight: 400,
   letterSpacing: '-0.04em',
 })
 
@@ -174,10 +174,10 @@ const EmptyReview = styled('p')({
   placeItems: 'center',
   minHeight: '180px',
   border: '1px dashed #d9cec0',
-  borderRadius: '24px',
+  borderRadius: '16px',
   background: '#fff',
   color: '#8c7d6d',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 const ReviewList = styled('div')({
@@ -188,7 +188,7 @@ const ReviewList = styled('div')({
 const ReviewItem = styled('article')({
   padding: '22px',
   border: '1px solid #e8e0d5',
-  borderRadius: '22px',
+  borderRadius: '16px',
   background: '#fff',
 })
 
@@ -200,8 +200,8 @@ const ReviewMeta = styled('div')({
 })
 
 const ReviewName = styled('p')({
-  color: '#171512',
-  fontWeight: 900,
+  color: '#000000',
+  fontWeight: 400,
 })
 
 const ReviewDate = styled('p')({
@@ -211,7 +211,7 @@ const ReviewDate = styled('p')({
 
 const Stars = styled('div')({
   marginBottom: '12px',
-  color: '#171512',
+  color: '#000000',
   fontSize: '18px',
   letterSpacing: '0.04em',
 })

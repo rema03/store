@@ -5,7 +5,7 @@ import CheckoutForm from '@/components/checkout/CheckoutForm'
 import { getServerSession } from '@/lib/auth'
 
 import { redirect } from 'next/navigation'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
   width: '100%',
@@ -17,7 +17,7 @@ const Page = styled('div')({
 const Title = styled('h1')({
   marginBottom: '48px',
   fontSize: '30px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 export default async function CheckoutPage() {

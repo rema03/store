@@ -1,10 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { useSession, signOut } from 'next-auth/react'
 import { ShoppingCart, Heart, User, Search, Menu, X } from 'lucide-react'
 import { useState } from 'react'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
+import { useJiminSession } from '@/lib/session'
 
 const SiteHeader = styled('header')({
   position: 'sticky',
@@ -31,7 +31,7 @@ const HeaderRow = styled('div')({
 
 const Brand = styled(Link)({
   fontSize: ['20px', '24px'],
-  fontWeight: 900,
+  fontWeight: 400,
   letterSpacing: '-0.02em',
 })
 
@@ -41,18 +41,18 @@ const DesktopNav = styled('nav')({
   gap: '8px',
   padding: '6px',
   border: '1px solid #eee9df',
-  borderRadius: '999px',
+  borderRadius: '16px',
   background: '#f8f5ef',
 })
 
 const NavLink = styled(Link)({
   padding: '9px 14px',
-  borderRadius: '999px',
+  borderRadius: '16px',
   fontSize: '13px',
-  fontWeight: 800,
+  fontWeight: 400,
   color: '#3f3a33',
   _hover: {
-    background: '#141414',
+    background: '#000000',
     color: '#fff',
   },
 })
@@ -68,7 +68,7 @@ const IconLink = styled(Link)({
   height: '40px',
   display: 'grid',
   placeItems: 'center',
-  borderRadius: '999px',
+  borderRadius: '16px',
   color: '#171717',
   _hover: {
     background: '#f2eee6',
@@ -77,13 +77,14 @@ const IconLink = styled(Link)({
 
 const LoginLink = styled(Link)({
   padding: '11px 14px',
-  borderRadius: '999px',
-  border: '1px solid #171717',
+  borderRadius: '16px',
+  border: '1px solid rgba(0,0,0,0.08)',
+  color: '#000000',
   fontSize: '12px',
-  fontWeight: 900,
+  fontWeight: 400,
   letterSpacing: '0.08em',
   _hover: {
-    background: '#171717',
+    background: '#000000',
     color: '#fff',
   },
 })
@@ -94,8 +95,8 @@ const MenuButton = styled('button')({
   display: ['grid', 'none'],
   placeItems: 'center',
   border: 0,
-  borderRadius: '999px',
-  background: '#171717',
+  borderRadius: '16px',
+  background: '#000000',
   color: '#fff',
   cursor: 'pointer',
 })
@@ -110,8 +111,8 @@ const UserButton = styled('button')({
   display: 'grid',
   placeItems: 'center',
   border: 0,
-  borderRadius: '999px',
-  background: '#171717',
+  borderRadius: '16px',
+  background: '#000000',
   color: '#fff',
   cursor: 'pointer',
 })
@@ -123,7 +124,7 @@ const UserDropdown = styled('div')({
   width: '210px',
   overflow: 'hidden',
   border: '1px solid #e7e1d7',
-  borderRadius: '18px',
+  borderRadius: '16px',
   background: '#fff',
   boxShadow: '0 24px 50px rgba(22, 18, 14, 0.14)',
   opacity: 0,
@@ -152,14 +153,14 @@ const StrongLine = styled('p')({
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 const DropdownLink = styled(Link)({
   display: 'block',
   padding: '12px 16px',
   fontSize: '14px',
-  fontWeight: 700,
+  fontWeight: 400,
   _hover: {
     background: '#faf7f0',
   },
@@ -171,10 +172,10 @@ const SignOutButton = styled('button')({
   border: 0,
   borderTop: '1px solid #f0ece5',
   background: '#fff',
-  color: '#c2410c',
+  color: '#000000',
   textAlign: 'left',
   fontSize: '14px',
-  fontWeight: 800,
+  fontWeight: 400,
   cursor: 'pointer',
   _hover: {
     background: '#fff7ed',
@@ -195,20 +196,29 @@ const MobileGrid = styled('div')({
 const MobileLink = styled(Link)({
   padding: '14px',
   border: '1px solid #eee9df',
-  borderRadius: '14px',
+  borderRadius: '16px',
   background: '#fbf8f2',
   fontSize: '14px',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 export default function Header() {
-  const { data: session } = useSession()
+  const { session } = useJiminSession()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const categoryLinks = [
     { href: '/products?categoryName=아우터', label: '아우터' },
     { href: '/products?categoryName=상의', label: '상의' },
     { href: '/products?categoryName=하의', label: '하의' },
   ]
+
+  const handleSignOut = () => {
+    const accountsUrl =
+      process.env.NEXT_PUBLIC_ACCOUNTS_URL || 'https://accounts.jimindev.com'
+    const callbackUrl = encodeURIComponent(
+      process.env.NEXT_PUBLIC_APP_URL || window.location.origin
+    )
+    window.location.href = `${accountsUrl}/logout?callbackUrl=${callbackUrl}`
+  }
 
   return (
     <SiteHeader>
@@ -238,16 +248,16 @@ export default function Header() {
 
             {session ? (
               <UserMenuWrap role="group">
-                <UserButton 
+                <UserButton
                   aria-label="사용자 메뉴"
-                  onClick={() => setIsMenuOpen(!isMenuOpen)} // 상태 사용
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
                   <User size={19} />
                 </UserButton>
-                <UserDropdown style={{ 
-                  opacity: isMenuOpen ? 1 : 0, 
+                <UserDropdown style={{
+                  opacity: isMenuOpen ? 1 : 0,
                   visibility: isMenuOpen ? 'visible' : 'hidden',
-                  transform: isMenuOpen ? 'translateY(0)' : 'translateY(-6px)'
+                  transform: isMenuOpen ? 'translateY(0)' : 'translateY(-6px)',
                 }}>
                   <DropdownHead>
                     <Muted>Logged in as</Muted>
@@ -258,7 +268,7 @@ export default function Header() {
                   {session.user?.role === 'ADMIN' && (
                     <DropdownLink href="/admin" onClick={() => setIsMenuOpen(false)}>관리자 대시보드</DropdownLink>
                   )}
-                  <SignOutButton onClick={() => signOut()}>로그아웃</SignOutButton>
+                  <SignOutButton onClick={handleSignOut}>로그아웃</SignOutButton>
                 </UserDropdown>
               </UserMenuWrap>
             ) : (

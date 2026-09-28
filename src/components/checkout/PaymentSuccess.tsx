@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const Shell = styled('div')({
   padding: '80px 16px',
@@ -23,7 +23,7 @@ const LoadingStack = styled(Stack)({
 const Spinner = styled('div')({
   width: '48px',
   height: '48px',
-  borderRadius: '999px',
+  borderRadius: '16px',
   border: '2px solid #e5e7eb',
   borderBottomColor: '#111',
   animation: 'spin 0.8s linear infinite',
@@ -35,7 +35,7 @@ const Message = styled('p')({
 
 const LoadingMessage = styled('p')({
   fontSize: '18px',
-  fontWeight: 700,
+  fontWeight: 400,
 })
 
 const Icon = styled('div')({
@@ -45,7 +45,7 @@ const Icon = styled('div')({
 
 const Title = styled('h1')({
   fontSize: '30px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const ActionRow = styled('div')({
@@ -57,10 +57,10 @@ const ActionRow = styled('div')({
 })
 
 const PrimaryLink = styled(Link)({
-  borderRadius: '6px',
+  borderRadius: '16px',
   background: '#111',
   color: '#fff',
-  fontWeight: 800,
+  fontWeight: 400,
   padding: '12px 32px',
   transition: 'background 0.15s ease',
   _hover: {
@@ -70,8 +70,8 @@ const PrimaryLink = styled(Link)({
 
 const SecondaryLink = styled(Link)({
   border: '1px solid #d1d5db',
-  borderRadius: '6px',
-  fontWeight: 800,
+  borderRadius: '16px',
+  fontWeight: 400,
   padding: '12px 32px',
   transition: 'background 0.15s ease',
   _hover: {

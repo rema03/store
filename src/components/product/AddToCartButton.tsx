@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { addToCart } from '@/actions/cartActions'
 import { useRouter } from 'next/navigation'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 interface AddToCartButtonProps {
   productId: number
@@ -15,10 +15,10 @@ const CartButton = styled('button')({
   minHeight: '56px',
   border: 0,
   borderRadius: '16px',
-  background: '#171512',
+  background: '#000000',
   color: '#fff',
   fontSize: '13px',
-  fontWeight: 950,
+  fontWeight: 400,
   letterSpacing: '0.1em',
   cursor: 'pointer',
   _hover: {

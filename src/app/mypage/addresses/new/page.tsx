@@ -1,5 +1,5 @@
 import AddressForm from '@/components/user/AddressForm'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
   background: '#fbf8f2',
@@ -14,9 +14,9 @@ const Shell = styled('div')({
 
 const Title = styled('h1')({
   marginBottom: '34px',
-  color: '#171512',
+  color: '#000000',
   fontSize: ['36px', '54px'],
-  fontWeight: 950,
+  fontWeight: 400,
   letterSpacing: '-0.055em',
 })
 

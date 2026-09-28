@@ -3,7 +3,7 @@ import ProductCard from '@/components/product/ProductCard'
 import { getServerSession } from '@/lib/auth'
 
 import { redirect } from 'next/navigation'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
   background: '#fbf8f2',
@@ -17,9 +17,9 @@ const Shell = styled('div')({
 
 const Title = styled('h1')({
   marginBottom: '30px',
-  color: '#171512',
+  color: '#000000',
   fontSize: ['40px', '64px'],
-  fontWeight: 950,
+  fontWeight: 400,
   letterSpacing: '-0.055em',
 })
 
@@ -28,10 +28,10 @@ const Empty = styled('div')({
   placeItems: 'center',
   minHeight: '260px',
   border: '1px dashed #d9cec0',
-  borderRadius: '28px',
+  borderRadius: '16px',
   background: '#fff',
   color: '#8c7d6d',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 const ProductGrid = styled('div')({

@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { formatPrice } from '@/lib/utils'
 import { updateCartItemQuantity, removeFromCart } from '@/actions/cartActions'
 import { useState } from 'react'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 interface CartItemRowProps {
   item: {
@@ -25,7 +25,7 @@ const Row = styled('div')({
   gap: ['14px', '20px'],
   padding: '18px',
   border: '1px solid #e8e0d5',
-  borderRadius: '24px',
+  borderRadius: '16px',
   background: '#fff',
 })
 
@@ -43,7 +43,7 @@ const Placeholder = styled('div')({
   placeItems: 'center',
   color: '#9a8d7f',
   fontSize: '12px',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 const Body = styled('div')({
@@ -58,9 +58,9 @@ const Top = styled('div')({
 })
 
 const Name = styled('h3')({
-  color: '#171512',
+  color: '#000000',
   fontSize: '16px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const Price = styled('p')({
@@ -69,8 +69,8 @@ const Price = styled('p')({
 })
 
 const Total = styled('p')({
-  color: '#171512',
-  fontWeight: 950,
+  color: '#000000',
+  fontWeight: 400,
   whiteSpace: 'nowrap',
 })
 
@@ -86,7 +86,7 @@ const Quantity = styled('div')({
   alignItems: 'center',
   overflow: 'hidden',
   border: '1px solid #e1d7ca',
-  borderRadius: '14px',
+  borderRadius: '16px',
 })
 
 const QuantityButton = styled('button')({

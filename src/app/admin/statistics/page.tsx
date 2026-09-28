@@ -3,7 +3,7 @@ import { formatPrice } from '@/lib/utils'
 import { getServerSession } from '@/lib/auth'
 
 import { redirect } from 'next/navigation'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
   width: '100%',
@@ -15,7 +15,7 @@ const Page = styled('div')({
 const Title = styled('h1')({
   marginBottom: '32px',
   fontSize: '30px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const Grid = styled('div')({
@@ -26,7 +26,7 @@ const Grid = styled('div')({
 
 const Stat = styled('section')({
   border: '1px solid #ddd',
-  borderRadius: '8px',
+  borderRadius: '16px',
   background: '#fff',
   padding: '24px',
 })
@@ -34,13 +34,13 @@ const Stat = styled('section')({
 const Label = styled('p')({
   color: '#666',
   fontSize: '13px',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 const Value = styled('p')({
   marginTop: '10px',
   fontSize: '26px',
-  fontWeight: 950,
+  fontWeight: 400,
 })
 
 export default async function AdminStatisticsPage() {

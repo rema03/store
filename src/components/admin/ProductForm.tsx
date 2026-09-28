@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 import Image from 'next/image'
 import type { Category, Product } from '@prisma/client'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 type ProductInput = z.infer<typeof productSchema>
 type ProductFormInitialData = Pick<Product, 'id' | 'name' | 'price' | 'description' | 'categoryId' | 'stock' | 'imageUrl'>
@@ -24,7 +24,7 @@ const Form = styled('form')({
   gap: '32px',
   maxWidth: '720px',
   border: '1px solid #ddd',
-  borderRadius: '8px',
+  borderRadius: '16px',
   background: '#fff',
   padding: '32px',
 })
@@ -52,13 +52,13 @@ const TwoColumn = styled('div')({
 
 const Label = styled('label')({
   fontSize: '14px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const inputStyle = {
   width: '100%',
   border: '1px solid #d1d5db',
-  borderRadius: '6px',
+  borderRadius: '16px',
   background: '#fff',
   padding: '12px',
   outline: 'none',
@@ -98,7 +98,7 @@ const Preview = styled('div')({
   flexShrink: 0,
   overflow: 'hidden',
   border: '1px solid #ddd',
-  borderRadius: '6px',
+  borderRadius: '16px',
   background: '#f1f1f1',
 })
 
@@ -151,8 +151,8 @@ const Actions = styled('div')({
 const SecondaryButton = styled('button')({
   flex: 1,
   border: '1px solid #d1d5db',
-  borderRadius: '6px',
-  fontWeight: 900,
+  borderRadius: '16px',
+  fontWeight: 400,
   padding: '16px',
   transition: 'background 0.15s ease',
   _hover: {
@@ -162,10 +162,10 @@ const SecondaryButton = styled('button')({
 
 const PrimaryButton = styled('button')({
   flex: 1,
-  borderRadius: '6px',
+  borderRadius: '16px',
   background: '#111',
   color: '#fff',
-  fontWeight: 900,
+  fontWeight: 400,
   padding: '16px',
   transition: 'background 0.15s ease',
   _hover: {

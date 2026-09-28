@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { getServerSession } from '@/lib/auth'
 
 import { redirect } from 'next/navigation'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
   width: '100%',
@@ -14,13 +14,13 @@ const Page = styled('div')({
 const Title = styled('h1')({
   marginBottom: '32px',
   fontSize: '30px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const TableWrap = styled('div')({
   overflowX: 'auto',
   border: '1px solid #ddd',
-  borderRadius: '8px',
+  borderRadius: '16px',
   background: '#fff',
 })
 
@@ -39,7 +39,7 @@ const Thead = styled('thead')({
 const Th = styled('th')({
   padding: '16px 24px',
   fontSize: '14px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const Tr = styled('tr')({
@@ -52,7 +52,7 @@ const Td = styled('td')({
 })
 
 const Strong = styled('p')({
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const Muted = styled('p')({
@@ -63,12 +63,12 @@ const Muted = styled('p')({
 
 const Badge = styled('span')({
   display: 'inline-flex',
-  borderRadius: '999px',
+  borderRadius: '16px',
   background: '#f2eee6',
   padding: '6px 10px',
-  color: '#171512',
+  color: '#000000',
   fontSize: '12px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 export default async function AdminUsersPage() {

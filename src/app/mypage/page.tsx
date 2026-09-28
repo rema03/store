@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation'
 import { getUserOrders } from '@/actions/orderActions'
 import { formatPrice, formatDate } from '@/lib/utils'
 import Link from 'next/link'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
   background: '#fbf8f2',
@@ -22,15 +22,15 @@ const Header = styled('header')({
 })
 
 const Title = styled('h1')({
-  color: '#171512',
+  color: '#000000',
   fontSize: ['32px', '48px'],
-  fontWeight: 950,
+  fontWeight: 400,
   letterSpacing: '-0.04em',
 })
 
 const Subtitle = styled('p')({
   marginTop: '12px',
-  color: '#7e7468',
+  color: '#666666',
   fontSize: '16px',
 })
 
@@ -52,7 +52,7 @@ const NavLink = styled(Link)({
   borderRadius: '16px',
   background: '#fff',
   border: '1px solid #e8e0d5',
-  color: '#171512',
+  color: '#000000',
   fontSize: '15px',
   fontWeight: 850,
   _hover: {
@@ -61,11 +61,11 @@ const NavLink = styled(Link)({
 })
 
 const ActiveNav = styled(NavLink)({
-  background: '#171512',
+  background: '#000000',
   color: '#fff',
-  borderColor: '#171512',
+  borderColor: '#000000',
   _hover: {
-    background: '#171512',
+    background: '#000000',
   },
 })
 
@@ -76,14 +76,14 @@ const Content = styled('div')({
 
 const SectionTitle = styled('h2')({
   marginBottom: '18px',
-  color: '#171512',
+  color: '#000000',
   fontSize: '20px',
-  fontWeight: 950,
+  fontWeight: 400,
 })
 
 const OrderCard = styled('div')({
   padding: '24px',
-  borderRadius: '24px',
+  borderRadius: '16px',
   background: '#fff',
   border: '1px solid #e8e0d5',
   boxShadow: '0 12px 35px rgba(39, 31, 22, 0.05)',
@@ -101,16 +101,16 @@ const OrderHeader = styled('div')({
 const OrderNum = styled('p')({
   color: '#8e8377',
   fontSize: '13px',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 const OrderStatus = styled('span')({
   padding: '6px 12px',
-  borderRadius: '999px',
+  borderRadius: '16px',
   background: '#f5efe6',
   color: '#5c5248',
   fontSize: '12px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const OrderItem = styled('div')({
@@ -124,7 +124,7 @@ const ItemInfo = styled('div')({
 })
 
 const ItemName = styled('p')({
-  color: '#171512',
+  color: '#000000',
   fontSize: '16px',
   fontWeight: 850,
 })
@@ -133,7 +133,7 @@ const ItemPrice = styled('p')({
   marginTop: '4px',
   color: '#6f6256',
   fontSize: '14px',
-  fontWeight: 800,
+  fontWeight: 400,
 })
 
 const EmptyState = styled('div')({
@@ -141,7 +141,7 @@ const EmptyState = styled('div')({
   textAlign: 'center',
   background: '#fff',
   border: '1px dashed #d9cec0',
-  borderRadius: '28px',
+  borderRadius: '16px',
   color: '#8c7d6d',
   fontSize: '15px',
   fontWeight: 850,
@@ -196,7 +196,7 @@ export default async function MyPage() {
                     </ItemInfo>
                     <Link 
                       href={`/orders/${order.id}`}
-                      style={{ fontSize: '13px', fontWeight: 900, color: '#171512' }}
+                      style={{ fontSize: '13px', fontWeight: 400, color: '#000000' }}
                     >
                       상세보기 →
                     </Link>

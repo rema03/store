@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { getServerSession } from '@/lib/auth'
 
 import { redirect } from 'next/navigation'
-import { styled } from '@devup-ui/react'
+import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
   width: '100%',
@@ -16,7 +16,7 @@ const Page = styled('div')({
 const Title = styled('h1')({
   marginBottom: '32px',
   fontSize: '30px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const StatsGrid = styled('div')({
@@ -36,7 +36,7 @@ const StatsGrid = styled('div')({
 
 const StatCard = styled(Link)({
   border: '1px solid #ddd',
-  borderRadius: '8px',
+  borderRadius: '16px',
   background: '#fff',
   padding: '24px',
   transition: 'box-shadow 0.15s ease, transform 0.15s ease',
@@ -49,13 +49,13 @@ const StatCard = styled(Link)({
 const StatName = styled('p')({
   color: '#666',
   fontSize: '14px',
-  fontWeight: 700,
+  fontWeight: 400,
 })
 
 const StatValue = styled('p')({
   marginTop: '8px',
   fontSize: '24px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const PanelGrid = styled('div')({
@@ -71,7 +71,7 @@ const PanelGrid = styled('div')({
 
 const Panel = styled('section')({
   border: '1px solid #ddd',
-  borderRadius: '8px',
+  borderRadius: '16px',
   background: '#fff',
   padding: '24px',
 })
@@ -79,7 +79,7 @@ const Panel = styled('section')({
 const PanelTitle = styled('h2')({
   marginBottom: '16px',
   fontSize: '20px',
-  fontWeight: 900,
+  fontWeight: 400,
 })
 
 const QuickGrid = styled('div')({
@@ -89,11 +89,11 @@ const QuickGrid = styled('div')({
 })
 
 const QuickLink = styled(Link)({
-  borderRadius: '6px',
+  borderRadius: '16px',
   background: '#f7f7f7',
   padding: '16px',
   textAlign: 'center',
-  fontWeight: 800,
+  fontWeight: 400,
   transition: 'background 0.15s ease',
   _hover: {
     background: '#eee',

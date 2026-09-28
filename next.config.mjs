@@ -1,4 +1,3 @@
-import { DevupUI } from '@devup-ui/next-plugin'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -10,7 +9,7 @@ const nextConfig = {
     return config
   },
   experimental: {
-    optimizePackageImports: ['@devup-ui/react', 'lucide-react'],
+    optimizePackageImports: ['lucide-react'],
   },
   typescript: {
     ignoreBuildErrors: false,
@@ -34,4 +33,4 @@ const nextConfig = {
   },
 }
 
-export default DevupUI(nextConfig)
+export default nextConfig
