@@ -30,23 +30,39 @@ export async function getCurrentUser() {
 }
 
 export async function getOrCreateLocalUser(payload: any) {
+  const email = (payload.email || '').toLowerCase().trim()
+  if (!email) return null
+
   let user = await prisma.user.findUnique({
-    where: { email: payload.email },
+    where: { email },
   })
+
+  const targetRole = payload.role === 'ADMIN' ? 'ADMIN' : 'USER'
+  const targetName = payload.name || payload.username || 'User'
 
   if (!user) {
     user = await prisma.user.create({
       data: {
-        email: payload.email,
+        email,
         password: '',
-        name: payload.name || payload.username || 'Unknown',
-        role: payload.role || 'USER',
+        name: targetName,
+        role: targetRole,
+      },
+    })
+  } else if (user.name !== targetName || user.role !== targetRole) {
+    // 동기화: 중앙 SSO에서 이름이나 권한이 변경된 경우 로컬 DB에 반영
+    user = await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        name: targetName,
+        role: targetRole,
       },
     })
   }
 
   return user
 }
+
 
 export async function getAuthUser() {
   const jwtUser = await getCurrentUser()
@@ -55,10 +71,15 @@ export async function getAuthUser() {
   }
 
   const localUser = await getOrCreateLocalUser(jwtUser)
+  if (!localUser) {
+    return null
+  }
+
   return {
     ...localUser,
     id: localUser.id.toString(),
   }
+
 }
 
 // Deprecated, do not use

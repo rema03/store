@@ -1,16 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useForm, Controller } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { loginSchema } from '@/lib/validators'
-import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { z } from 'zod'
+import React from 'react'
 import { styled } from '@/lib/styled'
-
-type LoginInput = z.infer<typeof loginSchema>
 
 const Card = styled('div')({
   width: '100%',
@@ -31,43 +22,6 @@ const Title = styled('h1')({
   textAlign: 'center',
 })
 
-const Form = styled('form')({
-  display: 'grid',
-  gap: '18px',
-})
-
-const Field = styled('div')({
-  display: 'grid',
-  gap: '8px',
-})
-
-const Label = styled('label')({
-  color: '#5f554b',
-  fontSize: '13px',
-  fontWeight: 850,
-})
-
-const Input = styled('input')({
-  width: '100%',
-  height: '48px',
-  padding: '0 14px',
-  border: '1px solid #ded3c6',
-  borderRadius: '16px',
-  outline: 0,
-  color: '#000000',
-  fontSize: '15px',
-  _focus: {
-    borderColor: '#000000',
-    boxShadow: '0 0 0 3px rgba(23,21,18,0.08)',
-  },
-})
-
-const ErrorText = styled('p')({
-  color: '#b91c1c',
-  fontSize: '12px',
-  fontWeight: 400,
-})
-
 const Submit = styled('button')({
   width: '100%',
   height: '52px',
@@ -80,10 +34,6 @@ const Submit = styled('button')({
   _hover: {
     background: '#3a3128',
   },
-  _disabled: {
-    background: '#b8aea1',
-    cursor: 'not-allowed',
-  },
 })
 
 const FooterText = styled('p')({
@@ -93,99 +43,49 @@ const FooterText = styled('p')({
   textAlign: 'center',
 })
 
-const FooterLink = styled(Link)({
+const FooterLink = styled('a')({
   color: '#000000',
   fontWeight: 400,
+  cursor: 'pointer',
+  textDecoration: 'underline',
 })
 
 export default function LoginForm() {
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
+  const accountsUrl =
+    typeof process !== 'undefined' && process.env.NEXT_PUBLIC_ACCOUNTS_URL
+      ? process.env.NEXT_PUBLIC_ACCOUNTS_URL
+      : 'https://accounts.jimindev.com'
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginInput>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    }
-  })
+  const handleLogin = () => {
+    const appUrl = typeof window !== 'undefined' ? window.location.origin : ''
+    window.location.href = `${accountsUrl}/login?callbackUrl=${encodeURIComponent(appUrl)}`
+  }
 
-  const onSubmit = async (data: LoginInput) => {
-    setIsLoading(true)
-    setError(null)
-
-    try {
-      const result = await signIn('credentials', {
-        email: data.email,
-        password: data.password,
-        redirect: false,
-      })
-
-      if (result?.error) {
-        setError(result.error)
-      } else {
-        router.push('/')
-        router.refresh()
-      }
-    } catch (err) {
-      setError('로그인 중 오류가 발생했습니다.')
-    } finally {
-      setIsLoading(false)
-    }
+  const handleSignup = () => {
+    const appUrl = typeof window !== 'undefined' ? window.location.origin : ''
+    window.location.href = `${accountsUrl}/signup?callbackUrl=${encodeURIComponent(appUrl)}`
   }
 
   return (
     <Card>
       <Title>로그인</Title>
 
-      <Form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Field>
-          <Label>이메일</Label>
-          <Controller
-            name="email"
-            control={control}
-            render={({ field: { ref, ...field } }) => (
-              <Input 
-                {...field}
-                type="email" 
-                placeholder="example@email.com" 
-              />
-            )}
-          />
-          {errors.email && <ErrorText>{errors.email.message}</ErrorText>}
-        </Field>
-
-        <Field>
-          <Label>비밀번호</Label>
-          <Controller
-            name="password"
-            control={control}
-            render={({ field: { ref, ...field } }) => (
-              <Input 
-                {...field}
-                type="password" 
-                placeholder="비밀번호 입력" 
-              />
-            )}
-          />
-          {errors.password && <ErrorText>{errors.password.message}</ErrorText>}
-        </Field>
-
-        {error && <ErrorText>{error}</ErrorText>}
-
-        <Submit type="submit" disabled={isLoading}>
-          {isLoading ? '로그인 중...' : '로그인'}
-        </Submit>
-      </Form>
+      <Submit type="button" onClick={handleLogin}>
+        Jimin Accounts로 로그인
+      </Submit>
 
       <FooterText>
-        계정이 없으신가요? <FooterLink href="/register">회원가입</FooterLink>
+        계정이 없으신가요?{' '}
+        <FooterLink
+          onClick={(e: React.MouseEvent) => {
+            e.preventDefault()
+            handleSignup()
+          }}
+        >
+          회원가입
+        </FooterLink>
       </FooterText>
     </Card>
   )
 }
+

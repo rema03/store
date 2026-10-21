@@ -1,21 +1,3 @@
-import { DefaultSession } from 'next-auth'
-
-declare module 'next-auth' {
-  interface Session {
-    user: {
-      id: string
-      role: string
-    } & DefaultSession['user']
-  }
-
-  interface User {
-    role: string
-  }
-}
-
-declare module 'next-auth/jwt' {
-  interface JWT {
-    id?: string
-    role?: string
-  }
-}
+// next-auth type declarations are no longer used.
+// Authentication is handled by Jimin Accounts SSO service.
+// See src/lib/auth.ts and src/lib/session.tsx for SSO integration.
