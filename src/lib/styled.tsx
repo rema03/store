@@ -22,20 +22,23 @@ export function styled(Tag: any) {
     const { _hover, _media, _disabled, _focus, _groupHover, _mediaQuery, ...restStyles } = styles
     
     let baseCss = ''
+    let tabletCss = ''
     let desktopCss = ''
     
     for (const [key, value] of Object.entries(restStyles)) {
        const cssKey = camelToKebab(key)
        if (Array.isArray(value)) {
          if (value[0] !== undefined) baseCss += `${cssKey}: ${value[0]};\n`
-         if (value[1] !== undefined) desktopCss += `${cssKey}: ${value[1]};\n`
+         if (value[1] !== undefined) tabletCss += `${cssKey}: ${value[1]};\n`
+         if (value[2] !== undefined) desktopCss += `${cssKey}: ${value[2]};\n`
        } else {
          baseCss += `${cssKey}: ${value};\n`
        }
     }
 
     css += `.${className} { ${baseCss} }`
-    if (desktopCss) css += `\n@media (min-width: 768px) { .${className} { ${desktopCss} } }`
+    if (tabletCss) css += `\n@media (min-width: 768px) { .${className} { ${tabletCss} } }`
+    if (desktopCss) css += `\n@media (min-width: 1024px) { .${className} { ${desktopCss} } }`
     
     if (_hover) {
       css += `\n.${className}:hover { `
@@ -60,6 +63,14 @@ export function styled(Tag: any) {
     if (_media) {
        for (const [query, mediaStyles] of Object.entries(_media)) {
            css += `\n@media ${query} {\n  .${className} {\n`
+           for (const [k, v] of Object.entries(mediaStyles as any)) css += `    ${camelToKebab(k)}: ${v};\n`
+           css += `  }\n}`
+       }
+    }
+    if (_mediaQuery) {
+       for (const [query, mediaStyles] of Object.entries(_mediaQuery)) {
+           const normalizedQuery = query.startsWith('@media') ? query : `@media ${query}`
+           css += `\n${normalizedQuery} {\n  .${className} {\n`
            for (const [k, v] of Object.entries(mediaStyles as any)) css += `    ${camelToKebab(k)}: ${v};\n`
            css += `  }\n}`
        }

@@ -1,4 +1,6 @@
 import { getUserOrders } from '@/actions/orderActions'
+import { getServerSession } from '@/lib/auth'
+import { redirect } from 'next/navigation'
 import { formatPrice } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -147,6 +149,9 @@ const ProductLink = styled(Link)({
 })
 
 export default async function OrdersPage() {
+  const session = await getServerSession()
+  if (!session?.user) redirect('/login?callbackUrl=/orders')
+
   const orders = await getUserOrders()
 
   return (

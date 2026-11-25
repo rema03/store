@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { styled } from '@/lib/styled'
@@ -82,6 +82,7 @@ const SecondaryLink = styled(Link)({
 export default function PaymentSuccess() {
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
   const [message, setMessage] = useState('결제를 승인 중입니다...')
+  const confirmedKeyRef = useRef<string | null>(null)
   const searchParams = useSearchParams()
 
   const paymentKey = searchParams.get('paymentKey')
@@ -95,6 +96,19 @@ export default function PaymentSuccess() {
       return
     }
 
+    const parsedAmount = Number(amount)
+    if (!Number.isInteger(parsedAmount) || parsedAmount < 0) {
+      setStatus('error')
+      setMessage('유효하지 않은 결제 금액입니다.')
+      return
+    }
+
+    const confirmKey = `${paymentKey}:${orderId}`
+    if (confirmedKeyRef.current === confirmKey) {
+      return
+    }
+    confirmedKeyRef.current = confirmKey
+
     const confirmPayment = async () => {
       try {
         const response = await fetch('/api/payments/confirm', {
@@ -103,7 +117,7 @@ export default function PaymentSuccess() {
           body: JSON.stringify({
             paymentKey,
             orderId,
-            amount: parseInt(amount),
+            amount: parsedAmount,
           }),
         })
 

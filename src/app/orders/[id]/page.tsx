@@ -1,8 +1,9 @@
 import { getOrderById } from '@/actions/orderActions'
+import { getServerSession } from '@/lib/auth'
 import { formatPrice } from '@/lib/utils'
 import Link from 'next/link'
 import Image from 'next/image'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { styled } from '@/lib/styled'
 
 interface OrderDetailPageProps {
@@ -102,8 +103,11 @@ const Muted = styled('p')({
 })
 
 export default async function OrderDetailPage({ params }: OrderDetailPageProps) {
+  const session = await getServerSession()
+  if (!session?.user) redirect(`/login?callbackUrl=${encodeURIComponent(`/orders/${params.id}`)}`)
+
   const orderId = Number(params.id)
-  if (!Number.isInteger(orderId)) notFound()
+  if (!Number.isInteger(orderId) || orderId <= 0) notFound()
 
   const order = await getOrderById(orderId)
   if (!order) notFound()

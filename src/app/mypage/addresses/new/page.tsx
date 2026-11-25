@@ -1,4 +1,6 @@
 import AddressForm from '@/components/user/AddressForm'
+import { getServerSession } from '@/lib/auth'
+import { redirect } from 'next/navigation'
 import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
@@ -20,7 +22,10 @@ const Title = styled('h1')({
   letterSpacing: '-0.055em',
 })
 
-export default function NewAddressPage() {
+export default async function NewAddressPage() {
+  const session = await getServerSession()
+  if (!session?.user) redirect('/login?callbackUrl=/mypage/addresses/new')
+
   return (
     <Page>
       <Shell>

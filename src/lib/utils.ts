@@ -40,7 +40,7 @@ export const calculateDiscount = (
     discount = maxDiscount
   }
 
-  return discount
+  return Math.max(0, Math.min(discount, amount))
 }
 
 // Format date

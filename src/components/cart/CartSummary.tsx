@@ -1,6 +1,7 @@
 'use client'
 
 import { formatPrice } from '@/lib/utils'
+import { FREE_SHIPPING_THRESHOLD, getShippingFee } from '@/lib/config'
 import Link from 'next/link'
 import { styled } from '@/lib/styled'
 
@@ -70,7 +71,7 @@ const ContinueLink = styled(Link)({
 })
 
 export default function CartSummary({ totalPrice }: CartSummaryProps) {
-  const shippingFee = totalPrice >= 50000 ? 0 : 3000
+  const shippingFee = getShippingFee(totalPrice)
   const finalPrice = totalPrice + shippingFee
 
   return (
@@ -86,7 +87,7 @@ export default function CartSummary({ totalPrice }: CartSummaryProps) {
           <span>배송비</span>
           <strong>{shippingFee === 0 ? '무료' : formatPrice(shippingFee)}</strong>
         </Row>
-        {shippingFee > 0 && <Hint>50,000원 이상 구매 시 무료배송</Hint>}
+        {shippingFee > 0 && <Hint>{formatPrice(FREE_SHIPPING_THRESHOLD)} 이상 구매 시 무료배송</Hint>}
         <StrongRow>
           <span>결제 예정 금액</span>
           <span>{formatPrice(finalPrice)}</span>

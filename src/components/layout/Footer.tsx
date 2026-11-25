@@ -112,8 +112,8 @@ export default function Footer() {
             <ColumnTitle>Shop</ColumnTitle>
             <LinkList>
               <li><FooterLink href="/products">All Products</FooterLink></li>
-              <li><FooterLink href="/products?category=new">New Arrivals</FooterLink></li>
-              <li><FooterLink href="/products?category=best">Best Sellers</FooterLink></li>
+              <li><FooterLink href="/products?sort=newest">New Arrivals</FooterLink></li>
+              <li><FooterLink href="/products?sort=price_asc">Curated Picks</FooterLink></li>
             </LinkList>
           </div>
 

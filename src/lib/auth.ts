@@ -2,11 +2,27 @@ import { cookies } from 'next/headers'
 import { prisma } from '@/lib/prisma'
 import * as jwt from 'jsonwebtoken'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret'
+const DEV_JWT_SECRET = 'dev-jwt-secret-change-in-production'
+let warnedInsecureSecret = false
+
+export function getJwtSecret(): string {
+  const secret = process.env.JWT_SECRET?.trim()
+  if (!secret) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('JWT_SECRET environment variable must be set in production.')
+    }
+    return DEV_JWT_SECRET
+  }
+  if (process.env.NODE_ENV === 'production' && secret === DEV_JWT_SECRET && !warnedInsecureSecret) {
+    warnedInsecureSecret = true
+    console.warn('[SECURITY] JWT_SECRET is using the development default in production.')
+  }
+  return secret
+}
 
 export async function verifyJiminToken(token: string) {
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload
+    const payload = jwt.verify(token, getJwtSecret(), { algorithms: ['HS256'] }) as jwt.JwtPayload
     return payload
   } catch (error) {
     return null

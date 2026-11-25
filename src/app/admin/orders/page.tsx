@@ -1,6 +1,8 @@
 import { getAllOrders } from '@/actions/adminActions'
 import { formatPrice } from '@/lib/utils'
 import OrderStatusSelect from '@/components/admin/OrderStatusSelect'
+import { getServerSession } from '@/lib/auth'
+import { redirect } from 'next/navigation'
 import { styled } from '@/lib/styled'
 
 const Page = styled('div')({
@@ -68,6 +70,9 @@ const Email = styled('p')({
 })
 
 export default async function AdminOrdersPage() {
+  const session = await getServerSession()
+  if (session?.user?.role !== 'ADMIN') redirect('/')
+
   const orders = await getAllOrders()
 
   return (

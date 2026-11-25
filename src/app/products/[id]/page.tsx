@@ -222,15 +222,20 @@ const ReviewContent = styled('p')({
 })
 
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
+  const productId = Number(params.id)
+  if (!Number.isInteger(productId) || productId <= 0) {
+    notFound()
+  }
+
   const session = await getServerSession()
-  const product = await getProductById(parseInt(params.id))
+  const product = await getProductById(productId)
 
   if (!product) {
     notFound()
   }
 
   if (session?.user) {
-    recordRecentView(product.id)
+    await recordRecentView(product.id)
   }
 
   const isWishlisted = session?.user

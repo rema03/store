@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { formatPrice } from '@/lib/utils'
-import { createOrder } from '@/actions/orderActions'
+import { cancelPendingOrder, createOrder } from '@/actions/orderActions'
 import { loadTossPayments } from '@tosspayments/payment-sdk'
 import { getShippingFee } from '@/lib/config'
 import type { Address, CartItem, Coupon, Product, UserCoupon } from '@prisma/client'
@@ -282,6 +282,7 @@ export default function CheckoutForm({ cartItems, addresses, coupons }: Checkout
       } else {
         discountAmount = coupon.discountValue
       }
+      discountAmount = Math.max(0, Math.min(discountAmount, totalPrice))
     }
   }
   
@@ -292,6 +293,7 @@ export default function CheckoutForm({ cartItems, addresses, coupons }: Checkout
     
     setIsSubmitting(true)
     setPaymentError(null)
+    let createdOrderId: number | undefined
     
     try {
       if (!clientKey) {
@@ -318,6 +320,7 @@ export default function CheckoutForm({ cartItems, addresses, coupons }: Checkout
         setIsSubmitting(false)
         return
       }
+      createdOrderId = result.orderId
 
       // 2. Toss Payments 결제창 띄우기
       const tossPayments = await loadTossPayments(clientKey)
@@ -332,6 +335,9 @@ export default function CheckoutForm({ cartItems, addresses, coupons }: Checkout
         failUrl: `${window.location.origin}/checkout/fail`,
       })
     } catch (error) {
+      if (createdOrderId) {
+        await cancelPendingOrder({ orderId: createdOrderId }).catch(() => {})
+      }
       console.error('Payment error:', error)
       const message = error instanceof Error ? error.message : '알 수 없는 오류'
       setPaymentError(`결제 준비 중 오류가 발생했습니다.\n${message}`)

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { styled } from '@/lib/styled'
+import { cancelPendingOrder } from '@/actions/orderActions'
 
 const Page = styled('div')({
   width: '100%',
@@ -63,11 +64,15 @@ const SecondaryLink = styled(Link)({
   },
 })
 
-export default function FailPage({
+export default async function FailPage({
   searchParams,
 }: {
-  searchParams: { message?: string; code?: string }
+  searchParams: { message?: string; code?: string; orderId?: string }
 }) {
+  if (searchParams.orderId) {
+    await cancelPendingOrder({ tossOrderId: searchParams.orderId })
+  }
+
   return (
     <Page>
       <Icon>✕</Icon>

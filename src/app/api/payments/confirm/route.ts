@@ -10,9 +10,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const { paymentKey, orderId, amount } = await req.json()
+  let body: unknown
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: '잘못된 결제 요청입니다.' }, { status: 400 })
+  }
 
-  if (typeof paymentKey !== 'string' || typeof orderId !== 'string' || typeof amount !== 'number') {
+  const { paymentKey, orderId, amount } = (body && typeof body === 'object' ? body : {}) as Record<string, unknown>
+
+  if (
+    typeof paymentKey !== 'string' || !paymentKey.trim() ||
+    typeof orderId !== 'string' || !orderId.trim() ||
+    typeof amount !== 'number' || !Number.isInteger(amount) || amount < 0
+  ) {
     return NextResponse.json({ error: '잘못된 결제 요청입니다.' }, { status: 400 })
   }
 
@@ -35,6 +46,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: '결제 금액이 일치하지 않습니다.' }, { status: 400 })
     }
 
+    if (order.status === 'PAID' && order.paymentKey === paymentKey) {
+      return NextResponse.json({ success: true, orderId: order.id, alreadyConfirmed: true })
+    }
+
     if (order.status !== 'PENDING') {
       return NextResponse.json({ error: '이미 처리된 주문입니다.' }, { status: 400 })
     }
@@ -54,6 +69,7 @@ export async function POST(req: NextRequest) {
         orderId,
         amount,
       }),
+      signal: AbortSignal.timeout(15000),
     })
 
     const result = await response.json()

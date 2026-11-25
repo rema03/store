@@ -1,10 +1,95 @@
 'use server'
 
+import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from '@/lib/auth'
 
 import { calculateDiscount, generateOrderNumber, generateTossOrderId } from '@/lib/utils'
 import { getShippingFee } from '@/lib/config'
+
+const PENDING_ORDER_TTL_MS = 30 * 60 * 1000
+
+async function restoreOrderReservations(
+  tx: Prisma.TransactionClient,
+  order: { id: number; userCouponId: number | null; items: { productId: number; quantity: number }[] }
+) {
+  for (const item of order.items) {
+    await tx.product.update({
+      where: { id: item.productId },
+      data: { stock: { increment: item.quantity } },
+    })
+  }
+
+  if (order.userCouponId) {
+    await tx.userCoupon.updateMany({
+      where: { id: order.userCouponId, isUsed: true },
+      data: { isUsed: false, usedAt: null },
+    })
+  }
+}
+
+async function releaseExpiredPendingOrders(tx: Prisma.TransactionClient) {
+  const cutoff = new Date(Date.now() - PENDING_ORDER_TTL_MS)
+  const expiredOrders = await tx.order.findMany({
+    where: {
+      status: 'PENDING',
+      createdAt: { lt: cutoff },
+    },
+    include: { items: true },
+  })
+
+  for (const expired of expiredOrders) {
+    const updated = await tx.order.updateMany({
+      where: { id: expired.id, status: 'PENDING' },
+      data: { status: 'CANCELED', paymentStatus: 'CANCELED' },
+    })
+    if (updated.count === 1) {
+      await restoreOrderReservations(tx, expired)
+    }
+  }
+}
+
+export async function cancelPendingOrder(params: { orderId?: number; tossOrderId?: string }) {
+  const session = await getServerSession()
+  if (!session?.user) return { error: '로그인이 필요합니다.' }
+
+  const userId = parseInt(session.user.id)
+  if (!params.orderId && !params.tossOrderId) {
+    return { error: '취소할 주문 정보가 없습니다.' }
+  }
+
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const order = await tx.order.findFirst({
+        where: {
+          userId,
+          status: 'PENDING',
+          ...(params.orderId ? { id: params.orderId } : {}),
+          ...(params.tossOrderId ? { tossOrderId: params.tossOrderId } : {}),
+        },
+        include: { items: true },
+      })
+
+      if (!order) {
+        return { success: false }
+      }
+
+      const updated = await tx.order.updateMany({
+        where: { id: order.id, status: 'PENDING' },
+        data: { status: 'CANCELED', paymentStatus: 'CANCELED' },
+      })
+
+      if (updated.count === 1) {
+        await restoreOrderReservations(tx, order)
+      }
+
+      return { success: true }
+    })
+  } catch (error) {
+    console.error('Cancel pending order error:', error)
+    return { error: '대기 주문 취소에 실패했습니다.' }
+  }
+}
 
 export async function createOrder(data: {
   addressId: number
@@ -18,6 +103,9 @@ export async function createOrder(data: {
 
   try {
     return await prisma.$transaction(async (tx) => {
+      // 0. 만료된 PENDING 주문의 선점 재고/쿠폰 복구
+      await releaseExpiredPendingOrders(tx)
+
       // 1. 장바구니 아이템 확인 (tx 내에서 조회)
       const cartItems = await tx.cartItem.findMany({
         where: { id: { in: data.cartItemIds }, userId },
